@@ -7,13 +7,14 @@ import javax.persistence.Id;
 
 @Entity
 public class User {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	@Column
 	private int id;
-	
+
 	@Column
 	private String username;
-	
+
 	@Column
 	private String password;
 
