@@ -1,6 +1,7 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -27,7 +28,24 @@ public class Map {
             tiles.put(t.hashCode(), t);
         }
     }
+    
+    public static Map setUpMap(List<Player> players, String jsonMap) {
+        Map map = JsonParser.parseMap(jsonMap);
+        return map;
+    }
+    
+    public int getWidth() {
+        return width;
+    }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public Iterable<Tile> getTiles() {
+        return tiles.values();
+    }
+    
     public List<Tile> getTilesWithTombstones() {
         /* TODO: No message view defined */
         return null;
@@ -43,38 +61,13 @@ public class Map {
         return null;
     }
 
-    public List<Tile> getTiles() {
-        /* TODO: No message view defined */
-        return null;
-    }
-
-    public static Map setUpMap(ArrayList<Player> players, String jsonMap) {
-        Village village;
-        Map map;
-        List<Tile> parsedTiles;
-        parsedTiles = JsonMapParser.parseTiles(jsonMap);
-        for (int i = 1 to tiles.size()) {
-            // This loop randomly places an equal number of villages for each player then creates a randomly sized region around the village;
-            // The parameters used below are not what they will be in implementation, there will be more logic to select players and tiles;
-            village = new Village();
-            village.setControlledBy();
-            region = new Region();
-            region.setVillage(village);
-            region.addTile();
-        }
-        map = new Map(parsedTiles);
-        return map;
-    }
-
     public void replaceTombstonesWithTrees(Player player) {
-        Player controllingPlayer;
         Tile tile;
-        for (for int i = 0 to (height * width - 1)) {
-            tile = tiles.get(0);
-            controllingPlayer = tile.getControllingPlayer();
-            if (player == controllingPlayer) {
-                tile.setStructure();
-                tile.setTerrainType();
+        for (int i = 0 ; i < totalTiles; i++) {
+            tile = tiles.get(i);
+            if (player == tile.getControllingPlayer()) {
+                tile.setStructure(null);
+                tile.setTerrainType(TerrainType.TREE);
             }
         }
     }
@@ -84,16 +77,8 @@ public class Map {
     }
 
     public Tile getTile(int x, int y) {
+        assert(x < width && x >= 0);
+        assert(y < height && y >= 0);
         return tiles.get(y * width + x);
-    }
-
-    public int getWidth() {
-        /* TODO: No message view defined */
-        return 0;
-    }
-
-    public int getHeight() {
-        /* TODO: No message view defined */
-        return 0;
     }
 }
