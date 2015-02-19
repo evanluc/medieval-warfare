@@ -1,5 +1,8 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 /**
@@ -9,84 +12,114 @@ package ca.mcgill.cs.comp361.nwo.mwgs.model;
 public class Tile {
     
     private TerrainType terrainType;
-    private int x;
-    private int y;
-    private List<Tile> neighbour;
+    private final int x;
+    private final int y;
+    private final int mapHeight;
+    private final int mapWidth;
     private Region region;
     private Unit unit;
-    private Village myVillage;
+    private Village villageOnTile;
     private Structure occupyingStructure;
-    private Map map;
+    private final Map map;
+    private final List<Tile> neighbours;
     
-    public Tile(int x, int y, Map myMap) {
-        /* TODO: No message view defined */
+    public Tile(int px, int py, Map myMap) {
+        x = px;
+        y = py;
+        map = myMap;
+        mapHeight = myMap.getHeight();
+        mapWidth = myMap.getWidth();
+        
+        final int yp = y-1;
+        final int ym = y-1;
+        final int xp = x+1;
+        final int xm = x-1;
+        final int mod2 = x % 2;
+        neighbours = new ArrayList<Tile>();
+        // North
+        if (ym >= 0) neighbours.add(map.getTile(x, ym));
+        // South
+        if (yp < mapHeight) neighbours.add(map.getTile(x, yp));
+        // East
+        if (xp < mapWidth) {
+            // N-E
+            if (mod2 == 0 && ym >= 0) neighbours.add(map.getTile(xp, ym));
+            else if (mod2 == 1) neighbours.add(map.getTile(yp, y));
+            // S-E
+            if (mod2 == 0) neighbours.add(map.getTile(xp, y));
+            else if (mod2 == 1 && yp < mapHeight) neighbours.add(map.getTile(xp, yp));
+        }
+        // West
+        if (xm >= 0) {
+            // N-W
+            if (mod2 == 0 && ym >= 0) neighbours.add(map.getTile(xm, ym));
+            else if (mod2 == 1) neighbours.add(map.getTile(xm, y));
+            // S-W
+            if (mod2 == 0) neighbours.add(map.getTile(xm, y));
+            else if (mod2 == 1 && yp < mapHeight) neighbours.add(map.getTile(xm, yp));
+        }
     }
-
+    
+    public Structure getStructure() {
+        return occupyingStructure;
+    }
+    
     public void setStructure(Structure structure) {
-        /* TODO: No message view defined */
+        occupyingStructure = structure;
     }
 
     public Village getVillage() {
-        /* TODO: No message view defined */
-        return null;
+        return villageOnTile;
+    }
+    
+    public void setVillage(Village myVillage) {
+        villageOnTile = myVillage;
     }
 
     public Region getRegion() {
-        /* TODO: No message view defined */
-        return null;
+        return region;
+    }
+    
+    public void setRegion(Region newRegion) {
+        region = newRegion;
     }
 
     public Unit getUnit() {
-        /* TODO: No message view defined */
-        return null;
+        return unit;
     }
 
-    public void setUnit(Unit unit) {
-        /* TODO: No message view defined */
+    public void setUnit(Unit newUnit) {
+        unit = newUnit;
     }
 
     public TerrainType getTerrainType() {
-        /* TODO: No message view defined */
-        return null;
+        return terrainType;
     }
 
     public void setTerrainType(TerrainType type) {
-        /* TODO: No message view defined */
-    }
-
-    public void setVillage(Village myVillage) {
-        /* TODO: No message view defined */
-    }
-
-    public Structure getStructure() {
-        /* TODO: No message view defined */
-        return null;
+        terrainType = type;
     }
 
     public List<Tile> getNeighbours() {
-        /* TODO: No message view defined */
-        return null;
+        return neighbours;
     }
 
     public void killUnit() {
-        /* TODO: No message view defined */
-    }
-
-    public void setRegion(Region region) {
-        /* TODO: No message view defined */
+        if (unit != null)
+        {
+            unit.kill();
+            unit = null;
+        }
     }
 
     public Player getControllingPlayer() {
-        Player controllingPlayer;
-        if (if region != null) {
-            controllingPlayer = region.getControllingPlayer();
-            return controllingPlayer;
+        if (region != null) {
+            return region.getControllingPlayer();
         }
-        return ;
+        return null;
     }
 
     public int hashCode() {
-        return y * width + x;
-        return 0;
+        return y * map.getWidth() + x;
     }
 }
