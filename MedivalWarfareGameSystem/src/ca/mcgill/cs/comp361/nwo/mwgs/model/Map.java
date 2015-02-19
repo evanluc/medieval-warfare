@@ -1,5 +1,9 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+
 
 
 /**
@@ -8,13 +12,20 @@ package ca.mcgill.cs.comp361.nwo.mwgs.model;
  */
 public class Map {
     
-    private int width;
-    private int height;
-    private int totalTiles;
-    private HashMap<int, Tile> tiles;
+    private final int width;
+    private final int height;
+    private final int totalTiles;
+    private final Hashtable<Integer, Tile> tiles;
     
-    public Map(List<Tile> tiles, int width, int height) {
-        /* TODO: No message view defined */
+    public Map(List<Tile> pTiles, int pWidth, int pHeight) {
+        assert(pTiles.size() == pWidth * pHeight);
+        width = pWidth;
+        height = pHeight;
+        totalTiles = pWidth * pHeight;
+        tiles = new Hashtable<Integer,Tile>();
+        for (Tile t : pTiles) {
+            tiles.put(t.hashCode(), t);
+        }
     }
 
     public List<Tile> getTilesWithTombstones() {
@@ -37,21 +48,14 @@ public class Map {
         return null;
     }
 
-    public void setTiles(List<Tile> tiles) {
-        Tile put;
-        for (for each Tile t in tiles) {
-            put = tiles.put(,);
-        }
-    }
-
     public static Map setUpMap(ArrayList<Player> players, String jsonMap) {
         Village village;
         Map map;
         List<Tile> parsedTiles;
         parsedTiles = JsonMapParser.parseTiles(jsonMap);
         for (int i = 1 to tiles.size()) {
-            This loop randomly places an equal number of villages for each player then creates a randomly sized region around the village;
-            The parameters used below are not what they will be in implementation, there will be more logic to select players and tiles;
+            // This loop randomly places an equal number of villages for each player then creates a randomly sized region around the village;
+            // The parameters used below are not what they will be in implementation, there will be more logic to select players and tiles;
             village = new Village();
             village.setControlledBy();
             region = new Region();
@@ -80,10 +84,7 @@ public class Map {
     }
 
     public Tile getTile(int x, int y) {
-        Tile tile;
-        The get statement uses the key k = y * width + x;
-        tile = tiles.get(0);
-        return tile;
+        return tiles.get(y * width + x);
     }
 
     public int getWidth() {

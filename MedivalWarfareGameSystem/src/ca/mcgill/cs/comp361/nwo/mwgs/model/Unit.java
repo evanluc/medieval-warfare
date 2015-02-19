@@ -36,8 +36,8 @@ public class Unit {
         /* TODO: No message view defined */
     }
 
-    public void setImmobileUntilRound(int immobileUntilRound) {
-        /* TODO: No message view defined */
+    public void setImmobileUntilRound(int pImmobileUntilRound) {
+        immobileUntilRound = pImmobileUntilRound;
     }
 
     public Tile getTile() {
@@ -51,10 +51,10 @@ public class Unit {
     }
 
     public int getUpkeep() {
-        int level;
+        int level, cost;
         level = Unit.unitLevel(unitType);
         cost = 2 * 3 ^ (level - 1);
-        return 0;
+        return cost;
     }
 
     public void setUnitType(UnitType unitType) {
@@ -82,14 +82,20 @@ public class Unit {
     }
 
     public void kill() {
-        This operation replaces the unit with a tombstone;
-        myVillage.removeUnit(target);
-        tile.setUnit();
-        tile.setStructure();
+        // This operation replaces the unit with a tombstone;
+        myVillage.removeUnit(this);
+        tile.setUnit(null);
+        tile.setStructure(StructureType.TOMBSTONE);
         destroy();
     }
 
     public void setTile(Tile tile) {
         /* TODO: No message view defined */
+    }
+
+    public Player getControllingPlayer()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

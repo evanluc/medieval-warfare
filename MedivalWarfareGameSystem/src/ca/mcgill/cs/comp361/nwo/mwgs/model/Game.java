@@ -1,5 +1,8 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 /**

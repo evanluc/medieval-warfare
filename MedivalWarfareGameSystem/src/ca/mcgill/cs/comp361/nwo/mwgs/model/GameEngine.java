@@ -1,5 +1,8 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 
 /**
@@ -24,7 +27,7 @@ public class GameEngine {
             return roundCount;
             roundCount = roundCount 1;
             u.setImmobileUntilRound(roundCount);
-            tile.setStructure();
+            tile.setStructure(StructureType.ROAD);
         }
     }
 
@@ -74,7 +77,7 @@ public class GameEngine {
         }
         if (players.size() <= 1) {
             gameState.setHasWon(true);
-            Increment the number of wins for the winner and the number of losses for the losers.;
+            // Increment the number of wins for the winner and the number of losses for the losers.;
         }
     }
 
@@ -153,8 +156,8 @@ public class GameEngine {
         List<Tile> adjacent;
         Structure structureOnDest;
         Unit unitOnDest;
-        Please refer to the attached pseudocode;
-        This sequence diagram does not check every case we intend to check;
+        // Please refer to the attached pseudocode;
+        // This sequence diagram does not check every case we intend to check;
         origin = u.getTile();
         adjacent = origin.getNeighbours();
         if (dest is in adjacent) {
@@ -236,7 +239,7 @@ public class GameEngine {
                 return tile;
                 tile.setTerrainType();
             } else if (currentAction == ActionType.BUILDINGROAD) {
-                The road structure was already placed as part of the build road operation;
+                // The road structure was already placed as part of the build road operation;
                 u.setCurrentAction();
             } else if (else) {
                 u.setCurrentAction();
@@ -265,11 +268,11 @@ public class GameEngine {
         Unit u;
         int totalUpkeep;
         ArrayList<Unit> supportedUnits;
-        Iterator<Village> iterator;
+        Iterator<Village> villageIterator;
         villages = p.getVillages();
-        iterator = villages.iterator();
-        for (iterator.hasNext() == true) {
-            v = iterator.next();
+        villageIterator = villages.iterator();
+        while (iterator.hasNext()) {
+            v = villageIterator.next();
             totalUpkeep = v.getTotalUpkeep();
             if (v.getGold() < totalUpkeep) {
                 supportedUnits = v.getSupportedUnits();
@@ -301,8 +304,8 @@ public class GameEngine {
             return unit;
             combineUnits(otherUnit, u);
         } else if (else) {
-            if (dest.getControllingPlayer() != u.getControllingPlayer && dest.getUnit() != null) {
-                If there is an enemy unit, we kill it because we checked whether it was defeatable in getMoveType;
+            if (dest.getControllingPlayer() != u.getControllingPlayer() && dest.getUnit() != null) {
+                //If there is an enemy unit, we kill it because we checked whether it was defeatable in getMoveType;
                 enemyUnit = dest.getUnit();
                 return unit;
                 enemyUnit.kill();
@@ -338,12 +341,12 @@ public class GameEngine {
     }
 
     private void combineUnits(Unit dest, Unit moved) {
-        This operation is a long series of if switches. Please see pseudocode.;
+        // This operation is a long series of if switches. Please see pseudocode.;
     }
 
     private void combineRegions(Unit u) {
-        This operation is two nested loops followed by two nested ifs. Please see the attached pseudocode.;
-        u.setCurrentAction();
+        // This operation is two nested loops followed by two nested ifs. Please see the attached pseudocode.;
+        u.setCurrentAction(null);
     }
 
     private void splitRegions(Unit u) {
@@ -353,20 +356,20 @@ public class GameEngine {
         Tile tile;
         tile = u.getTile();
         neighbours = tile.getNeighbours();
-        Check if the tiles around the unit belong to a region that has been split.;
+        // Check if the tiles around the unit belong to a region that has been split.;
         if (region has been split) {
-            Determine the set of connected tiles in each of the new regions;
+            // Determine the set of connected tiles in each of the new regions;
             for (for each new set of tiles) {
                 if (set of tiles is greater than or equal to 3) {
-                    Create a new region with the set of connected tiles.;
+                    // Create a new region with the set of connected tiles.;
                     region = new Region();
                     region.createVillage();
                     village = region.getVillage();
                     return controllingVillage;
-                    Iterate through every tile, set the village of each unit found to the new village.;
+                    // Iterate through every tile, set the village of each unit found to the new village.;
                 } else if (set of tiles is fewer than 3) {
-                    Remove all the tiles in the set from the region.;
-                    If the tile contains a unit, kill the unit.;
+                    // Remove all the tiles in the set from the region.;
+                    // If the tile contains a unit, kill the unit.;
                 }
             }
         }

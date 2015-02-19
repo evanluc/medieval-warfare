@@ -1,5 +1,7 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.List;
+
 
 
 /**
@@ -64,8 +66,8 @@ public class Region {
     public void createVillage() {
         Village village;
         if (controllingVillage == null) {
-            Randomly select a tile in the region that is a grass terrain.;
-            Place a new village on that tile.;
+            //Randomly select a tile in the region that is a grass terrain.;
+            //Place a new village on that tile.;
             village = new Village();
             tiles.setVillage(village);
         }

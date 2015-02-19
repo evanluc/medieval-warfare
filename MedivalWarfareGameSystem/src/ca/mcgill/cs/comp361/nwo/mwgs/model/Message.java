@@ -1,5 +1,7 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.Date;
+
 
 
 /**
@@ -8,26 +10,25 @@ package ca.mcgill.cs.comp361.nwo.mwgs.model;
  */
 public class Message {
     
-    private String message;
-    private Date timestamp;
-    private Player sender;
+    private final String message;
+    private final Date timestamp;
+    private final Player sender;
     
-    public Message(String message, Player sender) {
-        /* TODO: No message view defined */
+    public Message(String pMessage, Player pSender) {
+        message = pMessage;
+        sender = pSender;
+        timestamp = Clock.getNow();
     }
 
     public String getMessage() {
-        /* TODO: No message view defined */
-        return "";
+        return message;
     }
 
     public Player getSender() {
-        /* TODO: No message view defined */
-        return null;
+        return sender;
     }
 
     public Date getTimestamp() {
-        /* TODO: No message view defined */
-        return null;
+        return timestamp;
     }
 }
