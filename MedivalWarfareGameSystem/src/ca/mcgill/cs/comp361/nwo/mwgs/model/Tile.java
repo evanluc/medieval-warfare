@@ -100,7 +100,7 @@ public class Tile {
     }
 
     public List<Tile> getNeighbours() {
-        return neighbours;
+        return new ArrayList<Tile>(neighbours);
     }
 
     public void killUnit() {
@@ -120,5 +120,9 @@ public class Tile {
 
     public int hashCode() {
         return y * mapHeight + x;
+    }
+    
+    public boolean equals(Object o) {
+        return this.hashCode() == o.hashCode();
     }
 }

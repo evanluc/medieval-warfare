@@ -20,8 +20,8 @@ public class JsonParser {
     public static Map parseMap(String jsonMap) {
         /* TODO Implement */
         Map map = null;
-        List<Tile> parsedTiles = parseTiles(null, map);
-        for (Tile t : parsedTiles) {
+        // List<Tile> parsedTiles = parseTiles(null, map);
+        // for (Tile t : parsedTiles) {
             // This loop randomly places an equal number of villages for each player then creates a randomly sized region around the village;
             // The parameters used below are not what they will be in implementation, there will be more logic to select players and tiles;
             // village = new Village();
@@ -29,8 +29,8 @@ public class JsonParser {
             // region = new Region();
             // region.setVillage(village);
             // region.addTile();
-        }
-        return null;
+        // }
+        return map;
     }
     
 }

@@ -111,10 +111,10 @@ public class GameEngine {
         // Please refer to the attached pseudocode;
         // This sequence diagram does not check every case we intend to check;
         if (adjacent.contains(dest)) {
-            TerrainType landOnDest = dest.getTerrainType();
-            StructureType structureOnDest = dest.getStructure();
+            // TerrainType landOnDest = dest.getTerrainType();
+            // StructureType structureOnDest = dest.getStructure();
             Unit unitOnDest = dest.getUnit();
-            Village villageOnDest = dest.getVillage();
+            // Village villageOnDest = dest.getVillage();
             if (unitOnDest != null) {
                 if (unitOnDest.getControllingPlayer() == u.getControllingPlayer()) {
                     return MoveType.COMBINEUNITS;
