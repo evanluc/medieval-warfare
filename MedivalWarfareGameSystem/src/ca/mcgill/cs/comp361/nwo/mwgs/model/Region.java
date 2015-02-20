@@ -9,7 +9,7 @@ import java.util.List;
 public class Region {
     
     private List<Tile> tiles;
-    private Village controllingVillage;
+    private Village controllingVillage = null;
     private final Player controllingPlayer;
     
     public Region(List<Tile> pTiles, Player pPlayer) {
@@ -22,7 +22,7 @@ public class Region {
      * @param t The tile to remove.
      */
     public void removeTile(Tile t) {
-        tiles.remove(t);
+        if (tiles.remove(t)) t.setRegion(null);;
     }
 
     /**
@@ -30,7 +30,7 @@ public class Region {
      * @param t The tile to add.
      */
     public void addTile(Tile t) {
-        tiles.add(t);
+        if (tiles.add(t)) t.setRegion(this);
     }
 
     public List<Tile> getTiles() {
@@ -63,10 +63,15 @@ public class Region {
      * This will do nothing if the region still has a controlling village.
      */
     public void createVillage() {
+        /* TODO Handle a region of tiles that are all unsuitable for building a village */
         if (controllingVillage == null) {
             // Randomly select a tile in the region that is a grass terrain.
             // Place a new village on that tile.
             int tileIndex = (int)Math.floor(Math.random() * (tiles.size() - 1));
+            while (tiles.get(tileIndex).getTerrainType() == TerrainType.TREE) {
+                // Right now this will infinite loop if, say, we have a 3-region of just trees
+                tileIndex = (int)Math.floor(Math.random() * (tiles.size() - 1));
+            }
             Village village = new Village(tiles.get(tileIndex), controllingPlayer, tiles);
             tiles.get(tileIndex).setVillage(village);
             controllingVillage = village;

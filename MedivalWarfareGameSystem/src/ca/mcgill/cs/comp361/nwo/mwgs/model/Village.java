@@ -120,6 +120,11 @@ public class Village {
         return total;
     }
 
+    public void kill() {
+        killUnits();
+        this.controlledBy.removeVillage(this);
+    }
+    
     public void killUnits() {
         for (Unit u : supportedUnits) {
             u.kill();

@@ -1,7 +1,9 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 
@@ -25,6 +27,7 @@ public class GameEngine {
 
     public void takeoverTile(Tile dest) {
         Unit unit = dest.getUnit();
+        Region destRegion = dest.getRegion();
         Village destVillage = dest.getVillage();
         Village unitsVillage = unit.getVillage();
         
@@ -33,9 +36,10 @@ public class GameEngine {
             unitsVillage.transactWood(destVillage.getWood());
             dest.setVillage(null);
         }
-        dest.getRegion().removeTile(dest);
+        
+        destRegion.removeTile(dest);
         unitsVillage.getRegion().addTile(dest);
-        splitRegions(unit);
+        reconcileRegions(destRegion);
         checkWinConditions();
     }
 
@@ -246,32 +250,107 @@ public class GameEngine {
         u.setCurrentAction(null);
     }
 
-    private void splitRegions(Unit u) {
-        Region region;
-        Village village;
-        Tile tile= u.getTile();
-        List<Tile> neighbours = tile.getNeighbours();
-        // Check if the tiles around the unit belong to a region that has been split.
-        boolean replace = true;
-        if (replace) {
-            // Determine the set of connected tiles in each of the new regions
-            for (;; /* each new set of tiles */) {
-                if (replace /* set of tiles is greater than or equal to 3*/) {
-                    // Create a new region with the set of connected tiles.
-                    region = new Region(null, null);
-                    region.createVillage();
-                    village = region.getVillage();
-                    // Iterate through every tile, set the village of each unit found to the new village.
-                    for (Tile t : region.getTiles()) {
-                        if (t.getUnit() != null) {
-                            t.getUnit().setVillage(village);
-                        }
+    /* DEPRECATED, DO NOT USE, USE reconcileRegions(Region r) INSTEAD */
+//    private void splitRegions(Unit u) {
+//        Region region;
+//        Village village;
+//        Tile tile= u.getTile();
+//        List<Tile> neighbours = tile.getNeighbours();
+//        // Check if the tiles around the unit belong to a region that has been split.
+//        boolean replace = true;
+//        if (replace) {
+//            // Determine the set of connected tiles in each of the new regions
+//            for (;; /* each new set of tiles */) {
+//                if (replace /* set of tiles is greater than or equal to 3*/) {
+//                    // Create a new region with the set of connected tiles.
+//                    region = new Region(null, null);
+//                    region.createVillage();
+//                    village = region.getVillage();
+//                    // Iterate through every tile, set the village of each unit found to the new village.
+//                    for (Tile t : region.getTiles()) {
+//                        if (t.getUnit() != null) {
+//                            t.getUnit().setVillage(village);
+//                        }
+//                    }
+//                } else /* set of tiles is fewer than 3*/ {
+//                    // Remove all the tiles in the set from the region.
+//                    // If the tile contains a unit, kill the unit.
+//                }
+//            }
+//        }
+//    }
+    
+    private void reconcileRegions(Region r) {
+        Player controllingPlayer = r.getControllingPlayer();
+        Village originalVillage = r.getVillage();
+        List<Tile> unreached = new ArrayList<Tile>(r.getTiles());
+        List<List<Tile>> newRegionList = new ArrayList<List<Tile>>();
+        
+        while (unreached.size() > 0) {
+            // Take the first tile (an arbitrary tile)
+            Tile begin = unreached.get(0);
+            List<Tile> temp = new ArrayList<Tile>();
+            // Move the tile from the unreached list to the the temp list
+            temp.add(begin);
+            unreached.remove(begin);
+            // Determine the set of connected tiles
+            Set<Tile> connected = reachableTilesInSameRegion(begin, r, new HashSet<Tile>());
+            // Add all the connected tiles to the temp list and remove them from the unreached list
+            temp.addAll(connected);
+            unreached.removeAll(connected);
+            // Add the temp list to the new region list
+            newRegionList.add(temp);
+        }
+        
+        for (List<Tile> l : newRegionList) {
+            /* This is a set of tiles with insufficient tiles to form a region */ 
+            if (l.size() < 3) {
+                for (Tile t : l) {
+                    if (t.getVillage() != null) {
+                        t.getVillage().kill();
                     }
-                } else /* set of tiles is fewer than 3*/ {
-                    // Remove all the tiles in the set from the region.
-                    // If the tile contains a unit, kill the unit.
+                    if (t.getUnit() != null) {
+                        t.getUnit().kill();
+                        t.setRegion(null);
+                    }
+                }
+            }
+            /* This is the 'original' region */
+            else if (originalVillage != null && l.contains(originalVillage.getTile())) {
+                List<Tile> notInRegion = new ArrayList<Tile>(r.getTiles());
+                notInRegion.removeAll(l);
+                for (Tile t : notInRegion) {
+                    r.removeTile(t);
+                }
+                if (r.getVillage() == null) r.createVillage();
+            }
+            /* This is newly created region with > 3 non-village tiles, with no contolling village */
+            else {
+                Region newRegion = new Region(l, controllingPlayer);
+                newRegion.createVillage();
+                for (Tile t : l) {
+                    t.setRegion(newRegion);
+                    if (t.getUnit() != null) t.getUnit().setVillage(newRegion.getVillage());
                 }
             }
         }
+    }
+    
+    /**
+     * Recursive function to traverse the map and find all reachable tiles from the same former region
+     * @param from The tile to search from
+     * @param r The "original" region the tiles were a part of
+     * @param reached The set of tiles that has been reached
+     * @return
+     */
+    private Set<Tile> reachableTilesInSameRegion(Tile from, Region r, Set<Tile> reached) {
+        
+        for (Tile t : from.getNeighbours()) {
+            if (t.getRegion() == r && !reached.contains(t)) {
+                reached.add(t);
+                reached.addAll(reachableTilesInSameRegion(t, r, reached));
+            }
+        }
+        return new HashSet<Tile>(reached);
     }
 }
