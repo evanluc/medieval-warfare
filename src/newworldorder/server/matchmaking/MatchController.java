@@ -1,5 +1,8 @@
 package newworldorder.server.matchmaking;
 
+import java.util.Set;
+
+import newworldorder.common.matchmaking.GameRequest;
 import newworldorder.common.matchmaking.IMatchController;
 
 public class MatchController implements IMatchController {
@@ -25,9 +28,30 @@ public class MatchController implements IMatchController {
 	}
 	
 	@Override
-	public void addToQueue() {
-		// TODO
+	synchronized public void addToQueue(GameRequest gameRequest) {
+		String username = gameRequest.getUsername();
+		int numPlayers = gameRequest.getNumPlayers();
+		MatchQueue queue = getQueue(numPlayers);
+		queue.insertPlayer(username);
+		
+		if (queue.hasGame()) {
+			Set<String> players = queue.popGame();
+			// TODO: create fanout exchange named by first player, command each player
+			// to subscribe to the exchange.
+		}
 		
 	}
 	
+	private MatchQueue getQueue(int numPlayers) {
+		switch (numPlayers) {
+			case 2:
+				return twoPlayerQueue;
+			case 3:
+				return threePlayerQueue;
+			case 4:
+				return fourPlayerQueue;
+			default:
+				throw new IllegalArgumentException();
+		}
+	}
 }

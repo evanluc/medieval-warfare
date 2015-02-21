@@ -4,12 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import newworldorder.server.model.Player;
-
 public class MatchQueue {
 	
 	private int numPlayers;
-	private ConcurrentLinkedQueue<Player> playerQueue = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<String> playerQueue = new ConcurrentLinkedQueue<>();
 	
 	public MatchQueue(int numPlayers) {
 		super();
@@ -20,8 +18,8 @@ public class MatchQueue {
 		return playerQueue.size() >= numPlayers;
 	}
 	
-	public Set<Player> popGame() {
-		HashSet<Player> players = new HashSet<>();
+	public Set<String> popGame() {
+		HashSet<String> players = new HashSet<>();
 		
 		for (int i = 0; i < numPlayers; i++) {
 			players.add(playerQueue.remove());
@@ -30,7 +28,7 @@ public class MatchQueue {
 		return players;
 	}
 	
-	public void insertPlayer(Player p) {
-		playerQueue.add(p);
+	public void insertPlayer(String username) {
+		playerQueue.add(username);
 	}
 }
