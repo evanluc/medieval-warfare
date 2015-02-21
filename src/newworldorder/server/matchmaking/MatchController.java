@@ -1,6 +1,6 @@
 package newworldorder.server.matchmaking;
 
-import newworldorder.common.IMatchController;
+import newworldorder.common.matchmaking.IMatchController;
 
 public class MatchController implements IMatchController {
 	
