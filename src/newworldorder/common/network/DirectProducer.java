@@ -4,16 +4,17 @@ import java.io.IOException;
 
 import com.rabbitmq.client.Channel;
 
-public class DirectProducer {
+class DirectProducer implements MessageProducer {
 
-	private String queueName;
 	private Channel channel;
+	private String queueName;
 
-	public DirectProducer(String host, String queueName) throws IOException {
+	DirectProducer(Channel channel, String queueName) {
+		this.channel = channel;
 		this.queueName = queueName;
-		channel = ChannelFactory.createDirectChannel(host, queueName);
 	}
-
+	
+	@Override
 	public void sendMessage(String message) throws IOException {
 		channel.basicPublish("", queueName, null, message.getBytes());
 	}

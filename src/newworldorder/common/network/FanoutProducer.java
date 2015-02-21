@@ -4,16 +4,17 @@ import java.io.IOException;
 
 import com.rabbitmq.client.Channel;
 
-public class FanoutProducer {
-	
-	private String exchangeName;
+class FanoutProducer implements MessageProducer {
+
 	private Channel channel;
-	
-	public FanoutProducer(String host, String exchangeName) throws IOException {
+	private String exchangeName;
+
+	FanoutProducer(Channel channel, String exchangeName) {
+		this.channel = channel;
 		this.exchangeName = exchangeName;
-		channel = ChannelFactory.createFanoutChannel(host, exchangeName);
 	}
-	
+
+	@Override
 	public void sendMessage(String message) throws IOException {
 		channel.basicPublish(exchangeName, "", null, message.getBytes());
 	}
