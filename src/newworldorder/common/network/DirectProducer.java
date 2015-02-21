@@ -7,10 +7,10 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
 public class DirectProducer implements MessageProducer {
-	
+
 	private Channel channel;
 	private String queueName;
-	
+
 	public DirectProducer(String host, String queueName) throws IOException {
 		this.queueName = queueName;
 		ConnectionFactory factory = new ConnectionFactory();
@@ -24,5 +24,5 @@ public class DirectProducer implements MessageProducer {
 	public void sendMessage(String message) throws IOException {
 		channel.basicPublish("", queueName, null, message.getBytes());
 	}
-	
+
 }
