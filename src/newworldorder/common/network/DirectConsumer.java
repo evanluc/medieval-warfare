@@ -3,8 +3,6 @@ package newworldorder.common.network;
 import java.io.IOException;
 
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
 public class DirectConsumer {
@@ -17,14 +15,10 @@ public class DirectConsumer {
 			throws IOException {
 		this.queueName = queueName;
 		this.handler = handler;
-		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(host);
-		Connection connection = factory.newConnection();
-		channel = connection.createChannel();
-		channel.queueDeclare(queueName, false, false, false, null);
+		channel = ChannelFactory.createDirectChannel(host, queueName);
 	}
 
-	public final void consumeMessages() throws Exception {
+	public void consumeMessages() throws Exception {
 		QueueingConsumer consumer = new QueueingConsumer(channel);
 		channel.basicConsume(queueName, true, consumer);
 
@@ -34,5 +28,4 @@ public class DirectConsumer {
 			handler.handle(message);
 		}
 	}
-
 }
