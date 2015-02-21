@@ -1,4 +1,4 @@
-package newworldorder.common;
+package newworldorder.common.matchmaking;
 
 public interface IMatchController {
 
