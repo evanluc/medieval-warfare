@@ -15,6 +15,9 @@ public class Region {
     public Region(List<Tile> pTiles, Player pPlayer) {
         tiles = new ArrayList<Tile>(pTiles);
         controllingPlayer = pPlayer;
+        for(Tile t : tiles){
+        	t.setRegion(this);
+        }
     }
 
     /**

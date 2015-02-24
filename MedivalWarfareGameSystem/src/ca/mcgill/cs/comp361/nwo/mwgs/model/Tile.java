@@ -47,7 +47,7 @@ public class Tile {
         if (xp < mapWidth) {
             // N-E
             if (mod2 == 0 && ym >= 0) neighbours.add(map.getTile(xp, ym));
-            else if (mod2 == 1) neighbours.add(map.getTile(yp, y));
+            else if (mod2 == 1) neighbours.add(map.getTile(xp, y));
             // S-E
             if (mod2 == 0) neighbours.add(map.getTile(xp, y));
             else if (mod2 == 1 && yp < mapHeight) neighbours.add(map.getTile(xp, yp));
