@@ -1,8 +1,14 @@
 package newworldorder.common.network.message;
 
+import java.io.Serializable;
+
 import newworldorder.common.service.IServiceLocator;
 
-public abstract class RemoteCommand {
+public abstract class RemoteCommand implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String sender;
 	private IServiceLocator serviceLocator;
 
