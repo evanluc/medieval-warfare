@@ -7,12 +7,20 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import newworldorder.common.network.ActorFactory;
+import newworldorder.common.network.MessageProducer;
+import newworldorder.common.network.message.PrintCommand;
 
 public class LoginPanel extends JPanel{
 	/**
@@ -72,6 +80,21 @@ public class LoginPanel extends JPanel{
 			{
 				aMainView.setName(field.getText());
 				aMainView.setJoinGame();
+				
+				try {
+					MessageProducer producer = ActorFactory.createDirectProducer("localhost", "requestQueue");
+					PrintCommand printCommand = new PrintCommand(aMainView.getName(), "hi");
+					ByteArrayOutputStream bstream = new ByteArrayOutputStream();
+					ObjectOutputStream ostream = new ObjectOutputStream(bstream);
+					ostream.writeObject(printCommand);
+					producer.sendMessage(bstream.toByteArray());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		subCenterPanel.add(field);
