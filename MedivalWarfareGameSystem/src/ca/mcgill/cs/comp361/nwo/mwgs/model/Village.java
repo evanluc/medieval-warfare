@@ -1,5 +1,6 @@
 package ca.mcgill.cs.comp361.nwo.mwgs.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +30,7 @@ public class Village {
         controlledBy = pPlayer;
         controlledRegion = new Region(pControlledTiles, pPlayer);
         controlledRegion.setVillage(this);
+        supportedUnits = new ArrayList<Unit>();
     }
     
     public static int villageLevel(VillageType pVillageType) {

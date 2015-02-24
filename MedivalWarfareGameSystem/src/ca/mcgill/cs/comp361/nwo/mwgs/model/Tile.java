@@ -28,13 +28,17 @@ public class Tile {
         map = myMap;
         mapHeight = myMap.getHeight();
         mapWidth = myMap.getWidth();
-        
-        final int yp = y-1;
+        neighbours = new ArrayList<Tile>();
+     
+    }
+    
+    public void cacheNeighbours() {
+        final int yp = y+1;
         final int ym = y-1;
         final int xp = x+1;
         final int xm = x-1;
         final int mod2 = x % 2;
-        neighbours = new ArrayList<Tile>();
+
         // North
         if (ym >= 0) neighbours.add(map.getTile(x, ym));
         // South

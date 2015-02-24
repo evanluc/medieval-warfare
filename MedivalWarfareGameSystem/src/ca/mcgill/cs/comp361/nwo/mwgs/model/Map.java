@@ -17,14 +17,19 @@ public class Map {
     private final int totalTiles;
     private final Hashtable<Integer, Tile> tiles;
     
-    public Map(List<Tile> pTiles, int pWidth, int pHeight) {
-        assert(pTiles.size() == pWidth * pHeight);
+    public Map(int pWidth, int pHeight) {
         width = pWidth;
         height = pHeight;
         totalTiles = pWidth * pHeight;
         tiles = new Hashtable<Integer,Tile>();
-        for (Tile t : pTiles) {
-            tiles.put(t.hashCode(), t);
+        for (int i = 0 ; i < width ; i++) {
+        	for(int j = 0 ; j < height ; j++){
+        		Tile t = new Tile(i,j,this);
+                tiles.put(t.hashCode(), t);
+        	}
+        }
+        for(Tile t : tiles.values()){
+        	t.cacheNeighbours();
         }
     }
     
