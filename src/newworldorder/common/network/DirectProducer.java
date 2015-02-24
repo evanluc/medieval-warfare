@@ -15,7 +15,7 @@ class DirectProducer implements MessageProducer {
 	}
 	
 	@Override
-	public void sendMessage(String message) throws IOException {
-		channel.basicPublish("", queueName, null, message.getBytes());
+	public void sendMessage(byte[] message) throws IOException {
+		channel.basicPublish("", queueName, null, message);
 	}
 }

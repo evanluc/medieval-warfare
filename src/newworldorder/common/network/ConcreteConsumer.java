@@ -22,7 +22,7 @@ class ConcreteConsumer implements MessageConsumer {
 
 		while (true) {
 			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-			String message = new String(delivery.getBody());
+			byte[] message = delivery.getBody();
 			handler.handle(message);
 		}
 	}

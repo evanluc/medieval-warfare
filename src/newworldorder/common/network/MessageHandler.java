@@ -2,6 +2,6 @@ package newworldorder.common.network;
 
 public interface MessageHandler {
 
-	public void handle(String message);
+	public void handle(byte[] message);
 
 }

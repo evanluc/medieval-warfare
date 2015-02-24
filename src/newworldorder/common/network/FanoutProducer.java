@@ -15,7 +15,7 @@ class FanoutProducer implements MessageProducer {
 	}
 
 	@Override
-	public void sendMessage(String message) throws IOException {
-		channel.basicPublish(exchangeName, "", null, message.getBytes());
+	public void sendMessage(byte[] message) throws IOException {
+		channel.basicPublish(exchangeName, "", null, message);
 	}
 }
