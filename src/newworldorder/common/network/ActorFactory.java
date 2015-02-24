@@ -47,6 +47,8 @@ public class ActorFactory {
 	private static Channel setupChannel(String host) throws IOException {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
+		factory.setUsername("newworldorder");
+		factory.setPassword("warfare");
 		Connection connection = factory.newConnection();
 		return connection.createChannel();
 	}
