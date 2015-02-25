@@ -1,4 +1,7 @@
-package newworldorder.common.network;
+package newworldorder.common.network.factory;
+
+import newworldorder.common.network.MessageConsumer;
+import newworldorder.common.network.MessageHandler;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;

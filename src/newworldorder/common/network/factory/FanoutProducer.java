@@ -1,10 +1,12 @@
-package newworldorder.common.network;
+package newworldorder.common.network.factory;
 
 import java.io.IOException;
 
+import newworldorder.common.network.MessageProducer;
+
 import com.rabbitmq.client.Channel;
 
-class FanoutProducer implements MessageProducer {
+class FanoutProducer extends AbstractMessageProducer implements MessageProducer {
 
 	private Channel channel;
 	private String exchangeName;

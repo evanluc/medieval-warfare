@@ -1,6 +1,10 @@
-package newworldorder.common.network;
+package newworldorder.common.network.factory;
 
 import java.io.IOException;
+
+import newworldorder.common.network.MessageConsumer;
+import newworldorder.common.network.MessageHandler;
+import newworldorder.common.network.MessageProducer;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
