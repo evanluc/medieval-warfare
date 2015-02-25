@@ -5,6 +5,10 @@ import newworldorder.common.service.IMatchController;
 import newworldorder.common.service.IServiceLocator;
 
 public class JoinGameCommand extends RemoteCommand {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1047660304677624037L;
 	private GameRequest gameRequest;
 	
 	public JoinGameCommand(String sender, GameRequest gameRequest) {
