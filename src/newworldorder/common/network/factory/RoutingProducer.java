@@ -6,7 +6,7 @@ import newworldorder.common.network.util.Serialization;
 
 import com.rabbitmq.client.Channel;
 
-public class RoutingProducer implements IRoutingProducer  {
+class RoutingProducer implements IRoutingProducer  {
 	private Channel channel;
 	private String exchangeName;
 
@@ -15,10 +15,12 @@ public class RoutingProducer implements IRoutingProducer  {
 		this.exchangeName = exchangeName;
 	}
 	
+	@Override
 	public void sendMessage(byte[] message, String routingKey) throws Exception {
 		channel.basicPublish(exchangeName, routingKey, null, message);
 	}
 	
+	@Override
 	public void sendCommand(RemoteCommand command, String routingKey) throws Exception {
 		this.sendMessage(Serialization.command2bytes(command), routingKey);
 	}
