@@ -2,6 +2,7 @@ package newworldorder.common.network.factory;
 
 import java.io.IOException;
 
+import newworldorder.common.network.IRoutingProducer;
 import newworldorder.common.network.MessageConsumer;
 import newworldorder.common.network.MessageHandler;
 import newworldorder.common.network.MessageProducer;
@@ -31,6 +32,11 @@ public class ActorFactory {
 		return new DirectProducer(channel, queueName);
 	}
 
+	public static IRoutingProducer createRoutingProducer(String host, String exchangeName) throws IOException {
+		Channel channel = createRoutingChannel(host, exchangeName);
+		return new RoutingProducer(channel, exchangeName);
+	}
+
 	public static MessageProducer createFanoutProducer(String host, String exchangeName) throws IOException {
 		Channel channel = createFanoutChannel(host, exchangeName);
 		return new FanoutProducer(channel, exchangeName);
@@ -39,6 +45,12 @@ public class ActorFactory {
 	private static Channel createDirectChannel(String host, String routingKey) throws IOException {
 		Channel channel = setupChannel(host);
 		channel.queueDeclare(routingKey, false, false, false, null);
+		return channel;
+	}
+
+	private static Channel createRoutingChannel(String host, String exchangeName) throws IOException {
+		Channel channel = setupChannel(host);
+		channel.exchangeDeclare(exchangeName, "direct");
 		return channel;
 	}
 

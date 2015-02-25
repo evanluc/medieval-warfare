@@ -1,10 +1,8 @@
 package newworldorder.common.network.factory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-
 import newworldorder.common.network.MessageProducer;
 import newworldorder.common.network.message.RemoteCommand;
+import newworldorder.common.network.util.Serialization;
 
 public abstract class AbstractMessageProducer implements MessageProducer {
 
@@ -13,9 +11,6 @@ public abstract class AbstractMessageProducer implements MessageProducer {
 
 	@Override
 	public void sendCommand(RemoteCommand command) throws Exception {
-		ByteArrayOutputStream bstream = new ByteArrayOutputStream();
-		ObjectOutputStream ostream = new ObjectOutputStream(bstream);
-		ostream.writeObject(command);
-		this.sendMessage(bstream.toByteArray());
+		this.sendMessage(Serialization.command2bytes(command));
 	}
 }
