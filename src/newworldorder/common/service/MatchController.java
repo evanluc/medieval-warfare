@@ -1,9 +1,10 @@
-package newworldorder.server.matchmaking;
+package newworldorder.common.service;
 
 import java.util.Set;
 
 import newworldorder.common.matchmaking.GameRequest;
 import newworldorder.common.service.IMatchController;
+import newworldorder.server.matchmaking.MatchQueue;
 
 public class MatchController implements IMatchController {
 	

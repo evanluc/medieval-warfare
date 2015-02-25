@@ -15,7 +15,6 @@ public class ServiceLocator implements IServiceLocator {
 
 	@Override
 	public IMatchController getMatchController() {
-		// TODO Auto-generated method stub
-		return null;
+		return MatchController.getInstance();
 	}
 }
