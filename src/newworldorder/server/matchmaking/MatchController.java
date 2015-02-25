@@ -3,7 +3,7 @@ package newworldorder.server.matchmaking;
 import java.util.Set;
 
 import newworldorder.common.matchmaking.GameRequest;
-import newworldorder.common.matchmaking.IMatchController;
+import newworldorder.common.service.IMatchController;
 
 public class MatchController implements IMatchController {
 	
