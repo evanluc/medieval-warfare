@@ -1,6 +1,5 @@
 package newworldorder.common.service;
 
-
-public interface IServiceLocator {
+public interface IServerServiceLocator {
 	public IMatchController getMatchController(); 
 }

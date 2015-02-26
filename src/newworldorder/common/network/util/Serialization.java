@@ -6,19 +6,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import newworldorder.common.network.message.RemoteCommand;
+import newworldorder.common.network.message.AbstractCommand;
 
 public class Serialization {
-	public static byte[] command2bytes(RemoteCommand command) throws IOException {
+	public static byte[] command2bytes(AbstractCommand command) throws IOException {
 		ByteArrayOutputStream bstream = new ByteArrayOutputStream();
 		ObjectOutputStream ostream = new ObjectOutputStream(bstream);
 		ostream.writeObject(command);
 		return bstream.toByteArray();
 	}
 	
-	public static RemoteCommand bytes2Command(byte[] bytes) throws IOException, ClassNotFoundException {
+	public static AbstractCommand bytes2Command(byte[] bytes) throws IOException, ClassNotFoundException {
 		ObjectInputStream ostream = new ObjectInputStream(new ByteArrayInputStream(bytes));
-		RemoteCommand command = (RemoteCommand) ostream.readObject();
+		AbstractCommand command = (AbstractCommand) ostream.readObject();
 		return command;
 	}
 }

@@ -2,7 +2,7 @@ package newworldorder.common.network.message;
 
 import newworldorder.common.matchmaking.GameRequest;
 import newworldorder.common.service.IMatchController;
-import newworldorder.common.service.IServiceLocator;
+import newworldorder.common.service.IServerServiceLocator;
 
 public class JoinGameCommand extends RemoteCommand {
 	/**
@@ -18,7 +18,7 @@ public class JoinGameCommand extends RemoteCommand {
 
 	@Override
 	public void execute() {
-		IServiceLocator locator = this.getServiceLocator();
+		IServerServiceLocator locator = this.getServiceLocator();
 		IMatchController controller = locator.getMatchController();
 		controller.addToQueue(gameRequest);
 	}

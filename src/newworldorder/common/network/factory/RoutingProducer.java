@@ -1,7 +1,7 @@
 package newworldorder.common.network.factory;
 
 import newworldorder.common.network.IRoutingProducer;
-import newworldorder.common.network.message.RemoteCommand;
+import newworldorder.common.network.message.AbstractCommand;
 import newworldorder.common.network.util.Serialization;
 
 import com.rabbitmq.client.Channel;
@@ -21,7 +21,7 @@ class RoutingProducer implements IRoutingProducer  {
 	}
 	
 	@Override
-	public void sendCommand(RemoteCommand command, String routingKey) throws Exception {
+	public void sendCommand(AbstractCommand command, String routingKey) throws Exception {
 		this.sendMessage(Serialization.command2bytes(command), routingKey);
 	}
 }
