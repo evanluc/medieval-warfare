@@ -16,7 +16,7 @@ public class CommandHandler implements MessageHandler {
 	@Override
 	public void handle(byte[] message) throws IOException, ClassNotFoundException {
 		ObjectInputStream ostream = new ObjectInputStream(new ByteArrayInputStream(message));
-		RemoteCommand command = (RemoteCommand) ostream.readObject();
+		AbstractCommand command = (AbstractCommand) ostream.readObject();
 		executor.execute(command);
 	}
 
