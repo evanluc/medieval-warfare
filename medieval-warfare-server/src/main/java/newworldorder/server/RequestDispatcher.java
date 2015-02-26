@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import newworldorder.common.network.message.AbstractCommand;
 import newworldorder.common.network.message.CommandExecutor;
+import newworldorder.common.network.message.JoinGameCommand;
 import newworldorder.common.network.message.RemoteCommand;
 import newworldorder.server.service.ServiceLocator;
 
@@ -27,6 +28,10 @@ public class RequestDispatcher implements CommandExecutor {
 		if (command instanceof RemoteCommand) {
 			RemoteCommand remoteCommand = (RemoteCommand) command;
 			remoteCommand.setServiceLocator(locator);
+			
+			if (remoteCommand instanceof JoinGameCommand) {
+				System.out.println(remoteCommand.getSender() + " wants to play");
+			}
 			
 			threadPool.execute(new Runnable() {
 				@Override

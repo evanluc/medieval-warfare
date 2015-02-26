@@ -21,6 +21,7 @@ public class GameInitializer {
 	}
 	
 	public void initializeGame(List<String> players) {
+		System.out.println("Game popped.");
 		String gameExchangeName = UUID.randomUUID().toString();
 		
 		GameInfo gameInfo = new GameInfo(players, gameExchangeName);

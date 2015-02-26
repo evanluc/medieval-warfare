@@ -6,16 +6,22 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import newworldorder.common.matchmaking.GameRequest;
+import newworldorder.common.network.MessageConsumer;
+import newworldorder.common.network.MessageHandler;
 import newworldorder.common.network.MessageProducer;
 import newworldorder.common.network.factory.ActorFactory;
+import newworldorder.common.network.message.AbstractCommand;
 import newworldorder.common.network.message.JoinGameCommand;
 import newworldorder.common.network.message.LoginCommand;
 
@@ -70,6 +76,19 @@ public class JoinGamePanel extends JPanel{
 					GameRequest curRequest = new GameRequest(aMainView.getName(), 2);
 					JoinGameCommand joinGameCommand = new JoinGameCommand(aMainView.getName(), curRequest);
 					producer.sendCommand(joinGameCommand);
+					
+					// Now wait for a response from server
+					MessageConsumer consumer = ActorFactory.createRoutingConsumer("142.157.148.57", "notifyExchange", aMainView.getName(), 
+							new MessageHandler() {
+
+								@Override
+								public void handle(byte[] message) throws IOException, ClassNotFoundException {
+									JOptionPane.showMessageDialog(null, "Game found!");
+								}
+						
+					});
+					
+					consumer.consumeMessages();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

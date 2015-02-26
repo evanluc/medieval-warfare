@@ -26,6 +26,13 @@ public class ActorFactory {
 		channel.queueBind(queueName, exchangeName, "");
 		return new ConcreteConsumer(channel, queueName, handler);
 	}
+	
+	public static MessageConsumer createRoutingConsumer(String host, String exchangeName, String routingKey, MessageHandler handler) throws IOException {
+		Channel channel = createRoutingChannel(host, exchangeName);
+		String queueName = channel.queueDeclare().getQueue();
+		channel.queueBind(queueName, exchangeName, routingKey);
+		return new ConcreteConsumer(channel, queueName, handler);
+	}
 
 	public static MessageProducer createDirectProducer(String host, String queueName) throws IOException {
 		Channel channel = createDirectChannel(host, queueName);
