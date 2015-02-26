@@ -22,4 +22,34 @@ public class StartGameCommand extends ClientCommand {
 		IGameLauncher launcher = serviceLocator.getGameLauncher();
 		launcher.launchGame(gameInfo);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((gameInfo == null) ? 0 : gameInfo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StartGameCommand other = (StartGameCommand) obj;
+		if (gameInfo == null) {
+			if (other.gameInfo != null)
+				return false;
+		} else if (!gameInfo.equals(other.gameInfo))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "StartGameCommand [gameInfo=" + gameInfo + "]";
+	}
 }

@@ -1,7 +1,6 @@
 package newworldorder.server.matchmaking;
 
 import java.util.List;
-import java.util.UUID;
 
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.network.IRoutingProducer;
@@ -21,7 +20,7 @@ public class GameInitializer {
 	}
 	
 	public void initializeGame(List<String> players) {
-		String gameExchangeName = UUID.randomUUID().toString();
+		String gameExchangeName = String.valueOf(players.hashCode());
 		
 		GameInfo gameInfo = new GameInfo(players, gameExchangeName);
 		ClientCommand command = new StartGameCommand("server", gameInfo);
