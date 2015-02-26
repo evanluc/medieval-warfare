@@ -18,7 +18,7 @@ public class MatchController implements IMatchController {
 	private GameInitializer gameInitializer;
 	
 	@Autowired
-	private MatchController(GameInitializer gameInitializer) {
+	public MatchController(GameInitializer gameInitializer) {
 		twoPlayerQueue = new MatchQueue(2);
 		threePlayerQueue = new MatchQueue(3);
 		fourPlayerQueue = new MatchQueue(4);

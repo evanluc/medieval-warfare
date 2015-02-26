@@ -11,7 +11,7 @@ public class ServiceLocator implements IServerServiceLocator {
 	private IMatchController matchController;
 	
 	@Autowired
-	private ServiceLocator(IMatchController matchController) {
+	public ServiceLocator(IMatchController matchController) {
 		this.matchController = matchController;
 	}
 
