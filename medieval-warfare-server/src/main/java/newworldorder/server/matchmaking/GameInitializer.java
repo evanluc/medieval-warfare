@@ -18,11 +18,9 @@ public class GameInitializer {
 	@Autowired
 	public GameInitializer(IRoutingProducer producer) {
 		this.producer = producer;
-//		this.producer = ActorFactory.createRoutingProducer("localhost", "notifyExchange");
 	}
 	
 	public void initializeGame(List<String> players) {
-		System.out.println("Game popped.");
 		String gameExchangeName = UUID.randomUUID().toString();
 		
 		GameInfo gameInfo = new GameInfo(players, gameExchangeName);
