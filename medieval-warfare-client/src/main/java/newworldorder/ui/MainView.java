@@ -22,18 +22,12 @@ public class MainView extends JFrame {
 		super();
 		BufferedImage img;
 		try {
-			String imgPath = "/background.jpg";
 			InputStream stream = getClass().getResourceAsStream("/background.jpg");
-			if (stream == null ) System.exit(0);
-			else System.exit(1);
-			//img = ImageIO.read(stream);
-			
-			//img = ImageIO.read(new FileInputStream(imgPath));
-			//setContentPane(new BackgroundPanel(img));
-		} finally{}
-//		} catch (IOException e) {
-//			System.out.println(e.getMessage());
-//		}
+			img = ImageIO.read(stream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		setTitle("Medieval Warfare");
 		add(aMainMenuPanel);

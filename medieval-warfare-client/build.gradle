@@ -1,10 +1,6 @@
-//apply plugin:'application'
+apply plugin:'application'
 
-//mainClassName = "newworldorder.ui.MainView"
-
-jar {
-    manifest.mainAttributes("Main-Class" : "newworldorder.ui.MainView")
-}
+mainClassName = "newworldorder.ui.MainView"
 
 dependencies {
     compile project(':medieval-warfare-common')

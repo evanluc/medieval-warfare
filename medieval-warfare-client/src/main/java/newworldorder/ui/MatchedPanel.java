@@ -55,7 +55,7 @@ public class MatchedPanel extends JPanel{
 			leftPanel.add(jtitle);
 			BufferedImage img = null;
 			try {
-				String imgPath = "medievalBattle.jpg";
+				String imgPath = "/medievalBattle.jpg";
 				img= ImageIO.read(getClass().getResourceAsStream(imgPath));
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
