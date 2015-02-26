@@ -1,5 +1,7 @@
 package newworldorder.ui;
 
+
+
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class MainView extends JFrame {
 
 	public MainView() {
 		super();
-		BufferedImage img;
+		BufferedImage img=null;
 		try {
 			InputStream stream = getClass().getResourceAsStream("/background.jpg");
 			img = ImageIO.read(stream);
@@ -29,6 +31,7 @@ public class MainView extends JFrame {
 			e.printStackTrace();
 		}
 		
+		setContentPane(new BackgroundPanel(img));
 		setTitle("Medieval Warfare");
 		add(aMainMenuPanel);
 

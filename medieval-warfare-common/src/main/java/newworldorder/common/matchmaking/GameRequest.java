@@ -1,6 +1,8 @@
 package newworldorder.common.matchmaking;
 
-public class GameRequest {
+import java.io.Serializable;
+
+public class GameRequest implements Serializable {
 	private String username;
 	private int numPlayers;
 	

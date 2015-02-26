@@ -74,7 +74,7 @@ public class LoginPanel extends JPanel {
 				aMainView.setJoinGame();
 				
 				try {
-					MessageProducer producer = ActorFactory.createDirectProducer("142.157.148.114", "requestQueue");
+					MessageProducer producer = ActorFactory.createDirectProducer("142.157.148.57", "requestQueue");
 					LoginCommand loginCommand = new LoginCommand(aMainView.getName(), "password");
 					producer.sendCommand(loginCommand);
 				} catch (IOException e1) {
