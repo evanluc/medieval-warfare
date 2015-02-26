@@ -1,0 +1,5 @@
+#org.springsource.ide.eclipse.gradle.core.preferences.GradleProjectPreferences
+#Thu Feb 26 03:28:39 EST 2015
+build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;medieval-warfare-client;medieval-warfare-common;medieval-warfare-server;
+org.springsource.ide.eclipse.gradle.linkedresources=
+org.springsource.ide.eclipse.gradle.rootprojectloc=
