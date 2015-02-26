@@ -1,11 +1,11 @@
 package newworldorder.server.matchmaking;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class MatchQueueTest {
 	
 	@Test
 	public void testQueueWithGamePops() {
-		Set<String> expected = new HashSet<>();
+		List<String> expected = new ArrayList<>();
 		expected.add("player1");
 		expected.add("player2");
 		expected.add("player3");

@@ -11,12 +11,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import newworldorder.ui.MatchMakingPanel.LoadingPane;
 
 public class MatchedPanel extends JPanel{
 		/**

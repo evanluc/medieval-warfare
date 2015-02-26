@@ -1,8 +1,11 @@
-package newworldorder.common.service;
+package newworldorder.server.service;
 
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+
+import newworldorder.common.service.IMatchController;
+import newworldorder.server.service.ServiceLocator;
 
 import org.junit.After;
 import org.junit.Before;
