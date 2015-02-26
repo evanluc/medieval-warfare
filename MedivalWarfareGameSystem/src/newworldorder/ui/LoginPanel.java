@@ -6,9 +6,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -16,9 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import newworldorder.common.network.ActorFactory;
+import newworldorder.common.network.factory.ActorFactory;
 import newworldorder.common.network.MessageProducer;
-import newworldorder.common.network.message.PrintCommand;
+import newworldorder.common.network.message.LoginCommand;
 
 public class LoginPanel extends JPanel {
 	/**
@@ -74,17 +72,14 @@ public class LoginPanel extends JPanel {
 			public void actionPerformed(ActionEvent pEvent) {
 				aMainView.setName(field.getText());
 				aMainView.setJoinGame();
-
+				
 				try {
 					MessageProducer producer = ActorFactory.createDirectProducer("142.157.148.114", "requestQueue");
-					PrintCommand printCommand = new PrintCommand(aMainView.getName(), "hi");
-					ByteArrayOutputStream bstream = new ByteArrayOutputStream();
-					ObjectOutputStream ostream = new ObjectOutputStream(bstream);
-					ostream.writeObject(printCommand);
-					producer.sendMessage(bstream.toByteArray());
-				} catch (IOException e) {
+					LoginCommand loginCommand = new LoginCommand(aMainView.getName(), "password");
+					producer.sendCommand(loginCommand);
+				} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e1.printStackTrace();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
