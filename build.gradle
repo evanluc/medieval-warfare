@@ -1,0 +1,12 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.rabbitmq:amqp-client:3.4.4'
+
+    testCompile "junit:junit:4.11"
+}
