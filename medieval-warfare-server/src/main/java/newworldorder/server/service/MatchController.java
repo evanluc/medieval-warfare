@@ -1,41 +1,28 @@
 package newworldorder.server.service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
-import newworldorder.common.matchmaking.GameInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import newworldorder.common.matchmaking.GameRequest;
-import newworldorder.common.network.IRoutingProducer;
-import newworldorder.common.network.factory.ActorFactory;
-import newworldorder.common.network.message.ClientCommand;
-import newworldorder.common.network.message.StartGameCommand;
 import newworldorder.common.service.IMatchController;
+import newworldorder.server.matchmaking.GameInitializer;
 import newworldorder.server.matchmaking.MatchQueue;
 
+@Component
 public class MatchController implements IMatchController {
-	
-	private static MatchController instance;
-	
 	private MatchQueue twoPlayerQueue;
 	private MatchQueue threePlayerQueue;
 	private MatchQueue fourPlayerQueue;
+	private GameInitializer gameInitializer;
 	
-	private IRoutingProducer producer;
-	
-	private MatchController() throws IOException {
+	@Autowired
+	private MatchController(GameInitializer gameInitializer) {
 		twoPlayerQueue = new MatchQueue(2);
 		threePlayerQueue = new MatchQueue(3);
 		fourPlayerQueue = new MatchQueue(4);
-		producer = ActorFactory.createRoutingProducer("localhost", "notifyExchange");
-	}
-	
-	public static MatchController getInstance() throws IOException {
-		if (instance == null) {
-			instance = new MatchController();
-		}
-		
-		return instance;
+		this.gameInitializer = gameInitializer;
 	}
 	
 	@Override
@@ -47,20 +34,7 @@ public class MatchController implements IMatchController {
 		
 		if (queue.hasGame()) {
 			List<String> players = queue.popGame();
-			String gameExchangeName = UUID.randomUUID().toString();
-			
-			GameInfo gameInfo = new GameInfo(players, gameExchangeName);
-			ClientCommand command = new StartGameCommand("server", gameInfo);
-			
-			for (String player : players) {
-				try {
-					producer.sendCommand(command, player);
-				} 
-				catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			gameInitializer.initializeGame(players);
 		}
 	}
 	

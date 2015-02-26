@@ -14,9 +14,9 @@ import org.junit.Test;
 public class ServiceLocatorTest {
 	private ServiceLocator locator;
 	
-	@Before
-	public void setup() throws IOException {
-		locator = ServiceLocator.getInstance();
+	public ServiceLocatorTest(ServiceLocator locator) {
+		super();
+		this.locator = locator;
 	}
 	
 //	@Test
@@ -25,9 +25,4 @@ public class ServiceLocatorTest {
 //		IMatchController actual = locator.getMatchController();
 //		assertEquals(expected, actual);
 //	}
-	
-	@After
-	public void tearDown() {
-		locator = null;
-	}
 }

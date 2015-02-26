@@ -1,21 +1,25 @@
 package newworldorder.server;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import newworldorder.common.network.message.AbstractCommand;
 import newworldorder.common.network.message.CommandExecutor;
 import newworldorder.common.network.message.RemoteCommand;
 import newworldorder.server.service.ServiceLocator;
 
+@Component
 public class RequestDispatcher implements CommandExecutor {
 
 	private ExecutorService threadPool = Executors.newCachedThreadPool();
 	private ServiceLocator locator;
 	
-	public RequestDispatcher() throws IOException {
-		locator = ServiceLocator.getInstance();
+	@Autowired
+	public RequestDispatcher(ServiceLocator locator) {
+		this.locator = locator;
 	}
 
 	@Override

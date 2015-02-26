@@ -1,25 +1,18 @@
 package newworldorder.server.service;
 
-import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import newworldorder.common.service.IMatchController;
 import newworldorder.common.service.IServerServiceLocator;
 
+@Component
 public class ServiceLocator implements IServerServiceLocator {
-	private static ServiceLocator instance;
-	
 	private IMatchController matchController;
 	
-	private ServiceLocator() throws IOException {
-		matchController = MatchController.getInstance();
-	}
-	
-	public static ServiceLocator getInstance() throws IOException {
-		if (instance == null) {
-			instance = new ServiceLocator();
-		}
-		
-		return instance;
+	@Autowired
+	private ServiceLocator(IMatchController matchController) {
+		this.matchController = matchController;
 	}
 
 	@Override
