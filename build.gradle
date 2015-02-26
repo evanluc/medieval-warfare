@@ -1,0 +1,8 @@
+apply plugin:'application'
+
+mainClassName = "newworldorder.server.ServerMain"
+
+dependencies {
+    compile 'org.hibernate:hibernate-core:4.3.8.Final'
+    compile project(':medieval-warfare-common')
+}
