@@ -3,12 +3,11 @@ package newworldorder.ui;
 
 
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame {

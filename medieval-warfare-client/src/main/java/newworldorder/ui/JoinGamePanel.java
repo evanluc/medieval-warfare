@@ -6,9 +6,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,9 +19,7 @@ import newworldorder.common.network.MessageConsumer;
 import newworldorder.common.network.MessageHandler;
 import newworldorder.common.network.MessageProducer;
 import newworldorder.common.network.factory.ActorFactory;
-import newworldorder.common.network.message.AbstractCommand;
 import newworldorder.common.network.message.JoinGameCommand;
-import newworldorder.common.network.message.LoginCommand;
 
 public class JoinGamePanel extends JPanel{
 
