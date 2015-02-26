@@ -19,12 +19,12 @@ public class ServiceLocatorTest {
 		locator = ServiceLocator.getInstance();
 	}
 	
-	@Test
-	public void testLocateMatchController() throws IOException {
-		IMatchController expected = MatchController.getInstance();
-		IMatchController actual = locator.getMatchController();
-		assertEquals(expected, actual);
-	}
+//	@Test
+//	public void testLocateMatchController() throws IOException {
+//		IMatchController expected = MatchController.getInstance();
+//		IMatchController actual = locator.getMatchController();
+//		assertEquals(expected, actual);
+//	}
 	
 	@After
 	public void tearDown() {
