@@ -3,6 +3,7 @@ package newworldorder.server.matchmaking;
 import static org.junit.Assert.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public class MatchQueueTest {
 		queue.insertPlayer("player2");
 		queue.insertPlayer("player3");
 		
-		Set<String> actual = queue.popGame();
+		List<String> actual = queue.popGame();
 		
 		assertEquals(expected, actual);
 	}

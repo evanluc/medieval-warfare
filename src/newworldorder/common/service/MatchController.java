@@ -1,8 +1,15 @@
 package newworldorder.common.service;
 
-import java.util.Set;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 
+import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.matchmaking.GameRequest;
+import newworldorder.common.network.IRoutingProducer;
+import newworldorder.common.network.factory.ActorFactory;
+import newworldorder.common.network.message.ClientCommand;
+import newworldorder.common.network.message.StartGameCommand;
 import newworldorder.common.service.IMatchController;
 import newworldorder.server.matchmaking.MatchQueue;
 
@@ -14,13 +21,16 @@ public class MatchController implements IMatchController {
 	private MatchQueue threePlayerQueue;
 	private MatchQueue fourPlayerQueue;
 	
-	private MatchController() {
+	private IRoutingProducer producer;
+	
+	private MatchController() throws IOException {
 		twoPlayerQueue = new MatchQueue(2);
 		threePlayerQueue = new MatchQueue(3);
 		fourPlayerQueue = new MatchQueue(4);
+		producer = ActorFactory.createRoutingProducer("localhost", "notifyExchange");
 	}
 	
-	public static MatchController getInstance() {
+	public static MatchController getInstance() throws IOException {
 		if (instance == null) {
 			instance = new MatchController();
 		}
@@ -36,11 +46,22 @@ public class MatchController implements IMatchController {
 		queue.insertPlayer(username);
 		
 		if (queue.hasGame()) {
-			Set<String> players = queue.popGame();
-			// TODO: create fanout exchange named by first player, command each player
-			// to subscribe to the exchange.
+			List<String> players = queue.popGame();
+			String gameExchangeName = UUID.randomUUID().toString();
+			
+			GameInfo gameInfo = new GameInfo(players, gameExchangeName);
+			ClientCommand command = new StartGameCommand("server", gameInfo);
+			
+			for (String player : players) {
+				try {
+					producer.sendCommand(command, player);
+				} 
+				catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
-		
 	}
 	
 	private MatchQueue getQueue(int numPlayers) {

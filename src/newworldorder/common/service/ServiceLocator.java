@@ -1,11 +1,17 @@
 package newworldorder.common.service;
 
-public class ServiceLocator implements IServiceLocator {
+import java.io.IOException;
+
+public class ServiceLocator implements IServerServiceLocator {
 	private static ServiceLocator instance;
 	
-	private ServiceLocator() {};
+	private IMatchController matchController;
 	
-	public static ServiceLocator getInstance() {
+	private ServiceLocator() throws IOException {
+		matchController = MatchController.getInstance();
+	}
+	
+	public static ServiceLocator getInstance() throws IOException {
 		if (instance == null) {
 			instance = new ServiceLocator();
 		}
@@ -15,6 +21,6 @@ public class ServiceLocator implements IServiceLocator {
 
 	@Override
 	public IMatchController getMatchController() {
-		return MatchController.getInstance();
+		return matchController;
 	}
 }
