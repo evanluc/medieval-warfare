@@ -27,7 +27,7 @@ public class MatchController implements IMatchController {
 		twoPlayerQueue = new MatchQueue(2);
 		threePlayerQueue = new MatchQueue(3);
 		fourPlayerQueue = new MatchQueue(4);
-		producer = ActorFactory.createRoutingProducer("localhost", "notifyExchange");
+		producer = ActorFactory.createRoutingProducer("142.157.148.114", "notifyExchange");
 	}
 	
 	public static MatchController getInstance() throws IOException {
