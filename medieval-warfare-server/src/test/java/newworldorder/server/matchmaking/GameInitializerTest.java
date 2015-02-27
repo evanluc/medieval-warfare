@@ -1,25 +1,27 @@
 package newworldorder.server.matchmaking;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.network.IRoutingProducer;
 import newworldorder.common.network.message.StartGameCommand;
 
-import org.junit.Before;
-import org.junit.Test;
-
 public class GameInitializerTest {
-	private IRoutingProducer producer;
+	@Mock private IRoutingProducer producer;
 	private GameInitializer gameInitializer;
 	
 	@Before
 	public void setup() {
-		producer = mock(IRoutingProducer.class);
+		MockitoAnnotations.initMocks(this);
 		gameInitializer = new GameInitializer(producer);
 	}
 	
@@ -37,7 +39,13 @@ public class GameInitializerTest {
 		gameInitializer.initializeGame(players);
 		
 		for (String p : players) {
-			verify(producer).sendCommand(command, p);
+			then(producer).should().sendCommand(command, p);
 		}
+	}
+	
+	@After
+	public void tearDown() {
+		producer = null;
+		gameInitializer = null;
 	}
 }
