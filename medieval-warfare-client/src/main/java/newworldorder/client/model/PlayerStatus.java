@@ -1,4 +1,4 @@
-package ca.mcgill.cs.comp361.nwo.mwgs.model;
+package newworldorder.client.model;
 
 /**
  * PlayerStatus enumeration definition.

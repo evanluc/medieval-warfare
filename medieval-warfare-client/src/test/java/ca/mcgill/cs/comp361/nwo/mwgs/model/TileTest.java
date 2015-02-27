@@ -5,6 +5,17 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import newworldorder.client.model.Game;
+import newworldorder.client.model.Map;
+import newworldorder.client.model.Player;
+import newworldorder.client.model.Region;
+import newworldorder.client.model.StructureType;
+import newworldorder.client.model.TerrainType;
+import newworldorder.client.model.Tile;
+import newworldorder.client.model.Unit;
+import newworldorder.client.model.UnitType;
+import newworldorder.client.model.Village;
+
 import org.junit.Test;
 import org.junit.Before;
 

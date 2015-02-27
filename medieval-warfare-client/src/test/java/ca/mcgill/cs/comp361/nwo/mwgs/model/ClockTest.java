@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import newworldorder.client.model.Clock;
+
 import org.junit.Test;
 
 public class ClockTest
