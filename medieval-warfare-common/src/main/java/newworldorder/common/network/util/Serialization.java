@@ -16,7 +16,7 @@ public class Serialization {
 		return bstream.toByteArray();
 	}
 	
-	public static AbstractCommand bytes2Command(byte[] bytes) throws IOException, ClassNotFoundException {
+	public static AbstractCommand bytes2command(byte[] bytes) throws IOException, ClassNotFoundException {
 		ObjectInputStream ostream = new ObjectInputStream(new ByteArrayInputStream(bytes));
 		AbstractCommand command = (AbstractCommand) ostream.readObject();
 		return command;

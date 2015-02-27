@@ -19,5 +19,4 @@ public class CommandHandler implements MessageHandler {
 		AbstractCommand command = (AbstractCommand) ostream.readObject();
 		executor.execute(command);
 	}
-
 }

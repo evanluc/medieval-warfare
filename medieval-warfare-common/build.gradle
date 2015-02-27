@@ -8,5 +8,5 @@ repositories {
 dependencies {
     compile 'com.rabbitmq:amqp-client:3.4.4'
 
-    testCompile "junit:junit:4.11"
+    testCompile "org.mockito:mockito-core:1.+"
 }
