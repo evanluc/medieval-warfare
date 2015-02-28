@@ -1,6 +1,7 @@
 package newworldorder.client.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -133,8 +134,9 @@ public class Village {
     }
     
     public void killUnits() {
-        for (Unit u : supportedUnits) {
-            u.kill();
-        }
+    	List<Unit> aList = new ArrayList<Unit>(supportedUnits);
+    	for(Unit u : aList){
+    		u.kill();
+    	}
     }
 }
