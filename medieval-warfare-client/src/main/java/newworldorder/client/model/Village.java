@@ -32,6 +32,10 @@ public class Village {
         controlledRegion = new Region(pControlledTiles, pPlayer);
         controlledRegion.setVillage(this);
         supportedUnits = new ArrayList<Unit>();
+        villageType = VillageType.HOVEL;
+        gold = 0;
+        wood = 0;
+        controlledBy.addVillage(this);
     }
     
     public static int villageLevel(VillageType pVillageType) {

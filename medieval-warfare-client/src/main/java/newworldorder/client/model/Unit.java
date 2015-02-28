@@ -22,6 +22,7 @@ public class Unit {
         immobileUntilRound = -1;
         currentAction = ActionType.READYFORORDERS;
         controllingPlayer = myVillage.getControlledBy();
+        myVillage.addUnit(this);
     }
     
     public static int unitLevel(UnitType u) {
