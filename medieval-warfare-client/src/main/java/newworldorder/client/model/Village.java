@@ -1,10 +1,9 @@
 package newworldorder.client.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-
-
+import java.util.Set;
 
 /**
  * Village class is clean and complete.
@@ -17,7 +16,7 @@ public class Village {
     private final Player controlledBy;
     private final Tile tile;
     private final Region controlledRegion;
-    private List<Unit> supportedUnits;
+    private Set<Unit> supportedUnits;
     
     /**
      * Creating a Village with the list of 
@@ -32,7 +31,7 @@ public class Village {
         controlledBy = pPlayer;
         controlledRegion = new Region(pControlledTiles, pPlayer);
         controlledRegion.setVillage(this);
-        supportedUnits = new ArrayList<Unit>();
+        supportedUnits = new HashSet<Unit>();
         villageType = VillageType.HOVEL;
         gold = 0;
         wood = 0;
@@ -91,7 +90,7 @@ public class Village {
     }
 
     public List<Unit> getSupportedUnits() {
-        return supportedUnits;
+        return new ArrayList<Unit>(supportedUnits);
     }
     
     public void transactGold(int g) {

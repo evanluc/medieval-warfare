@@ -121,6 +121,6 @@ public class Player {
     }
 
     public void incrementLossCount() {
-        losses--;
+        losses++;
     }
 }
