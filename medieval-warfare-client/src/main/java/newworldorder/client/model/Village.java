@@ -27,6 +27,7 @@ public class Village {
     public Village(Tile pTile, Player pPlayer, List<Tile> pControlledTiles) {
         assert(pControlledTiles.contains(pTile));
         tile = pTile;
+        tile.setVillage(this);
         controlledBy = pPlayer;
         controlledRegion = new Region(pControlledTiles, pPlayer);
         controlledRegion.setVillage(this);
