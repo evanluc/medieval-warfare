@@ -93,7 +93,13 @@ public class GameEngine {
     }
 
     public void buildTower(Tile t) {
-        /* TODO: No message view defined */
+        Village village = t.getRegion().getVillage();
+        if (village != null) {
+        	if (village.getWood() >= 5) {
+        		t.setStructure(StructureType.WATCHTOWER);
+        		village.transactWood(-5);
+        	}
+        }
     }
 
     public Game getGameState() {
@@ -105,33 +111,77 @@ public class GameEngine {
     }
 
     private MoveType getMoveType(Unit u, Tile dest) {
-        /* TODO Implement */
         Tile origin = u.getTile();;
         List<Tile> adjacent = origin.getNeighbours();
-        // Please refer to the attached pseudocode;
-        // This sequence diagram does not check every case we intend to check;
+
         if (adjacent.contains(dest)) {
-            // TerrainType landOnDest = dest.getTerrainType();
-            // StructureType structureOnDest = dest.getStructure();
+            TerrainType landOnDest = dest.getTerrainType();
+            StructureType structureOnDest = dest.getStructure();
             Unit unitOnDest = dest.getUnit();
-            // Village villageOnDest = dest.getVillage();
+            Village villageOnDest = dest.getVillage();
+            
             if (unitOnDest != null) {
                 if (unitOnDest.getControllingPlayer() == u.getControllingPlayer()) {
-                    return MoveType.COMBINEUNITS;
+                    // Combine units
+                	return MoveType.COMBINEUNITS;
                 } else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(u.getUnitType())) {
-                    return MoveType.INVALIDMOVE;
-                } else if (Unit.unitLevel(unitOnDest.getUnitType()) < Unit.unitLevel(u.getUnitType())) {
+                    // Enemy unit is stronger
+                	return MoveType.INVALIDMOVE;
+                } else {
+                	// Enemy unit is weaker
+                    if (structureOnDest == StructureType.WATCHTOWER && 
+                    		Unit.unitLevel(u.getUnitType()) <= Unit.unitLevel(UnitType.INFANTRY)) {
+                    	// but tile contains a watchtower and the attacking unit is weaker than the tower
+                    	return MoveType.INVALIDMOVE;
+                    }
                     return MoveType.FREEMOVE;
                 }
-                else {
-                    /* INCOMPLETE */
-                    return null;
-                }
             }
-            else {
-                /* INCOMPLETE */
-                return null;
+            
+            if (structureOnDest == StructureType.WATCHTOWER) {
+            	// dest contains a watchtower
+            	if (dest.getControllingPlayer() != u.getControllingPlayer()) {
+                	if (Unit.unitLevel(u.getUnitType()) <= Unit.unitLevel(UnitType.INFANTRY)) {
+                		return MoveType.INVALIDMOVE;
+                	}
+            	}
             }
+            
+    		if (villageOnDest != null) {
+    			// Unit invades enemy village
+    			if ( (u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER) && 
+    					villageOnDest.getControlledBy() != u.getVillage().getControlledBy() ) {
+    				return MoveType.FREEMOVE;
+    			} else {
+    				return MoveType.INVALIDMOVE;
+    			}
+    		}
+    		if (landOnDest == TerrainType.TREE){
+    			if (u.getUnitType() == UnitType.KNIGHT){
+    				return MoveType.INVALIDMOVE;
+    			} else {
+    				return MoveType.GATHERWOOD;
+    			}
+    		}
+    		if (structureOnDest == StructureType.TOMBSTONE){
+    			if (u.getUnitType() == UnitType.KNIGHT) {
+    				return MoveType.INVALIDMOVE;
+    			} else {
+    				return MoveType.CLEARTOMB;
+    			}
+    		}
+    		if (landOnDest == TerrainType.MEADOW) {
+    			if (u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER) {
+    				return MoveType.TRAMPLEMEADOW;
+    			} else {
+    				return MoveType.FREEMOVE;
+    			}
+    		}
+    		if (landOnDest == TerrainType.SEA) {
+    			return MoveType.INVALIDMOVE;
+    		}
+    		
+    		return MoveType.INVALIDMOVE;
         } else {
             return MoveType.INVALIDMOVE;
         }
@@ -153,7 +203,7 @@ public class GameEngine {
     private void trampleMeadow(Unit u) {
         Tile t = u.getTile(); 
         // Only Soldier and Knight trample meadows
-        if (Unit.unitLevel(u.getUnitType()) >= 3 && t.getTerrainType() == TerrainType.MEADOW && t.getStructure() != StructureType.ROAD){
+        if (Unit.unitLevel(u.getUnitType()) >= Unit.unitLevel(UnitType.INFANTRY) && t.getTerrainType() == TerrainType.MEADOW && t.getStructure() != StructureType.ROAD){
             u.getTile().setTerrainType(TerrainType.GRASS);
         }
     }
@@ -206,9 +256,14 @@ public class GameEngine {
         } else if (moveType == MoveType.COMBINEUNITS) {
             combineUnits(dest.getUnit(), u);
         } else {
-         // If there is an enemy unit, we kill it because we checked whether it was defeatable in getMoveType
-            if (dest.getControllingPlayer() != u.getControllingPlayer() && dest.getUnit() != null) {
-                dest.getUnit().kill();
+        	// If there is an enemy unit, we kill it because we checked whether it was defeatable in getMoveType
+            if (dest.getControllingPlayer() != u.getControllingPlayer()) {
+            	if (dest.getUnit() != null) {
+            		dest.getUnit().kill();
+            	}
+            	if (dest.getStructure() == StructureType.WATCHTOWER) {
+            		dest.setTerrainType(null);
+            	}
             }
             
             // Move the unit
@@ -226,9 +281,10 @@ public class GameEngine {
                 gatherWood(u);
             }
             
-            // Exiting the territory type actions
+            // Exiting own territory type actions
             if (dest.getControllingPlayer() == null) {
-                combineRegions(u);
+            	u.getVillage().getRegion().addTile(dest);
+                combineRegions(dest);
                 u.setImmobileUntilRound(gameState.getRoundCount() + 1);
                 u.setCurrentAction(ActionType.MOVED);
             } else if (dest.getControllingPlayer() != u.getControllingPlayer()) {
@@ -240,46 +296,73 @@ public class GameEngine {
     }
 
     private void combineUnits(Unit dest, Unit moved) {
-        /* TODO Implement */
-        // This operation is a long series of if switches. Please see pseudocode.
+    	UnitType newLevel = null;
+    	
+    	if(dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.PEASANT ){
+    		newLevel = UnitType.INFANTRY;
+    	} else if (dest.getUnitType() == UnitType.INFANTRY && moved.getUnitType() == UnitType.INFANTRY ){
+    		newLevel = UnitType.KNIGHT;
+    	} else if ( (dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.INFANTRY)
+    			|| (dest.getUnitType() == UnitType.INFANTRY && moved.getUnitType() == UnitType.PEASANT)){
+    		newLevel = UnitType.SOLDIER;
+    	} else if ( (dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.SOLDIER)
+    			|| (dest.getUnitType() == UnitType.SOLDIER && moved.getUnitType() == UnitType.PEASANT)){
+    		newLevel = UnitType.KNIGHT;
+    	} else {
+    		return;
+    	}
+    	dest.setUnitType(newLevel);
+    	moved.kill();
     }
 
-    private void combineRegions(Unit u) {
-        /* TODO Implement */
-        // This operation is two nested loops followed by two nested ifs. Please see the attached pseudocode.
-        u.setCurrentAction(null);
+    private void combineRegions(Tile t) {
+        List<Tile> adjacent = t.getNeighbours();
+        
+        for (Tile t1 : adjacent) {
+        	if (t.getControllingPlayer() == t1.getControllingPlayer() && t.getRegion() != t1.getRegion()) {
+        		Village oldV;
+        		Region oldR;
+        		Village newV;
+        		Region newR;
+        		
+        		// set the old and new regions and villages depending on which level is greater.
+				if( Village.villageLevel(t.getRegion().getVillage().getVillageType()) >= Village.villageLevel(t1.getRegion().getVillage().getVillageType())) {
+					oldR = t1.getRegion();
+					oldV = oldR.getVillage();
+					newR = t.getRegion();
+					newV = newR.getVillage();
+				} else {
+					oldR = t.getRegion();
+					oldV = oldR.getVillage();
+					newR = t1.getRegion();
+					newV = newR.getVillage();
+				}
+				
+				// loop through all tiles in old region and update
+				for (Tile oldTile : oldR.getTiles()) {
+					oldTile.setRegion(t.getRegion());
+					newR.addTile(oldTile);
+				}
+				
+				// loop through all units in old region and update
+				for (Unit u : oldV.getSupportedUnits()) {
+					u.setVillage(newV);
+					newV.addUnit(u);
+				}
+				
+				// add the old village's gold and wood to the new village
+				newV.transactWood(oldV.getWood());
+				newV.transactGold(oldV.getGold());
+        	}
+        }
     }
-
-    /* DEPRECATED, DO NOT USE, USE reconcileRegions(Region r) INSTEAD */
-//    private void splitRegions(Unit u) {
-//        Region region;
-//        Village village;
-//        Tile tile= u.getTile();
-//        List<Tile> neighbours = tile.getNeighbours();
-//        // Check if the tiles around the unit belong to a region that has been split.
-//        boolean replace = true;
-//        if (replace) {
-//            // Determine the set of connected tiles in each of the new regions
-//            for (;; /* each new set of tiles */) {
-//                if (replace /* set of tiles is greater than or equal to 3*/) {
-//                    // Create a new region with the set of connected tiles.
-//                    region = new Region(null, null);
-//                    region.createVillage();
-//                    village = region.getVillage();
-//                    // Iterate through every tile, set the village of each unit found to the new village.
-//                    for (Tile t : region.getTiles()) {
-//                        if (t.getUnit() != null) {
-//                            t.getUnit().setVillage(village);
-//                        }
-//                    }
-//                } else /* set of tiles is fewer than 3*/ {
-//                    // Remove all the tiles in the set from the region.
-//                    // If the tile contains a unit, kill the unit.
-//                }
-//            }
-//        }
-//    }
     
+    /**
+     * This method determines whether or not the tiles in a given region are connected
+     * and if tiles have been disconnected, it determines whether the disconnected tiles
+     * can form a new region and creates a new region if that is the case.
+     * @param r The region to reconcile.
+     */
     private void reconcileRegions(Region r) {
         Player controllingPlayer = r.getControllingPlayer();
         Village originalVillage = r.getVillage();
@@ -324,7 +407,7 @@ public class GameEngine {
                 }
                 if (r.getVillage() == null) r.createVillage();
             }
-            /* This is newly created region with > 3 non-village tiles, with no contolling village */
+            /* This is newly created region with > 3 non-village tiles, with no controlling village */
             else {
                 Region newRegion = new Region(l, controllingPlayer);
                 newRegion.createVillage();
@@ -344,7 +427,6 @@ public class GameEngine {
      * @return
      */
     private Set<Tile> reachableTilesInSameRegion(Tile from, Region r, Set<Tile> reached) {
-        
         for (Tile t : from.getNeighbours()) {
             if (t.getRegion() == r && !reached.contains(t)) {
                 reached.add(t);
