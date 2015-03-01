@@ -1,0 +1,12 @@
+package newworldorder.client.driver;
+
+public enum UIActionType {
+	MOVEUNIT,
+	BUILDROAD,
+	CULTIVATEMEADOW,
+	BUILDTOWER,
+	BUILDUNIT,
+	UPGRADEUNIT,
+	UPGRADEVILLAGE,
+	ENDTURN
+}
