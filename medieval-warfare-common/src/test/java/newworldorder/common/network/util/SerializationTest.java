@@ -24,14 +24,14 @@ public class SerializationTest {
 		AbstractCommand restored = bytes2command(command2bytes(command));
 		assertEquals(command, restored);
 	}
-	
+
 	@Test
 	public void testJoinGameCommandSerialization() throws ClassNotFoundException, IOException {
 		JoinGameCommand command = new JoinGameCommand("sender", new GameRequest("player1", 3));
 		AbstractCommand restored = bytes2command(command2bytes(command));
 		assertEquals(command, restored);
 	}
-	
+
 	@Test
 	public void testStartGameCommandSerialization() throws ClassNotFoundException, IOException {
 		List<String> players = new ArrayList<>();

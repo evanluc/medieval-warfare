@@ -10,5 +10,8 @@ public class GameRequestTest {
 		GameRequest request = new GameRequest("player1", 2);
 		assertEquals("player1", request.getUsername());
 		assertEquals(2, request.getNumPlayers());
+
+		GameRequest other = new GameRequest("player1", 2);
+		assertEquals(request, other);
 	}
 }

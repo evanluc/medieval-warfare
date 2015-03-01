@@ -10,7 +10,7 @@ public class StartGameCommand extends ClientCommand {
 	 */
 	private static final long serialVersionUID = 2435938035933490611L;
 	private GameInfo gameInfo;
-	
+
 	public StartGameCommand(String sender, GameInfo gameInfo) {
 		super(sender);
 		this.gameInfo = gameInfo;
