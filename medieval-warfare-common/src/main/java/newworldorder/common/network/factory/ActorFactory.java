@@ -2,32 +2,31 @@ package newworldorder.common.network.factory;
 
 import java.io.IOException;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
 import newworldorder.common.network.IRoutingProducer;
 import newworldorder.common.network.MessageConsumer;
 import newworldorder.common.network.MessageHandler;
 import newworldorder.common.network.MessageProducer;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-
 public class ActorFactory {
 
-	public static MessageConsumer createDirectConsumer(String host, String queueName, MessageHandler handler)
-			throws IOException {
+	public static MessageConsumer createDirectConsumer(String host, String queueName, MessageHandler handler) throws IOException {
 		Channel channel = createDirectChannel(host, queueName);
 		return new ConcreteConsumer(channel, queueName, handler);
 	}
 
-	public static MessageConsumer createFanoutConsumer(String host, String exchangeName, MessageHandler handler)
-			throws IOException {
+	public static MessageConsumer createFanoutConsumer(String host, String exchangeName, MessageHandler handler) throws IOException {
 		Channel channel = createFanoutChannel(host, exchangeName);
 		String queueName = channel.queueDeclare().getQueue();
 		channel.queueBind(queueName, exchangeName, "");
 		return new ConcreteConsumer(channel, queueName, handler);
 	}
-	
-	public static MessageConsumer createRoutingConsumer(String host, String exchangeName, String routingKey, MessageHandler handler) throws IOException {
+
+	public static MessageConsumer createRoutingConsumer(String host, String exchangeName, String routingKey, MessageHandler handler)
+			throws IOException {
 		Channel channel = createRoutingChannel(host, exchangeName);
 		String queueName = channel.queueDeclare().getQueue();
 		channel.queueBind(queueName, exchangeName, routingKey);
