@@ -1,0 +1,4 @@
+include 'desktop', 'core'
+
+project(':desktop').projectDir = new File('/desktop')
+project(':core').projectDir = new File('/core')

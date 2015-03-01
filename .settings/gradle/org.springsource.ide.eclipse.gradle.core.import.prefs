@@ -1,5 +1,5 @@
 #org.springsource.ide.eclipse.gradle.core.preferences.GradleImportPreferences
-#Thu Feb 26 03:28:37 EST 2015
+#Sun Mar 01 17:14:07 EST 2015
 addResourceFilters=true
 afterTasks=afterEclipseImport;
 beforeTasks=cleanEclipse;eclipse;
@@ -7,4 +7,4 @@ enableAfterTasks=true
 enableBeforeTasks=true
 enableDSLD=false
 enableDependendencyManagement=true
-projects=;medieval-warfare-client;medieval-warfare-common;medieval-warfare-server;
+projects=;medieval-warfare-client;medieval-warfare-common;medieval-warfare-game;medieval-warfare-game/core;medieval-warfare-game/desktop;medieval-warfare-server;

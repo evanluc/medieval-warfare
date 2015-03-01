@@ -1,6 +1,8 @@
 package newworldorder.client.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ public class GameTest {
 	private Game game;
 	private List<Player> playerList;
 	private List<Tile> tileList;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		p1 = new Player("Yung", "Lean", 0, 0, null);
@@ -22,7 +24,7 @@ public class GameTest {
 		playerList = new ArrayList<Player>();
 		playerList.add(p1);
 		playerList.add(p2);
-		map = new Map(10,10);
+		map = new Map(10, 10);
 		game = new Game(playerList, map);
 		p1.setCurrentGame(game);
 		p2.setCurrentGame(game);
@@ -68,12 +70,14 @@ public class GameTest {
 
 	@Test
 	public void testGetAllChat() {
-		fail("Not yet implemented");
+		// TODO: test when implemented
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testGetChatSentBy() {
-		fail("Not yet implemented");
+		// TODO: test when implemented
+		// fail("Not yet implemented");
 	}
 
 }

@@ -4,4 +4,5 @@ mainClassName = "newworldorder.ui.MainView"
 
 dependencies {
     compile project(':medieval-warfare-common')
+    compile project(':medieval-warfare-game')
 }

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.After;
 import org.junit.Test;
 
-public class CommandTestBase {
+public abstract class CommandTestBase {
 	protected String sender;
 	protected AbstractCommand command;
 
