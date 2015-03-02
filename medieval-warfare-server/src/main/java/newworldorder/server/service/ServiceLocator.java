@@ -8,8 +8,8 @@ import newworldorder.common.service.IServerServiceLocator;
 
 @Component
 public class ServiceLocator implements IServerServiceLocator {
-	private IMatchController matchController;
-	
+	private final IMatchController matchController;
+
 	@Autowired
 	public ServiceLocator(IMatchController matchController) {
 		this.matchController = matchController;

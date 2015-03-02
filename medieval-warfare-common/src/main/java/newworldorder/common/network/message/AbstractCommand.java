@@ -2,7 +2,9 @@ package newworldorder.common.network.message;
 
 import java.io.Serializable;
 
-public abstract class AbstractCommand implements Serializable {
+import newworldorder.common.network.Command;
+
+public abstract class AbstractCommand implements Command, Serializable {
 
 	/**
 	 * 
@@ -19,6 +21,7 @@ public abstract class AbstractCommand implements Serializable {
 		return sender;
 	}
 
+	@Override
 	public abstract void execute();
 
 	@Override

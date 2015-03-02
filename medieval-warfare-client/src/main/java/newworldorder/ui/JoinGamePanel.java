@@ -67,23 +67,24 @@ public class JoinGamePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				aMainView.setMatchMaking();
 				try {
-					MessageProducer producer = ActorFactory.createDirectProducer("142.157.148.57", "requestQueue");
+					String msgHost = "104.236.30.10";
+					MessageProducer producer = ActorFactory.createDirectProducer(msgHost, "requestQueue");
 					GameRequest curRequest = new GameRequest(aMainView.getName(), 2);
 					JoinGameCommand joinGameCommand = new JoinGameCommand(aMainView.getName(), curRequest);
 					producer.sendCommand(joinGameCommand);
 
 					// Now wait for a response from server
-					MessageConsumer consumer = ActorFactory.createRoutingConsumer("142.157.148.57", "notifyExchange", aMainView.getName(),
+					MessageConsumer consumer = ActorFactory.createDirectConsumer(msgHost, "notifyExchange", aMainView.getName(),
 							new MessageHandler() {
 
 								@Override
-								public void handle(byte[] message) throws IOException, ClassNotFoundException {
+								public void handle(byte[] message) {
 									JOptionPane.showMessageDialog(null, "Game found!");
 								}
 
 							});
 
-					consumer.consumeMessages();
+					consumer.startConsuming();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

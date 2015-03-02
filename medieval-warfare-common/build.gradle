@@ -1,12 +1,26 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-repositories {
-    jcenter()
+sourceSets {
+    integTest {
+        java.srcDir file('src/integration-test/java')
+    }
 }
 
+task integTest(type: Test) {
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+}
+
+check.dependsOn integTest
+
 dependencies {
-    compile 'com.rabbitmq:amqp-client:3.4.4'
+    compile 'org.springframework.amqp:spring-rabbit'
 
     testCompile "org.mockito:mockito-core:1.+"
+    
+    integTestCompile sourceSets.main.output
+    integTestCompile configurations.testCompile
+    integTestCompile sourceSets.test.output
+    integTestRuntime configurations.testRuntime
 }

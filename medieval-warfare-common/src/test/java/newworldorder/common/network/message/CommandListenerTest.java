@@ -9,32 +9,34 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.amqp.core.Message;
 
 import newworldorder.common.network.util.Serialization;
 
-public class CommandHandlerTest {
+public class CommandListenerTest {
 	@Mock private CommandExecutor executor;
-	private CommandHandler handler;
-	
+	private CommandListener listener;
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		handler = new CommandHandler(executor);
+		listener = new CommandListener(executor);
 	}
-	
+
 	@After
 	public void tearDown() {
 		executor = null;
-		handler = null;
+		listener = null;
 	}
-	
+
 	@Test
 	public void testHandleMessage() throws IOException, ClassNotFoundException {
 		LoginCommand command = new LoginCommand("username", "password");
 		byte[] serialized = Serialization.command2bytes(command);
-		
-		handler.handle(serialized);
-		
+		Message message = new Message(serialized, null);
+
+		listener.onMessage(message);
+
 		then(executor).should().execute(command);
 	}
 }

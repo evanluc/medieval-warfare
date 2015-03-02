@@ -1,11 +1,13 @@
 package newworldorder.common.network;
 
-import newworldorder.common.network.message.AbstractCommand;
+import java.io.IOException;
 
 public interface IRoutingProducer {
-	
-	public void sendMessage(byte[] message, String routingKey) throws Exception;
-	
-	public void sendCommand(AbstractCommand command, String routingKey) throws Exception;
-	
+
+	public void sendMessage(byte[] message, String routingKey) throws IOException;
+
+	public void sendCommand(Command command, String routingKey) throws IOException;
+
+	public void releaseConnection() throws IOException;
+
 }
