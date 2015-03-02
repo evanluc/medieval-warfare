@@ -69,7 +69,13 @@ public class GameEngineTest {
 
 	@Test
 	public void testUpgradeUnit() {
-		fail("Not yet implemented");
+		Unit aUnit = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
+		assertEquals(aUnit.getVillage().getWood(), 0);
+		gameEngine.upgradeUnit(aUnit, UnitType.KNIGHT);
+		assertEquals(aUnit.getUnitType(), UnitType.PEASANT);
+		aUnit.getVillage().transactGold(20);
+		gameEngine.upgradeUnit(aUnit, UnitType.KNIGHT);
+		assertEquals(aUnit.getUnitType(), UnitType.KNIGHT);
 	}
 
 	@Test
@@ -93,8 +99,41 @@ public class GameEngineTest {
 	}
 
 	@Test
-	public void testMoveUnit() {
+	public void testMoveUnit_InvalidMove() {
+		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
+		Unit enemy = new Unit(UnitType.KNIGHT, village2, aMap.getTile(1, 1));
+		System.out.println(aMap.getTile(1,0).getUnit());
+		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
+		System.out.println(aMap.getTile(1,0).getUnit());
+		assertEquals(aMap.getTile(1,0).getUnit(), ally);
+		assertEquals(aMap.getTile(1,1).getUnit(), enemy);
+	}
+	@Test
+	public void testMoveUnit_FreeMove() {
 		fail("Not yet implemented");
 	}
-
+	@Test
+	public void testMoveUnit_ClearTomb() {
+		fail("Not yet implemented");
+	}
+	@Test
+	public void testMoveUnit_GatherWood() {
+		fail("Not yet implemented");
+	}
+	@Test
+	public void testMoveUnit_NeutralTakeOver() {
+		fail("Not yet implemented");
+	}
+	@Test
+	public void testMoveUnit_EnemyTakeover() {
+		fail("Not yet implemented");
+	}
+	@Test
+	public void testMoveUnit_CombineUnits() {
+		fail("Not yet implemented");
+	}
+	@Test
+	public void testMoveUnit_TrampleMeadow() {
+		fail("Not yet implemented");
+	}
 }

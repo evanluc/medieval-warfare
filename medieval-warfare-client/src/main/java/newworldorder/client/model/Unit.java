@@ -23,6 +23,7 @@ public class Unit {
         currentAction = ActionType.READYFORORDERS;
         controllingPlayer = myVillage.getControlledBy();
         myVillage.addUnit(this);
+        tile.setUnit(this);
     }
     
     public static int unitLevel(UnitType u) {
