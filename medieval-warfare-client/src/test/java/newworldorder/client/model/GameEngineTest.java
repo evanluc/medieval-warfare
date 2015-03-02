@@ -104,13 +104,34 @@ public class GameEngineTest {
 
 	@Test
 	public void testMoveUnit_InvalidMove() {
+		//Case where enemy unit is stronger
 		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
 		Unit enemy = new Unit(UnitType.KNIGHT, village2, aMap.getTile(1, 1));
-		System.out.println(aMap.getTile(1, 0).getUnit());
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
-		System.out.println(aMap.getTile(1, 0).getUnit());
+		assertEquals(aMap.getTile(1,0).getUnit(), ally);
+		assertEquals(aMap.getTile(1,1).getUnit(), enemy);
+		//Case where dest tile is not adjacent.
+		gameEngine.moveUnit(ally, aMap.getTile(2, 2));
+		assertEquals(aMap.getTile(1,0).getUnit(), ally);
+		//Case where enemy unit is weaker, but on a watchtower that is stronger than attacker
+		ally.setUnitType(UnitType.INFANTRY);
+		enemy.setUnitType(UnitType.PEASANT);
+		enemy.getTile().setStructure(StructureType.WATCHTOWER);
+		gameEngine.moveUnit(ally, enemy.getTile());
 		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
-		assertEquals(aMap.getTile(1, 1).getUnit(), enemy);
+		//Case where there is just a watchtower
+		enemy.kill();
+		aMap.getTile(1, 1).setStructure(StructureType.WATCHTOWER);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
+		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
+		//Case where weak unit tries to take village
+		aMap.getTile(1, 1).setRegion(aMap.getTile(1,0).getRegion());
+		aMap.getTile(1, 1).setTerrainType(TerrainType.GRASS);
+		gameEngine.moveUnit(ally, aMap.getTile(1,1));
+		assertEquals(aMap.getTile(1, 0).getRegion(), aMap.getTile(1, 1).getRegion());
+		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
+		gameEngine.moveUnit(ally, aMap.getTile(2,2));
+		assertEquals(aMap.getTile(1,1).getUnit(), ally);
 	}
 
 	@Test
