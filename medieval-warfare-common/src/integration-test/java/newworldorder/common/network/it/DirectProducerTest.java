@@ -28,7 +28,7 @@ public class DirectProducerTest {
 	private String hostname = "104.236.30.10";
 	@Mock private MessageHandler handler;
 
-	private final int wait = 2000;
+	private final int wait = 1000;
 
 	@Before
 	public void setup() throws IOException {
@@ -41,10 +41,11 @@ public class DirectProducerTest {
 		producer.releaseConnection();
 		consumer.stopConsuming();
 		consumer.releaseConnection();
+		RabbitUtils.deleteQueue(hostname, queue);
+		RabbitUtils.deleteQueue(hostname, consumer.getQueue());
 		producer = null;
 		handler = null;
 		consumer = null;
-		RabbitUtils.purgeQueue(hostname, queue);
 	}
 
 	@Test
@@ -73,7 +74,7 @@ public class DirectProducerTest {
 
 	@Test
 	public void testUnsubscribedConsumerDoesNotReceiveMessage() throws Exception {
-		consumer = ActorFactory.createDirectConsumer(hostname, "some-other-queue", handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, "test-queue-2", handler, false);
 		consumer.startConsuming();
 		byte[] message = "message".getBytes();
 		producer.sendMessage(message);

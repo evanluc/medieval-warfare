@@ -29,7 +29,7 @@ public class RoutingProducerTest {
 	private String routingKey = "routing-key-1";
 	@Mock MessageHandler handler;
 
-	private final int wait = 2000;
+	private final int wait = 1000;
 
 	@Before
 	public void setup() throws IOException {
@@ -45,7 +45,6 @@ public class RoutingProducerTest {
 		producer = null;
 		handler = null;
 		consumer = null;
-		RabbitUtils.purgeQueue(hostname, exchange, routingKey);
 		RabbitUtils.deleteExchange(hostname, exchange);
 	}
 

@@ -30,7 +30,7 @@ public class FanoutProducerTest {
 	private String exchange = "test-exchange-1";
 	@Mock private MessageHandler handler1, handler2, handler3;
 
-	private final int wait = 2000;
+	private final int wait = 1000;
 
 	@Before
 	public void setup() throws IOException {
@@ -48,7 +48,6 @@ public class FanoutProducerTest {
 			c = null;
 		}
 		consumers.clear();
-		RabbitUtils.purgeExchange(hostname, exchange);
 		RabbitUtils.deleteExchange(hostname, exchange);
 		handler1 = null;
 		handler2 = null;

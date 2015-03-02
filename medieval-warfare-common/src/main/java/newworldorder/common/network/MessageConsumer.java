@@ -10,4 +10,6 @@ public interface MessageConsumer {
 
 	public void releaseConnection() throws IOException;
 
+	public String getQueue();
+
 }

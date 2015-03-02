@@ -49,4 +49,9 @@ class AsyncConsumer implements MessageConsumer {
 			}
 		};
 	}
+
+	@Override
+	public String getQueue() {
+		return queueName;
+	}
 }

@@ -52,4 +52,9 @@ class BlockingConsumer implements MessageConsumer {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public String getQueue() {
+		return queueName;
+	}
 }
