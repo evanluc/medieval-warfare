@@ -186,7 +186,9 @@ public class GameEngine {
     		if (landOnDest == TerrainType.SEA) {
     			return MoveType.INVALIDMOVE;
     		}
-    		
+    		if (landOnDest == TerrainType.GRASS){
+    			return MoveType.FREEMOVE;
+    		}
     		return MoveType.INVALIDMOVE;
         } else {
             return MoveType.INVALIDMOVE;
