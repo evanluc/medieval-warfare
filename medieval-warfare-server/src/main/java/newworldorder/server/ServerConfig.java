@@ -36,8 +36,8 @@ public class ServerConfig {
 	@Bean
 	ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host, port);
-		connectionFactory.setUsername("newworldorder");
-		connectionFactory.setPassword("warfare");
+		connectionFactory.setUsername(username);
+		connectionFactory.setPassword(password);
 		return connectionFactory;
 	}
 
