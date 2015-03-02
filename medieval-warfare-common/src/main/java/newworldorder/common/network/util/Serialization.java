@@ -13,12 +13,15 @@ public class Serialization {
 		ByteArrayOutputStream bstream = new ByteArrayOutputStream();
 		ObjectOutputStream ostream = new ObjectOutputStream(bstream);
 		ostream.writeObject(command);
-		return bstream.toByteArray();
+		byte[] bytes = bstream.toByteArray();
+		ostream.close();
+		return bytes;
 	}
-	
+
 	public static AbstractCommand bytes2command(byte[] bytes) throws IOException, ClassNotFoundException {
 		ObjectInputStream ostream = new ObjectInputStream(new ByteArrayInputStream(bytes));
 		AbstractCommand command = (AbstractCommand) ostream.readObject();
+		ostream.close();
 		return command;
 	}
 }

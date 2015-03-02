@@ -77,13 +77,13 @@ public class JoinGamePanel extends JPanel {
 							new MessageHandler() {
 
 								@Override
-								public void handle(byte[] message) throws IOException, ClassNotFoundException {
+								public void handle(byte[] message) {
 									JOptionPane.showMessageDialog(null, "Game found!");
 								}
 
-							});
+							}, false);
 
-					consumer.consumeMessages();
+					consumer.startConsuming();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
