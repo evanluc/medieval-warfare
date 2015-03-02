@@ -5,8 +5,8 @@ import java.io.IOException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
+import newworldorder.common.network.Command;
 import newworldorder.common.network.IRoutingProducer;
-import newworldorder.common.network.message.AbstractCommand;
 import newworldorder.common.network.util.Serialization;
 
 class RoutingProducer implements IRoutingProducer {
@@ -24,7 +24,7 @@ class RoutingProducer implements IRoutingProducer {
 	}
 
 	@Override
-	public void sendCommand(AbstractCommand command, String routingKey) throws IOException {
+	public void sendCommand(Command command, String routingKey) throws IOException {
 		this.sendMessage(Serialization.command2bytes(command), routingKey);
 	}
 

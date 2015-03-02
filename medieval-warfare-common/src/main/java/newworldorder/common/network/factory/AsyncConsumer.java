@@ -12,16 +12,20 @@ import newworldorder.common.network.MessageConsumer;
 import newworldorder.common.network.MessageHandler;
 
 class AsyncConsumer implements MessageConsumer {
-	private Channel channel;
-	private String queueName;
-	private DefaultConsumer consumer;
-	private MessageHandler handler;
+	private final Channel channel;
+	private final String queueName;
+	private final DefaultConsumer consumer;
 
 	AsyncConsumer(Channel channel, String queueName, MessageHandler handler) {
 		this.channel = channel;
 		this.queueName = queueName;
-		this.handler = handler;
-		initializeConsumer();
+
+		consumer = new DefaultConsumer(channel) {
+			@Override
+			public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+				handler.handle(body);
+			}
+		};
 	}
 
 	@Override
@@ -35,19 +39,10 @@ class AsyncConsumer implements MessageConsumer {
 	}
 
 	@Override
-	public void releaseConnection() throws IOException {
+	public final void releaseConnection() throws IOException {
 		Connection conn = channel.getConnection();
 		channel.close();
 		conn.close();
-	}
-
-	private void initializeConsumer() {
-		this.consumer = new DefaultConsumer(channel) {
-			@Override
-			public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
-				handler.handle(body);
-			}
-		};
 	}
 
 	@Override

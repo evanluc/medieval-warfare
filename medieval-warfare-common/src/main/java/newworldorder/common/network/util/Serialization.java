@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import newworldorder.common.network.message.AbstractCommand;
+import newworldorder.common.network.Command;
 
 public class Serialization {
-	public static byte[] command2bytes(AbstractCommand command) throws IOException {
+	public static byte[] command2bytes(Command command) throws IOException {
 		ByteArrayOutputStream bstream = new ByteArrayOutputStream();
 		ObjectOutputStream ostream = new ObjectOutputStream(bstream);
 		ostream.writeObject(command);
@@ -18,9 +18,9 @@ public class Serialization {
 		return bytes;
 	}
 
-	public static AbstractCommand bytes2command(byte[] bytes) throws IOException, ClassNotFoundException {
+	public static Command bytes2command(byte[] bytes) throws IOException, ClassNotFoundException {
 		ObjectInputStream ostream = new ObjectInputStream(new ByteArrayInputStream(bytes));
-		AbstractCommand command = (AbstractCommand) ostream.readObject();
+		Command command = (Command) ostream.readObject();
 		ostream.close();
 		return command;
 	}

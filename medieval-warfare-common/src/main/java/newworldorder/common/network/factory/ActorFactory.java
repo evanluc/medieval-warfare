@@ -12,26 +12,24 @@ import newworldorder.common.network.util.RabbitUtils;
 
 public class ActorFactory {
 
-	public static MessageConsumer createDirectConsumer(String host, String queueName, MessageHandler handler, boolean blocking)
-			throws IOException {
+	public static MessageConsumer createDirectConsumer(String host, String queueName, MessageHandler handler) throws IOException {
 		Channel channel = RabbitUtils.createDirectChannel(host, queueName);
-		return (blocking ? new BlockingConsumer(channel, queueName, handler) : new AsyncConsumer(channel, queueName, handler));
+		return new AsyncConsumer(channel, queueName, handler);
 	}
 
-	public static MessageConsumer createFanoutConsumer(String host, String exchangeName, MessageHandler handler, boolean blocking)
+	public static MessageConsumer createDirectConsumer(String host, String exchangeName, String routingKey, MessageHandler handler)
 			throws IOException {
-		Channel channel = RabbitUtils.createFanoutChannel(host, exchangeName);
-		String queueName = channel.queueDeclare().getQueue();
-		channel.queueBind(queueName, exchangeName, "");
-		return (blocking ? new BlockingConsumer(channel, queueName, handler) : new AsyncConsumer(channel, queueName, handler));
-	}
-
-	public static MessageConsumer createRoutingConsumer(String host, String exchangeName, String routingKey, MessageHandler handler,
-			boolean blocking) throws IOException {
 		Channel channel = RabbitUtils.createRoutingChannel(host, exchangeName);
 		String queueName = channel.queueDeclare().getQueue();
 		channel.queueBind(queueName, exchangeName, routingKey);
-		return (blocking ? new BlockingConsumer(channel, queueName, handler) : new AsyncConsumer(channel, queueName, handler));
+		return new AsyncConsumer(channel, queueName, handler);
+	}
+
+	public static MessageConsumer createFanoutConsumer(String host, String exchangeName, MessageHandler handler) throws IOException {
+		Channel channel = RabbitUtils.createFanoutChannel(host, exchangeName);
+		String queueName = channel.queueDeclare().getQueue();
+		channel.queueBind(queueName, exchangeName, "");
+		return new AsyncConsumer(channel, queueName, handler);
 	}
 
 	public static MessageProducer createDirectProducer(String host, String queueName) throws IOException {

@@ -50,7 +50,7 @@ public class DirectProducerTest {
 
 	@Test
 	public void testSubscribedConsumerHandlesMessage() throws Exception {
-		consumer = ActorFactory.createDirectConsumer(hostname, queue, handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, queue, handler);
 		consumer.startConsuming();
 		byte[] message = "message".getBytes();
 		producer.sendMessage(message);
@@ -62,7 +62,7 @@ public class DirectProducerTest {
 
 	@Test
 	public void testSubscribedConsumerHandlesCommand() throws Exception {
-		consumer = ActorFactory.createDirectConsumer(hostname, queue, handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, queue, handler);
 		consumer.startConsuming();
 		AbstractCommand command = new LoginCommand("sender", "password");
 		producer.sendCommand(command);
@@ -74,7 +74,7 @@ public class DirectProducerTest {
 
 	@Test
 	public void testUnsubscribedConsumerDoesNotReceiveMessage() throws Exception {
-		consumer = ActorFactory.createDirectConsumer(hostname, "test-queue-2", handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, "test-queue-2", handler);
 		consumer.startConsuming();
 		byte[] message = "message".getBytes();
 		producer.sendMessage(message);

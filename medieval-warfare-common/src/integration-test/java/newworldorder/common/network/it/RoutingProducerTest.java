@@ -50,7 +50,7 @@ public class RoutingProducerTest {
 
 	@Test
 	public void testSubscribedConsumerHandlesMessage() throws Exception {
-		consumer = ActorFactory.createRoutingConsumer(hostname, exchange, routingKey, handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, exchange, routingKey, handler);
 		consumer.startConsuming();
 		byte[] message = "message".getBytes();
 
@@ -63,7 +63,7 @@ public class RoutingProducerTest {
 
 	@Test
 	public void testSubscribedConsumerHandlesCommand() throws Exception {
-		consumer = ActorFactory.createRoutingConsumer(hostname, exchange, routingKey, handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, exchange, routingKey, handler);
 		consumer.startConsuming();
 		AbstractCommand command = new LoginCommand("sender", "password");
 		byte[] message = Serialization.command2bytes(command);
@@ -77,7 +77,7 @@ public class RoutingProducerTest {
 
 	@Test
 	public void testSubscribedConsumerWithDifferentKeyDoesNotHandleMessage() throws Exception {
-		consumer = ActorFactory.createRoutingConsumer(hostname, exchange, "routing-key-2", handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, exchange, "routing-key-2", handler);
 		consumer.startConsuming();
 		AbstractCommand command = new LoginCommand("sender", "password");
 
@@ -92,7 +92,7 @@ public class RoutingProducerTest {
 	@Test
 	public void testUnsubscribedConsumerDoesNotHandleMessage() throws Exception {
 		String otherExchange = "test-exchange-2";
-		consumer = ActorFactory.createRoutingConsumer(hostname, otherExchange, routingKey, handler, false);
+		consumer = ActorFactory.createDirectConsumer(hostname, otherExchange, routingKey, handler);
 		consumer.startConsuming();
 		AbstractCommand command = new LoginCommand("sender", "password");
 

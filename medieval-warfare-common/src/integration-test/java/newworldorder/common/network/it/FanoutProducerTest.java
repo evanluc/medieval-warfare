@@ -58,9 +58,9 @@ public class FanoutProducerTest {
 
 	@Test
 	public void testMultipleSubscribedConsumersHandleMessage() throws Exception {
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler1, false));
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler2, false));
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler3, false));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler1));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler2));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler3));
 
 		for (MessageConsumer c : consumers) {
 			c.startConsuming();
@@ -78,9 +78,9 @@ public class FanoutProducerTest {
 
 	@Test
 	public void testMultipleSubscribedConsumersHandleCommand() throws Exception {
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler1, false));
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler2, false));
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler3, false));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler1));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler2));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, exchange, handler3));
 
 		for (MessageConsumer c : consumers) {
 			c.startConsuming();
@@ -100,7 +100,7 @@ public class FanoutProducerTest {
 	@Test
 	public void testUnsubscribedConsumerDoesNotHandleMessage() throws Exception {
 		String otherExchange = "test-exchange-2";
-		consumers.add(ActorFactory.createFanoutConsumer(hostname, otherExchange, handler1, false));
+		consumers.add(ActorFactory.createFanoutConsumer(hostname, otherExchange, handler1));
 
 		for (MessageConsumer c : consumers) {
 			c.startConsuming();

@@ -17,7 +17,7 @@ public class ServerMain {
 
 		try {
 			MessageHandler requestHandler = new CommandHandler(executor);
-			MessageConsumer consumer = ActorFactory.createDirectConsumer("localhost", "requestQueue", requestHandler, false);
+			MessageConsumer consumer = ActorFactory.createDirectConsumer("localhost", "requestQueue", requestHandler);
 			System.out.println("Consumer connected to requestQueue. Waiting for messages...");
 			consumer.startConsuming();
 		} catch (Exception e) {
