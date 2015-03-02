@@ -1,10 +1,26 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'io.spring.gradle:dependency-management-plugin:0.3.0.RELEASE'
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'eclipse'
+    apply plugin: 'io.spring.dependency-management'
 
     repositories {
-       mavenCentral()
+       jcenter()
     }
+    
+    dependencyManagement {
+	    imports {
+	        mavenBom 'io.spring.platform:platform-bom:1.1.1.RELEASE'
+	    }
+	}
 
     dependencies {
         testCompile 'junit:junit:4.11'
