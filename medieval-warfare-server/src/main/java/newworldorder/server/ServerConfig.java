@@ -1,9 +1,14 @@
 package newworldorder.server;
 
-import org.springframework.amqp.core.MessageListener;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,27 +16,25 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-import newworldorder.common.network.message.CommandExecutor;
-import newworldorder.common.network.message.CommandListener;
+import newworldorder.common.network.command.CommandExecutor;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
 public class ServerConfig {
 
-	@Value("${rabbitmq.host}")
-	String host;
+	@Value("${rabbitmq.host}") private String host;
 
-	@Value("${rabbitmq.port}")
-	int port;
+	@Value("${rabbitmq.port}") private int port;
 
-	@Value("${rabbitmq.username}")
-	String username;
+	@Value("${rabbitmq.username}") private String username;
 
-	@Value("${rabbitmq.password}")
-	String password;
+	@Value("${rabbitmq.password}") private String password;
 
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
+	@Value("${rabbitmq.request-queue-name") private String requestQueue;
+
+	@Autowired RabbitTemplate rabbitTemplate;
+
+	@Autowired CommandExecutor executor;
 
 	@Bean
 	ConnectionFactory connectionFactory() {
@@ -42,8 +45,32 @@ public class ServerConfig {
 	}
 
 	@Bean
-	MessageListener commandListener(CommandExecutor executor) {
-		return new CommandListener(executor);
+	Queue queue() {
+		return new Queue(requestQueue, false);
+	}
+
+	@Bean
+	DirectExchange exchange() {
+		return new DirectExchange("");
+	}
+
+	@Bean
+	Binding binding(Queue queue, DirectExchange exchange) {
+		return BindingBuilder.bind(queue).to(exchange).withQueueName();
+	}
+
+	@Bean
+	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.setQueueNames(requestQueue);
+		container.setMessageListener(listenerAdapter);
+		return container;
+	}
+
+	@Bean
+	MessageListenerAdapter listenerAdapter(CommandExecutor executor) {
+		return new MessageListenerAdapter(executor, "execute");
 	}
 
 	@Bean

@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import newworldorder.common.network.command.JoinGameCommand;
+
 import newworldorder.common.matchmaking.GameRequest;
 import newworldorder.common.service.IMatchController;
 import newworldorder.common.service.IServerServiceLocator;

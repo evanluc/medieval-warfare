@@ -1,4 +1,4 @@
-package newworldorder.common.network;
+package newworldorder.common.network.command;
 
 public interface Command {
 	public void execute();

@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import newworldorder.common.network.command.StartGameCommand;
+
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.service.IClientServiceLocator;
 import newworldorder.common.service.IGameLauncher;

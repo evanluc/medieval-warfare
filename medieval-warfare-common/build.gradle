@@ -15,6 +15,7 @@ task integTest(type: Test) {
 check.dependsOn integTest
 
 dependencies {
+	compile 'commons-logging:commons-logging:1.2'
     compile 'org.springframework.amqp:spring-rabbit'
 
     testCompile "org.mockito:mockito-core:1.+"

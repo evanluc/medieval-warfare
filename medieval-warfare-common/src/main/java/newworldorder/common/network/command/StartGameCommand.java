@@ -1,4 +1,4 @@
-package newworldorder.common.network.message;
+package newworldorder.common.network.command;
 
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.service.IClientServiceLocator;

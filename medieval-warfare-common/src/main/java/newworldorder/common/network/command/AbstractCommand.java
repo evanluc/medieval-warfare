@@ -1,8 +1,6 @@
-package newworldorder.common.network.message;
+package newworldorder.common.network.command;
 
 import java.io.Serializable;
-
-import newworldorder.common.network.Command;
 
 public abstract class AbstractCommand implements Command, Serializable {
 

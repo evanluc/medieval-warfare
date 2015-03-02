@@ -12,8 +12,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.amqp.core.AmqpTemplate;
 
+import newworldorder.common.network.command.StartGameCommand;
+
 import newworldorder.common.matchmaking.GameInfo;
-import newworldorder.common.network.message.StartGameCommand;
 
 public class GameInitializerTest {
 	@Mock private AmqpTemplate amqpTemplate;

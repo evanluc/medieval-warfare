@@ -6,9 +6,10 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import newworldorder.common.network.command.ClientCommand;
+import newworldorder.common.network.command.StartGameCommand;
+
 import newworldorder.common.matchmaking.GameInfo;
-import newworldorder.common.network.message.ClientCommand;
-import newworldorder.common.network.message.StartGameCommand;
 
 @Component
 public class GameInitializer {

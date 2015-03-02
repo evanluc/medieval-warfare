@@ -6,20 +6,11 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import newworldorder.common.matchmaking.GameRequest;
-import newworldorder.common.network.MessageConsumer;
-import newworldorder.common.network.MessageHandler;
-import newworldorder.common.network.MessageProducer;
-import newworldorder.common.network.factory.ActorFactory;
-import newworldorder.common.network.message.JoinGameCommand;
 
 public class JoinGamePanel extends JPanel {
 
@@ -66,32 +57,37 @@ public class JoinGamePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				aMainView.setMatchMaking();
-				try {
-					String msgHost = "104.236.30.10";
-					MessageProducer producer = ActorFactory.createDirectProducer(msgHost, "requestQueue");
-					GameRequest curRequest = new GameRequest(aMainView.getName(), 2);
-					JoinGameCommand joinGameCommand = new JoinGameCommand(aMainView.getName(), curRequest);
-					producer.sendCommand(joinGameCommand);
-
-					// Now wait for a response from server
-					MessageConsumer consumer = ActorFactory.createDirectConsumer(msgHost, "notifyExchange", aMainView.getName(),
-							new MessageHandler() {
-
-								@Override
-								public void handle(byte[] message) {
-									JOptionPane.showMessageDialog(null, "Game found!");
-								}
-
-							});
-
-					consumer.startConsuming();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (Exception ex) {
-					// TODO Auto-generated catch block
-					ex.printStackTrace();
-				}
+				// try {
+				// String msgHost = "104.236.30.10";
+				// MessageProducer producer =
+				// ActorFactory.createDirectProducer(msgHost, "requestQueue");
+				// GameRequest curRequest = new GameRequest(aMainView.getName(),
+				// 2);
+				// JoinGameCommand joinGameCommand = new
+				// JoinGameCommand(aMainView.getName(), curRequest);
+				// producer.sendCommand(joinGameCommand);
+				//
+				// // Now wait for a response from server
+				// MessageConsumer consumer =
+				// ActorFactory.createDirectConsumer(msgHost, "notifyExchange",
+				// aMainView.getName(),
+				// new MessageHandler() {
+				//
+				// @Override
+				// public void handle(byte[] message) {
+				// JOptionPane.showMessageDialog(null, "Game found!");
+				// }
+				//
+				// });
+				//
+				// consumer.startConsuming();
+				// } catch (IOException e1) {
+				// // TODO Auto-generated catch block
+				// e1.printStackTrace();
+				// } catch (Exception ex) {
+				// // TODO Auto-generated catch block
+				// ex.printStackTrace();
+				// }
 			}
 		});
 		southPanel.add(join);

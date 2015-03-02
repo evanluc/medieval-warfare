@@ -1,4 +1,4 @@
-package newworldorder.common.network.message;
+package newworldorder.common.network.command;
 
 public class LoginCommand extends RemoteCommand {
 	/**
