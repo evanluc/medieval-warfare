@@ -15,6 +15,12 @@ public class GameEngine {
     
     private Game gameState;
     
+    public GameEngine(){
+    	this.gameState = null;
+    }
+    public GameEngine(Game pGameState){
+    	this.gameState = pGameState;
+    }
     public void buildRoad(Unit u) {
         Tile tile;
         tile = u.getTile();
