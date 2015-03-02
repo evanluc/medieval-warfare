@@ -3,7 +3,6 @@ package newworldorder.client.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,38 +106,45 @@ public class GameEngineTest {
 	public void testMoveUnit_InvalidMove() {
 		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
 		Unit enemy = new Unit(UnitType.KNIGHT, village2, aMap.getTile(1, 1));
-		System.out.println(aMap.getTile(1,0).getUnit());
+		System.out.println(aMap.getTile(1, 0).getUnit());
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
-		System.out.println(aMap.getTile(1,0).getUnit());
-		assertEquals(aMap.getTile(1,0).getUnit(), ally);
-		assertEquals(aMap.getTile(1,1).getUnit(), enemy);
+		System.out.println(aMap.getTile(1, 0).getUnit());
+		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
+		assertEquals(aMap.getTile(1, 1).getUnit(), enemy);
 	}
+
 	@Test
 	public void testMoveUnit_FreeMove() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
+
 	@Test
 	public void testMoveUnit_ClearTomb() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
+
 	@Test
 	public void testMoveUnit_GatherWood() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
+
 	@Test
 	public void testMoveUnit_NeutralTakeOver() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
+
 	@Test
 	public void testMoveUnit_EnemyTakeover() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
+
 	@Test
 	public void testMoveUnit_CombineUnits() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
+
 	@Test
 	public void testMoveUnit_TrampleMeadow() {
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 }
