@@ -3,6 +3,7 @@ package newworldorder.client.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,18 +137,27 @@ public class GameEngineTest {
 
 	@Test
 	public void testMoveUnit_FreeMove() {
-		// fail("Not yet implemented");
+		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
+		Unit enemy = new Unit(UnitType.KNIGHT, village2, aMap.getTile(1, 1));
+		aMap.getTile(0, 1).setTerrainType(TerrainType.GRASS);
+		//Move onto grass in own territory
+		gameEngine.moveUnit(ally, aMap.getTile(0,1));
+		assertEquals(aMap.getTile(0,1), ally);
+		//Move onto meadow as weak unit
+		aMap.getTile(1, 0).setTerrainType(TerrainType.MEADOW);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 0));
+		assertEquals(aMap.getTile(1, 0).getTerrainType(), TerrainType.MEADOW);
+		//Kill enemy unit
+		ally.setUnitType(UnitType.KNIGHT);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
+		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
+		assertEquals(aMap.getTile(1, 1).getRegion(), aMap.getTile(1, 0).getRegion());
+		//Take over village
+		gameEngine.moveUnit(ally, aMap.getTile(2,2));
+		assertEquals(aMap.getTile(2,2).getUnit(), ally);
 	}
 
-	@Test
-	public void testMoveUnit_ClearTomb() {
-		// fail("Not yet implemented");
-	}
 
-	@Test
-	public void testMoveUnit_GatherWood() {
-		// fail("Not yet implemented");
-	}
 
 	@Test
 	public void testMoveUnit_NeutralTakeOver() {
@@ -161,7 +171,7 @@ public class GameEngineTest {
 
 	@Test
 	public void testMoveUnit_CombineUnits() {
-		// fail("Not yet implemented");
+		 fail("Not yet implemented");
 	}
 
 	@Test
