@@ -133,6 +133,14 @@ public class GameEngineTest {
 		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
 		gameEngine.moveUnit(ally, aMap.getTile(2,2));
 		assertEquals(aMap.getTile(1,1).getUnit(), ally);
+		//Knight cant walk onto trees or tombstones
+		ally.setUnitType(UnitType.KNIGHT);
+		aMap.getTile(1, 0).setTerrainType(TerrainType.TREE);
+		aMap.getTile(0, 1).setStructure(StructureType.WATCHTOWER);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 0));
+		assertEquals(aMap.getTile(1,1).getUnit(), ally);
+		gameEngine.moveUnit(ally, aMap.getTile(0, 1));
+		assertEquals(aMap.getTile(1,1).getUnit(), ally);
 	}
 
 	@Test
@@ -153,9 +161,11 @@ public class GameEngineTest {
 		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
 		assertEquals(aMap.getTile(1, 1).getRegion(), aMap.getTile(1, 0).getRegion());
 		//Take over village
+		ally.setImmobileUntilRound(0);
 		gameEngine.moveUnit(ally, aMap.getTile(2,2));
 		assertEquals(aMap.getTile(2,2).getUnit(), ally);
 		//Walk into neutral territory
+		ally.setImmobileUntilRound(0);
 		aMap.getTile(0, 2).setTerrainType(TerrainType.GRASS);
 		aMap.getTile(1,1).setStructure(null);
 		aMap.getTile(1,1).setTerrainType(TerrainType.GRASS);
@@ -164,21 +174,13 @@ public class GameEngineTest {
 		assertEquals(aMap.getTile(0, 2).getUnit(), ally);
 	}
 
-
-
-	@Test
-	public void testMoveUnit_NeutralTakeOver() {
-		// fail("Not yet implemented");
-	}
-
-	@Test
-	public void testMoveUnit_EnemyTakeover() {
-		// fail("Not yet implemented");
-	}
-
 	@Test
 	public void testMoveUnit_CombineUnits() {
-		// fail("Not yet implemented");
+		Unit u1 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(0, 1));
+		Unit u2 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
+		gameEngine.moveUnit(u1, aMap.getTile(1, 0));
+		assertEquals(aMap.getTile(0, 1).getUnit(), null);
+		assertEquals(aMap.getTile(1, 0).getUnit().getUnitType(), UnitType.KNIGHT);
 	}
 
 	@Test

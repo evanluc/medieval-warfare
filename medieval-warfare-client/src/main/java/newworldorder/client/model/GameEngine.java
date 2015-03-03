@@ -354,7 +354,8 @@ public class GameEngine {
     		return;
     	}
     	dest.setUnitType(newLevel);
-    	moved.kill();
+    	moved.getVillage().removeUnit(moved);
+        moved.getTile().setUnit(null);
     }
 
     private void combineRegions(Tile t) {
