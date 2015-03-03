@@ -1,3 +1,0 @@
-include 'medieval-warfare-common', 'desktop'
-
-project(':desktop').projectDir = new File('../medieval-warfare-game/desktop')
