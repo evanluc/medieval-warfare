@@ -10,8 +10,21 @@ buildscript {
     }
 }
 
+sourceSets {
+    integTest {
+        java.srcDir file('src/integration-test/java')
+    }
+}
+
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
+
+task integTest(type: Test) {
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+}
+
+check.dependsOn integTest
 
 jar {
     baseName = 'medieval-warfare-server'
@@ -31,4 +44,9 @@ dependencies {
     compile project(':medieval-warfare-common')
     
     testCompile "org.mockito:mockito-core:1.+"
+    
+    integTestCompile sourceSets.main.output
+    integTestCompile configurations.testCompile
+    integTestCompile sourceSets.test.output
+    integTestRuntime configurations.testRuntime
 }

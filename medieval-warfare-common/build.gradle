@@ -1,6 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
 sourceSets {
     integTest {
         java.srcDir file('src/integration-test/java')
