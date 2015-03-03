@@ -77,17 +77,34 @@ public class GameEngine {
     public void newGame(List<Player> players, String mapChosen) {
         /* TODO Correct SetUpMap */
         Map map = Map.setUpMap(players, mapChosen);
-        Game game= new Game(players, map);
+        Game game = new Game(players, map);
         Player.setUpPlayers(players);
         setGameState(game);
     }
 
-    public void beginTurn(Game g, Player p) {
-        Map map = g.getMap();
+    public void beginTurn(Player p) {
+        Map map = gameState.getMap();
+        
         phaseBuild(p);
         phaseTombstone(p, map);
         phaseIncome(p);
         phasePayment(p);
+    }
+    
+    /**
+     * Not sure if the list from gameState.getPlayers() keeps its order, it should since
+     * the return is not making a copy.
+     */
+    public void endTurn() {
+    	List<Player> players = gameState.getPlayers();
+    	int turnPosition = players.indexOf(gameState.getTurnOf());
+    	if (turnPosition == players.size() - 1) {
+    		gameState.incrementRoundCount();
+    		turnPosition = 0;
+    	} else {
+    		turnPosition++;
+    	}
+    	beginTurn(players.get(0));
     }
     
     public void buildUnit(Village v, Tile t, UnitType type) {
