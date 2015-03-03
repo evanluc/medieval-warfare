@@ -84,7 +84,7 @@ public class GameEngine {
 
     public void beginTurn(Player p) {
         Map map = gameState.getMap();
-        
+        gameState.setTurnOf(p);
         phaseBuild(p);
         phaseTombstone(p, map);
         phaseIncome(p);
@@ -104,7 +104,7 @@ public class GameEngine {
     	} else {
     		turnPosition++;
     	}
-    	beginTurn(players.get(0));
+    	beginTurn(players.get(turnPosition));
     }
     
     public void buildUnit(Village v, Tile t, UnitType type) {
@@ -230,14 +230,14 @@ public class GameEngine {
     }
 
     private void gatherWood(Unit u) {
-        u.getTile().setTerrainType(TerrainType.MEADOW);
+        u.getTile().setTerrainType(TerrainType.GRASS);
         u.setImmobileUntilRound(gameState.getRoundCount() + 1);
         u.setCurrentAction(ActionType.CHOPPINGTREE);
         u.getVillage().transactWood(1);
     }
 
     private void clearTombstone(Unit u) {
-        u.getTile().setStructure(StructureType.TOMBSTONE);
+        u.getTile().setStructure(null);
         u.setImmobileUntilRound(gameState.getRoundCount() + 1);
         u.setCurrentAction(ActionType.CLEARINGTOMBSTONE);
     }
