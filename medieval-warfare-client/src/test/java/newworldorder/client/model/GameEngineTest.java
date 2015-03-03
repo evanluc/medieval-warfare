@@ -138,11 +138,11 @@ public class GameEngineTest {
 	@Test
 	public void testMoveUnit_FreeMove() {
 		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
-		Unit enemy = new Unit(UnitType.KNIGHT, village2, aMap.getTile(1, 1));
+		Unit enemy = new Unit(UnitType.SOLDIER, village2, aMap.getTile(1, 1));
 		aMap.getTile(0, 1).setTerrainType(TerrainType.GRASS);
 		//Move onto grass in own territory
 		gameEngine.moveUnit(ally, aMap.getTile(0,1));
-		assertEquals(aMap.getTile(0,1), ally);
+		assertEquals(aMap.getTile(0,1).getUnit(), ally);
 		//Move onto meadow as weak unit
 		aMap.getTile(1, 0).setTerrainType(TerrainType.MEADOW);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 0));
@@ -155,6 +155,13 @@ public class GameEngineTest {
 		//Take over village
 		gameEngine.moveUnit(ally, aMap.getTile(2,2));
 		assertEquals(aMap.getTile(2,2).getUnit(), ally);
+		//Walk into neutral territory
+		aMap.getTile(0, 2).setTerrainType(TerrainType.GRASS);
+		aMap.getTile(1,1).setStructure(null);
+		aMap.getTile(1,1).setTerrainType(TerrainType.GRASS);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
+		gameEngine.moveUnit(ally, aMap.getTile(0, 2));
+		assertEquals(aMap.getTile(0, 2).getUnit(), ally);
 	}
 
 
@@ -171,7 +178,7 @@ public class GameEngineTest {
 
 	@Test
 	public void testMoveUnit_CombineUnits() {
-		 fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
