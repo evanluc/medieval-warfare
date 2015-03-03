@@ -22,12 +22,21 @@ public class GameEngine {
     	this.gameState = pGameState;
     }
     public void buildRoad(Unit u) {
-        Tile tile;
-        tile = u.getTile();
+        Tile tile = u.getTile();
         if (u.getUnitType() == UnitType.PEASANT && tile.getStructure() != StructureType.ROAD) {
             u.setCurrentAction(ActionType.BUILDINGROAD);
             u.setImmobileUntilRound(gameState.getRoundCount() + 1);
             tile.setStructure(StructureType.ROAD);
+        }
+    }
+    
+    public void cultivateMeadow(Unit u) {
+        Tile tile = u.getTile();
+        if (u.getUnitType() == UnitType.PEASANT && tile.getTerrainType() == TerrainType.GRASS) {
+            u.setCurrentAction(ActionType.STARTCULTIVATING);
+            u.setImmobileUntilRound(gameState.getRoundCount() + 2);
+            // The meadow terrain is built in phaseBuild of beginTurn because it should not 
+            // appear until the second turn that the unit is cultivating the meadow.
         }
     }
 
@@ -239,7 +248,7 @@ public class GameEngine {
                 u.setCurrentAction(ActionType.READYFORORDERS);
                 u.getTile().setTerrainType(TerrainType.MEADOW);
             } else {
-             // The road structure was already placed as part of the build road operation
+            	// The road structure was already placed as part of the build road operation
                 u.setCurrentAction(ActionType.READYFORORDERS);
             }
         }
