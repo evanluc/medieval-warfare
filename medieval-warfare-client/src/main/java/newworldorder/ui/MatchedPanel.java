@@ -15,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import newworldorder.client.game.desktop.DesktopLauncher;
+
 public class MatchedPanel extends JPanel{
 		/**
 		 * 
@@ -67,7 +69,14 @@ public class MatchedPanel extends JPanel{
 		    map.setForeground(Color.WHITE);
 		    map.setFocusPainted(false);
 		    map.setFont(new Font("Calibri", Font.BOLD, 20));
-			leftPanel.add(map);
+			map.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					aMainView.dispose();
+					new DesktopLauncher();
+				}
+			});
+		    leftPanel.add(map);
 			leftPanel.setOpaque(false);
 			add(leftPanel, BorderLayout.WEST);
 			
