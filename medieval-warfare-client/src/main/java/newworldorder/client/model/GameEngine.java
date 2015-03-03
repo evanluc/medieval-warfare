@@ -80,6 +80,14 @@ public class GameEngine {
         phaseIncome(p);
         phasePayment(p);
     }
+    
+    public void buildUnit(Village v, Tile t, UnitType type) {
+    	Region r = v.getRegion();
+    	if (t.getUnit() == null && v.getGold() >= Unit.unitCost(type) && r.getTiles().contains(t)) {
+    		v.transactGold(-1 * Unit.unitCost(type));
+    		new Unit(type, v, t);
+    	}
+    }
 
     public void upgradeUnit(Unit u, UnitType newLevel) {
         Village v = u.getVillage();
@@ -120,7 +128,7 @@ public class GameEngine {
         Tile origin = u.getTile();;
         List<Tile> adjacent = origin.getNeighbours();
 
-        if (adjacent.contains(dest)) {
+        if (u.getImmobileUntilRound() <= gameState.getRoundCount() && adjacent.contains(dest)) {
             TerrainType landOnDest = dest.getTerrainType();
             StructureType structureOnDest = dest.getStructure();
             Unit unitOnDest = dest.getUnit();
