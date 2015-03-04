@@ -238,7 +238,11 @@ public class GameEngineTest {
 		gameEngine.endTurn();
 		assertEquals(u1.getCurrentAction(), ActionType.READYFORORDERS);
 		assertEquals(u1.getTile(), t1);
-		System.out.println(u1.getTile().getTerrainType());
-		//assertEquals(t1.getTerrainType(), TerrainType.MEADOW);
+		assertEquals(t1.getTerrainType(), TerrainType.MEADOW);
+	}
+	
+	@Test
+	public void testCheckWinConditions(){
+		
 	}
 }
