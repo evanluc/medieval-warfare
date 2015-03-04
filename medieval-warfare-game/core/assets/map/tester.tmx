@@ -19,8 +19,14 @@
   <tile id="5">
    <image width="35" height="30" source="colourtiles/yellow.png"/>
   </tile>
+  <tile id="6">
+   <image width="35" height="30" source="colourtiles/brown.png"/>
+  </tile>
+  <tile id="7">
+   <image width="35" height="30" source="colourtiles/pink.png"/>
+  </tile>
  </tileset>
- <tileset firstgid="7" name="terrain" tilewidth="84" tileheight="72">
+ <tileset firstgid="9" name="terrain" tilewidth="84" tileheight="72">
   <tile id="0">
    <image width="35" height="30" source="colourtiles/meadow.png"/>
   </tile>
@@ -33,6 +39,9 @@
   <tile id="3">
    <image width="35" height="30" source="colourtiles/water.png"/>
   </tile>
+  <tile id="4">
+   <image width="35" height="30" source="colourtiles/actualgree.png"/>
+  </tile>
  </tileset>
  <layer name="colour" width="20" height="15">
   <data encoding="base64" compression="gzip">
@@ -41,7 +50,7 @@
  </layer>
  <layer name="terrain" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+NkYGDgHMWjeBSP4iGAATJYavKwBAAA
+   H4sIAAAAAAAAA9VTMQ4AIQhjB/7/XRenprWY3HAOxBCglCIVEfWIpXldPsZurMH/I14LrBI9FUZDPtNQ1SFGAh7jyGZgdYwb0+/UV/Gb7sPNqnR2+z3NeMNP/TPHeXJzCX5tnMktfmULDflalbAEAAA=
   </data>
  </layer>
 </map>

@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import newworldorder.client.driver.UITileDescriptor;
+import newworldorder.client.model.ColourType;
+import newworldorder.client.model.TerrainType;
 
 import java.util.Iterator;
 import java.util.List;
@@ -53,17 +55,15 @@ public class TiledMapStage extends Stage {
 
 	public void tiledMapRenderUpdate (List<UITileDescriptor> UpdateTilesList) {
 		Iterator itrTilesList = UpdateTilesList.iterator();
-		System.out.println("size of the update tiles list: " + UpdateTilesList.size());
 		UITileDescriptor currentTile; 
 		int i = 0; 
 		int x;
 		int y;
 		while (i < UpdateTilesList.size()) {
 			currentTile = UpdateTilesList.get(i);
-			System.out.println("You are accessing tile ("+currentTile.x+ "," + currentTile.y + ")");
-			System.out.println("Updating colour to " + currentTile.colourType);
 			i++;
 			tiledMapColourUpdate(currentTile);
+			tiledMapTerrainUpdate(currentTile);
 		}
 	}
 
@@ -71,10 +71,61 @@ public class TiledMapStage extends Stage {
 		int x = updatedDescription.x; 
 		int y = updatedDescription.y;
 		Cell updateCell = tiledMapDescriptors.colourLayer.getCell(x,y);
-		updateCell.setTile(tiledMapDescriptors.blueTile);
 
+		ColourType newColour = updatedDescription.colourType;
+		switch(newColour){
+			case BLUE: updateCell.setTile(tiledMapDescriptors.blueTile); 
+			break; 
+			
+			case RED: updateCell.setTile(tiledMapDescriptors.redTile);
+			break;
+		
+			case GREEN: updateCell.setTile(tiledMapDescriptors.greenTile);
+			break;
+			
+			case PURPLE: updateCell.setTile(tiledMapDescriptors.purpleTile);
+			break;
+			
+			case ORANGE: updateCell.setTile(tiledMapDescriptors.orangeTile);
+			break;
+			
+			case BROWN: updateCell.setTile(tiledMapDescriptors.brownTile);
+			break;			
+		
+			case PINK: updateCell.setTile(tiledMapDescriptors.pinkTile);
+			break;		
+	
+			case YELLOW: updateCell.setTile(tiledMapDescriptors.yellowTile);
+			break;					
+			
+		}
+		
 
 	}
-
+	
+	public void tiledMapTerrainUpdate(UITileDescriptor updatedDescription){
+		int x = updatedDescription.x;
+		int y = updatedDescription.y;
+		Cell updateCell = tiledMapDescriptors.terrainLayer.getCell(x,y);
+		
+		TerrainType newTerrain = updatedDescription.terrainType;
+		switch(newTerrain){
+			case MEADOW: updateCell.setTile(tiledMapDescriptors.meadowTile); 
+			break; 
+			
+			case GRASS: updateCell.setTile(tiledMapDescriptors.grassTile);
+			break;
+			
+			case SEA: updateCell.setTile(tiledMapDescriptors.oceanTile);
+			break;
+			
+			case TREE: updateCell.setTile(tiledMapDescriptors.treeTile);
+			break;
+				
+			
+		}
+		
+		
+	}
 }
 

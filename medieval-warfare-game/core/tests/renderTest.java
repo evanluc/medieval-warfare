@@ -29,10 +29,10 @@ public class renderTest {
 		ColourType testColour = ColourType.BLUE;
 		
 		UITileDescriptor testDescriptor1 = new UITileDescriptor(x,y,testTerrain,testStructure,
-				testUnit,testVillage,testColour);
+				testUnit,testVillage,ColourType.BLUE);
 		
 		UITileDescriptor testDescriptor2= new UITileDescriptor(x2,y2,testTerrain,testStructure,
-				testUnit,testVillage,testColour); 
+				testUnit,testVillage,ColourType.YELLOW); 
 		
 		
 		ArrayList<UITileDescriptor> testList = new ArrayList<UITileDescriptor>();

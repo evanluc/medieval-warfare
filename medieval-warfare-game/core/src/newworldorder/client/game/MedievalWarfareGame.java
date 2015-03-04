@@ -84,17 +84,20 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		int y = 2;
 		int x2 = 3;
 		int y2 = 3;
-		TerrainType testTerrain = TerrainType.TREE; 
+		TerrainType testTerrain1 = TerrainType.TREE; 
+		TerrainType testTerrain2 = TerrainType.MEADOW; 
+
 		StructureType testStructure = StructureType.ROAD;
 		UnitType testUnit = UnitType.PEASANT;
 		VillageType testVillage = VillageType.TOWN;
-		ColourType testColour = ColourType.BLUE;
+		ColourType testColour1 = ColourType.BLUE;
+		ColourType testColour2 = ColourType.PINK;
+
+		UITileDescriptor testDescriptor1 = new UITileDescriptor(x,y,testTerrain1,testStructure,
+				testUnit,testVillage,testColour1);
 		
-		UITileDescriptor testDescriptor1 = new UITileDescriptor(x,y,testTerrain,testStructure,
-				testUnit,testVillage,testColour);
-		
-		UITileDescriptor testDescriptor2= new UITileDescriptor(x2,y2,testTerrain,testStructure,
-				testUnit,testVillage,testColour); 
+		UITileDescriptor testDescriptor2= new UITileDescriptor(x2,y2,testTerrain2,testStructure,
+				testUnit,testVillage,testColour2); 
 		
 		
 		ArrayList<UITileDescriptor> testList = new ArrayList<UITileDescriptor>();
