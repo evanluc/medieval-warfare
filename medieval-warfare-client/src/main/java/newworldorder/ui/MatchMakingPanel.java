@@ -76,7 +76,7 @@ public class MatchMakingPanel extends JPanel {
 			super();
 			aMainView = pMainView;
 			setOpaque(false);
-			paintTimer = new Timer(50, new ActionListener() {
+			paintTimer = new Timer(5, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					cycle += 0.02f;

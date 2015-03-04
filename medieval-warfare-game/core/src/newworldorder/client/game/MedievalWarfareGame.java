@@ -44,7 +44,6 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);
 		camera.update();
-
 		tiledMap = new TmxMapLoader().load("lunar.tmx");
 		MapProperties prop = tiledMap.getProperties();
 		int mapWidth = prop.get("width", Integer.class);
