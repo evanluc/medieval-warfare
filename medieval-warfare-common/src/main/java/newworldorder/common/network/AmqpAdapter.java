@@ -2,6 +2,8 @@ package newworldorder.common.network;
 
 import org.springframework.amqp.core.AmqpTemplate;
 
+import newworldorder.common.network.command.Command;
+
 public class AmqpAdapter {
 	private final AmqpTemplate template;
 	
@@ -10,15 +12,15 @@ public class AmqpAdapter {
 		this.template = template;
 	}
 
-	public void send(Object message, String routingKey) {
-		template.convertAndSend(routingKey, message);
+	public void send(Command command, String routingKey) {
+		template.convertAndSend(routingKey, command);
 	}
 	
-	public void send(Object message, String exchange, String routingKey) {
-		template.convertAndSend(exchange, routingKey, message);
+	public void send(Command command, String exchange, String routingKey) {
+		template.convertAndSend(exchange, routingKey, command);
 	}
 
-	public Object receive(String queueName) {
-		return template.receiveAndConvert(queueName);
+	public Command receive(String queueName) {
+		return (Command) template.receiveAndConvert(queueName);
 	}
 }

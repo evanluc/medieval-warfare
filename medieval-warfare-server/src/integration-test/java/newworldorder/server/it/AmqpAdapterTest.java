@@ -18,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import newworldorder.common.network.AmqpAdapter;
+import newworldorder.common.network.command.Command;
 import newworldorder.common.network.command.LoginCommand;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -88,10 +89,10 @@ public class AmqpAdapterTest {
 		admin.declareBinding(BindingBuilder.bind(queue).to(fanoutExchange));
 		admin.declareBinding(BindingBuilder.bind(queue2).to(fanoutExchange));
 		
-		adapter.send(expected, fanoutExchange.getName());
-		LoginCommand actual1 = (LoginCommand) adapter.receive(queue.getName());
+		adapter.send(expected, fanoutExchange.getName(), "");
+		Command actual1 = adapter.receive(queue.getName());
 		assertEquals(expected, actual1);
-		LoginCommand actual2 = (LoginCommand) adapter.receive(queue2.getName());
+		Command actual2 = adapter.receive(queue2.getName());
 		assertEquals(expected, actual2);
 	}
 	
