@@ -43,7 +43,17 @@ public class GameEngineTest {
 		reg2.add(aMap.getTile(2, 2));
 		village2 = new Village(aMap.getTile(2, 2), p2, reg2);
 	}
-
+	
+	@Test
+	public void testBuildUnit() {
+		village1.transactGold(10);
+		assertEquals(aMap.getTile(0, 1).getUnit(), null);
+		gameEngine.buildUnit(village1, aMap.getTile(0, 1), UnitType.PEASANT);
+		assertEquals(aMap.getTile(0, 1).getUnit().getUnitType(), UnitType.PEASANT);
+		//Now try making a unit without enough money
+		gameEngine.buildUnit(village1, aMap.getTile(1, 0), UnitType.PEASANT);
+		assertEquals(aMap.getTile(1, 0).getUnit(), null);
+	}
 	@Test
 	public void testBuildRoad() {
 		Unit aUnit = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
@@ -141,7 +151,7 @@ public class GameEngineTest {
 		//Knight cant walk onto trees or tombstones
 		ally.setUnitType(UnitType.KNIGHT);
 		aMap.getTile(1, 0).setTerrainType(TerrainType.TREE);
-		aMap.getTile(0, 1).setStructure(StructureType.WATCHTOWER);
+		aMap.getTile(0, 1).setStructure(StructureType.TOMBSTONE);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 0));
 		assertEquals(aMap.getTile(1,1).getUnit(), ally);
 		gameEngine.moveUnit(ally, aMap.getTile(0, 1));
@@ -242,7 +252,25 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void testCheckWinConditions(){
-		
+	public void testCombineRegions(){
+		List<Tile> reg3 = new ArrayList<Tile>();
+		reg3.add(aMap.getTile(0, 3));
+		reg3.add(aMap.getTile(0, 4));
+		reg3.add(aMap.getTile(1, 3));
+		Village village3 = new Village(aMap.getTile(1, 3), p1, reg3);
+		village3.setVillageType(VillageType.FORT);
+		assertTrue(village3.getRegion().getTiles().contains(aMap.getTile(0, 3)));
+		assertEquals(village3.getRegion(), aMap.getTile(0, 3).getRegion());
+		Unit u1 = new Unit(UnitType.SOLDIER, village1, aMap.getTile(0, 1));
+		Unit u2 = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
+		aMap.getTile(0, 2).setTerrainType(TerrainType.GRASS);
+		gameEngine.moveUnit(u1, aMap.getTile(0, 2));
+		assertTrue(village3.getRegion().getTiles().contains(aMap.getTile(0, 3)));
+		assertEquals(village3.getRegion(), aMap.getTile(0, 3).getRegion());
+		assertEquals(village3.getRegion(), aMap.getTile(0, 2).getRegion());
+		assertEquals(village3.getRegion(), aMap.getTile(0, 1).getRegion());
+		assertEquals(aMap.getTile(1, 0).getRegion().getVillage(), village3);
+		assertEquals(u1.getVillage(), village3);
+		assertEquals(u2.getVillage(), village3);
 	}
 }
