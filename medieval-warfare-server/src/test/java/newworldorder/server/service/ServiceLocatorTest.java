@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.amqp.core.AmqpTemplate;
 
-import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.service.IMatchController;
 import newworldorder.server.matchmaking.GameInitializer;
 

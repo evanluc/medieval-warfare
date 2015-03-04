@@ -1,13 +1,8 @@
 package newworldorder.client.driver;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import newworldorder.client.model.ColourType;
 import newworldorder.client.model.GameEngine;
-import newworldorder.client.model.StructureType;
-import newworldorder.client.model.TerrainType;
 import newworldorder.client.model.Tile;
 import newworldorder.client.model.Unit;
 import newworldorder.client.model.UnitType;
@@ -34,21 +29,10 @@ public class ModelManager implements IModelCommunicator {
 	}
 
 
-	/**
-	 * This method handles ENDTURN.
-	 */
 	@Override
 	public void informOfUserAction(UIActionType action) {
-		if (!gameRunning)
-			return;
+		// TODO Auto-generated method stub
 		
-		switch (action) {
-		case ENDTURN:
-			engine.endTurn();
-			break;
-		default:
-			break;
-		}
 	}
 	
 	/**

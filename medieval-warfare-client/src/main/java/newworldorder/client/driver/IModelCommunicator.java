@@ -22,13 +22,11 @@ public interface IModelCommunicator {
 	
 	public List<UITileDescriptor> getUpdatedTiles();
 	
-	public UIVillageDescriptor getVillage(int x, int y);
+	public void connect(String serverAddress);
+	
+	public void disconnect();
 	
 	public void login(String username, String password);
 	
 	public void logout();
-	
-	public void joinGame(String gameExchange);
-	
-	public void leaveGame();
 }

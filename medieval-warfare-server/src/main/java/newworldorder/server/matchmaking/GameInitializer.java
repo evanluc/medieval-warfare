@@ -2,21 +2,22 @@ package newworldorder.server.matchmaking;
 
 import java.util.List;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import newworldorder.common.matchmaking.GameInfo;
-import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.StartGameCommand;
 
+import newworldorder.common.matchmaking.GameInfo;
+
 @Component
 public class GameInitializer {
-	private final AmqpAdapter amqpAdapter;
+	private final AmqpTemplate amqpTemplate;
 
 	@Autowired
-	public GameInitializer(AmqpAdapter adapter) {
-		amqpAdapter = adapter;
+	public GameInitializer(AmqpTemplate template) {
+		amqpTemplate = template;
 	}
 
 	public void initializeGame(List<String> players) {

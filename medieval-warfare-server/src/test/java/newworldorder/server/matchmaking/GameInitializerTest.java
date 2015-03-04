@@ -10,19 +10,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.amqp.core.AmqpTemplate;
 
-import newworldorder.common.matchmaking.GameInfo;
-import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.StartGameCommand;
 
+import newworldorder.common.matchmaking.GameInfo;
+
 public class GameInitializerTest {
-	@Mock private AmqpAdapter amqpAdapter;
+	@Mock private AmqpTemplate amqpTemplate;
 	private GameInitializer gameInitializer;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		gameInitializer = new GameInitializer(amqpAdapter);
+		gameInitializer = new GameInitializer(amqpTemplate);
 	}
 
 	@Test
