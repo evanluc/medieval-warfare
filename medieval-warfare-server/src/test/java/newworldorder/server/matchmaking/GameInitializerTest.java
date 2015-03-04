@@ -10,20 +10,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.amqp.core.AmqpTemplate;
-
-import newworldorder.common.network.command.StartGameCommand;
 
 import newworldorder.common.matchmaking.GameInfo;
+import newworldorder.common.network.AmqpAdapter;
+import newworldorder.common.network.command.StartGameCommand;
 
 public class GameInitializerTest {
-	@Mock private AmqpTemplate amqpTemplate;
+	@Mock private AmqpAdapter amqpAdapter;
 	private GameInitializer gameInitializer;
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		gameInitializer = new GameInitializer(amqpTemplate);
+		gameInitializer = new GameInitializer(amqpAdapter);
 	}
 
 	@Test
@@ -40,13 +39,13 @@ public class GameInitializerTest {
 		gameInitializer.initializeGame(players);
 
 		for (String p : players) {
-			then(amqpTemplate).should().convertAndSend(p, command);
+			then(amqpAdapter).should().send(command, "notify-exchange", p);
 		}
 	}
 
 	@After
 	public void tearDown() {
-		amqpTemplate = null;
+		amqpAdapter = null;
 		gameInitializer = null;
 	}
 }

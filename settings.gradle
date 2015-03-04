@@ -1,9 +1,9 @@
 include ":medieval-warfare-common", ":medieval-warfare-client", ":medieval-warfare-server", ":medieval-warfare-game"
 
 include 'desktop'
-project(':desktop').projectDir = new File('medieval-warfare-game/desktop')
+project(':desktop').projectDir = new File('/medieval-warfare-game/desktop')
 
 include 'core'
-project(':core').projectDir = new File('medieval-warfare-game/core')
+project(':core').projectDir = new File('/medieval-warfare-game/core')
 
 rootProject.name = 'medieval-warfare'

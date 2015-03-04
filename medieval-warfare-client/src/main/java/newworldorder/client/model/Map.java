@@ -15,7 +15,7 @@ public class Map {
     private final int width;
     private final int height;
     private final int totalTiles;
-    private final Hashtable<Integer, Tile> tiles;
+	private final Hashtable<Integer, Tile> tiles;
     
     public Map(int pWidth, int pHeight) {
         width = pWidth;
@@ -46,6 +46,10 @@ public class Map {
     public int getHeight() {
         return height;
     }
+    
+    public int getTotalTiles() {
+		return totalTiles;
+	}
 
     public Iterable<Tile> getTiles() {
         return tiles.values();
@@ -82,12 +86,10 @@ public class Map {
     }
 
     public void replaceTombstonesWithTrees(Player player) {
-        Tile tile;
-        for (int i = 0 ; i < totalTiles; i++) {
-            tile = tiles.get(i);
-            if (player == tile.getControllingPlayer()) {
-                tile.setStructure(null);
-                tile.setTerrainType(TerrainType.TREE);
+        for (Tile t : tiles.values()) {
+            if (t.getStructure() == StructureType.TOMBSTONE && player == t.getControllingPlayer()) {
+                t.setStructure(null);
+                t.setTerrainType(TerrainType.TREE);
             }
         }
     }

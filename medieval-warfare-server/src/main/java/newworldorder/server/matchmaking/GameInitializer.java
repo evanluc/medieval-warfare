@@ -2,22 +2,21 @@ package newworldorder.server.matchmaking;
 
 import java.util.List;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import newworldorder.common.matchmaking.GameInfo;
+import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.StartGameCommand;
 
-import newworldorder.common.matchmaking.GameInfo;
-
 @Component
 public class GameInitializer {
-	private final AmqpTemplate amqpTemplate;
+	private final AmqpAdapter amqpAdapter;
 
 	@Autowired
-	public GameInitializer(AmqpTemplate template) {
-		amqpTemplate = template;
+	public GameInitializer(AmqpAdapter adapter) {
+		amqpAdapter = adapter;
 	}
 
 	public void initializeGame(List<String> players) {
@@ -27,7 +26,7 @@ public class GameInitializer {
 		ClientCommand command = new StartGameCommand("server", gameInfo);
 
 		for (String player : players) {
-			amqpTemplate.convertAndSend(player, command);
+			amqpAdapter.send(command, "notify-exchange", player);
 		}
 	}
 }

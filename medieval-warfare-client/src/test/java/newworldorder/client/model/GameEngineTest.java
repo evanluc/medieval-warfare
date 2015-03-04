@@ -57,10 +57,6 @@ public class GameEngineTest {
 		assertFalse(aMap.getTile(0, 1).getStructure() == StructureType.ROAD);
 	}
 
-	@Test
-	public void testTakeoverTile() {
-		// TODO fail("Not yet implemented");
-	}
 
 	@Test
 	public void testNewGame() {
@@ -68,8 +64,11 @@ public class GameEngineTest {
 	}
 
 	@Test
-	public void testBeginTurn() {
-		// TODO fail("Not yet implemented");
+	public void testEndTurn() {
+		gameEngine.endTurn();
+		assertEquals(gameEngine.getGameState().getTurnOf(), p2);
+		gameEngine.endTurn();
+		assertEquals(gameEngine.getGameState().getTurnOf(), p1);
 	}
 
 	@Test
@@ -85,23 +84,29 @@ public class GameEngineTest {
 
 	@Test
 	public void testUpgradeVillage() {
-		// TODO fail("Not yet implemented");
+		//not enough wood
+		gameEngine.upgradeVillage(village1, VillageType.FORT);
+		assertEquals(village1.getVillageType(), VillageType.HOVEL);
+		//proper upgrade
+		village1.transactWood(16);
+		gameEngine.upgradeVillage(village1, VillageType.FORT);
+		assertEquals(village1.getVillageType(), VillageType.FORT);
+		assertEquals(village1.getWood(), 0);
 	}
 
 	@Test
 	public void testBuildTower() {
-		// TODO fail("Not yet implemented");
+		//not enough wood
+		Tile buildOn = aMap.getTile(0, 1);
+		gameEngine.buildTower(buildOn);
+		assertEquals(buildOn.getStructure(), null);
+		//proper build
+		village1.transactWood(5);
+		gameEngine.buildTower(buildOn);
+		assertEquals(buildOn.getStructure(), StructureType.WATCHTOWER);
+		assertEquals(village1.getWood(), 0);
 	}
 
-	@Test
-	public void testGetGameState() {
-		// TODO fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetGameState() {
-		// TODO fail("Not yet implemented");
-	}
 
 	@Test
 	public void testMoveUnit_InvalidMove() {
@@ -185,6 +190,59 @@ public class GameEngineTest {
 
 	@Test
 	public void testMoveUnit_TrampleMeadow() {
-		// fail("Not yet implemented");
+		Unit u1 = new Unit(UnitType.KNIGHT, village1, aMap.getTile(0, 1));
+		aMap.getTile(1, 0).setTerrainType(TerrainType.MEADOW);
+		gameEngine.moveUnit(u1, aMap.getTile(1, 0));
+		assertEquals(aMap.getTile(1, 0).getUnit(), u1);
+		assertEquals(aMap.getTile(1, 0).getTerrainType(), TerrainType.GRASS);
+	}
+	
+	@Test
+	public void testMoveUnit_ClearTomb() {
+		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(0, 1));
+		Tile dest = aMap.getTile(1, 0);
+		dest.setStructure(StructureType.TOMBSTONE);
+		gameEngine.moveUnit(u1, dest);
+		assertEquals(dest.getStructure(), null);
+		assertEquals(dest.getUnit(), u1);
+	}
+	
+	@Test
+	public void testMoveUnit_GatherWood(){
+		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(0, 1));
+		Tile dest = aMap.getTile(1, 0);
+		dest.setTerrainType(TerrainType.TREE);
+		gameEngine.moveUnit(u1, dest);
+		assertEquals(dest.getTerrainType(), TerrainType.GRASS);
+		assertEquals(dest.getUnit(), u1);
+	}
+	
+	@Test
+	public void testCultivateMeadow(){
+		//Strong unit cant cultivate
+		village1.transactGold(10);
+		
+		Tile t1 = aMap.getTile(0, 1);
+		Unit u1 = new Unit(UnitType.KNIGHT, village1, t1 );
+		t1.setTerrainType(TerrainType.GRASS);
+		gameEngine.cultivateMeadow(u1);
+		assertEquals(t1.getTerrainType(), TerrainType.GRASS);
+		//Peasant can
+		u1.setUnitType(UnitType.PEASANT);
+		gameEngine.cultivateMeadow(u1);
+		assertEquals(u1.getCurrentAction(), ActionType.STARTCULTIVATING);
+		gameEngine.endTurn();
+		gameEngine.endTurn();
+		assertEquals(u1.getCurrentAction(), ActionType.FINISHCULTIVATING);
+		gameEngine.endTurn();
+		gameEngine.endTurn();
+		assertEquals(u1.getCurrentAction(), ActionType.READYFORORDERS);
+		assertEquals(u1.getTile(), t1);
+		assertEquals(t1.getTerrainType(), TerrainType.MEADOW);
+	}
+	
+	@Test
+	public void testCheckWinConditions(){
+		
 	}
 }

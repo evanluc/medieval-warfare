@@ -2,6 +2,7 @@ package newworldorder.client.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +51,7 @@ public class GameEngine {
             unitsVillage.transactGold(destVillage.getGold());
             unitsVillage.transactWood(destVillage.getWood());
             dest.setVillage(null);
+            destVillage.kill();
         }
         
         destRegion.removeTile(dest);
@@ -60,9 +62,11 @@ public class GameEngine {
 
     private void checkWinConditions() {
         List<Player> players = new ArrayList<Player>(gameState.getPlayers());
-        for (Player p : players) {
+        Iterator<Player> iter = players.iterator();
+        while( iter.hasNext() ){
+        	Player p = iter.next();
             if (p.getVillages().size() <= 0) {
-                players.remove(p);
+            	iter.remove();
             }
         }
         if (players.size() <= 1) {
@@ -84,7 +88,7 @@ public class GameEngine {
 
     public void beginTurn(Player p) {
         Map map = gameState.getMap();
-        
+        gameState.setTurnOf(p);
         phaseBuild(p);
         phaseTombstone(p, map);
         phaseIncome(p);
@@ -104,7 +108,7 @@ public class GameEngine {
     	} else {
     		turnPosition++;
     	}
-    	beginTurn(players.get(0));
+    	beginTurn(players.get(turnPosition));
     }
     
     public void buildUnit(Village v, Tile t, UnitType type) {
@@ -230,14 +234,14 @@ public class GameEngine {
     }
 
     private void gatherWood(Unit u) {
-        u.getTile().setTerrainType(TerrainType.MEADOW);
+        u.getTile().setTerrainType(TerrainType.GRASS);
         u.setImmobileUntilRound(gameState.getRoundCount() + 1);
         u.setCurrentAction(ActionType.CHOPPINGTREE);
         u.getVillage().transactWood(1);
     }
 
     private void clearTombstone(Unit u) {
-        u.getTile().setStructure(StructureType.TOMBSTONE);
+        u.getTile().setStructure(null);
         u.setImmobileUntilRound(gameState.getRoundCount() + 1);
         u.setCurrentAction(ActionType.CLEARINGTOMBSTONE);
     }
@@ -306,6 +310,7 @@ public class GameEngine {
             	if (dest.getStructure() == StructureType.WATCHTOWER) {
             		dest.setTerrainType(null);
             	}
+
             }
             
             // Move the unit
