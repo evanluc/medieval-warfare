@@ -374,7 +374,8 @@ public class GameEngine {
         		Region newR;
         		
         		// set the old and new regions and villages depending on which level is greater.
-				if( Village.villageLevel(t.getRegion().getVillage().getVillageType()) >= Village.villageLevel(t1.getRegion().getVillage().getVillageType())) {
+				if( Village.villageLevel(t.getRegion().getVillage().getVillageType()) >= 
+						Village.villageLevel(t1.getRegion().getVillage().getVillageType())) {
 					oldR = t1.getRegion();
 					oldV = oldR.getVillage();
 					newR = t.getRegion();
