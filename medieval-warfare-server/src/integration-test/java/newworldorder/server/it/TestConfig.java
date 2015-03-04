@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
+import newworldorder.common.network.AmqpAdapter;
+
 @Configuration
 @PropertySource("classpath:/application.properties")
 public class TestConfig {
@@ -27,7 +29,12 @@ public class TestConfig {
 	private String username;
 	@Value("${rabbitmq.password}")
 	private String password;
-
+	
+	@Bean
+	AmqpAdapter amqpAdapter(AmqpTemplate template) {
+		return new AmqpAdapter(template);
+	}
+	
 	@Bean
 	AmqpTemplate rabbitTemplate(ConnectionFactory factory) {
 		return new RabbitTemplate(factory);

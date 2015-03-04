@@ -30,13 +30,12 @@ public class AmqpAdapterTest {
 	@Autowired DirectExchange defaultExchange;
 	@Autowired DirectExchange directExchange;
 	@Autowired FanoutExchange fanoutExchange;
-	private AmqpAdapter adapter;
+	@Autowired AmqpAdapter adapter;
 	private LoginCommand expected;
 	
 	@Before
 	public void setup() {
 		expected = new LoginCommand("username", "password");
-		adapter = new AmqpAdapter(template);
 	}
 	
 	@After
