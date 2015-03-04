@@ -49,8 +49,6 @@ public class RequestDispatcherTest {
 		MessageListenerAdapter adapter = new MessageListenerAdapter(executor);
 		adapter.setDefaultListenerMethod("execute");
 		container.setMessageListener(adapter);
-
-		container.setReceiveTimeout(0);
 	}
 
 	@Test
@@ -62,6 +60,5 @@ public class RequestDispatcherTest {
 
 		LoginCommand command = new LoginCommand("username", "password");
 		template.convertAndSend(queue.getName(), command);
-
 	}
 }
