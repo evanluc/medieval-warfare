@@ -1,5 +1,14 @@
 package newworldorder.client.game;
 
+import java.util.ArrayList;
+
+import newworldorder.client.driver.UITileDescriptor;
+import newworldorder.client.model.ColourType;
+import newworldorder.client.model.StructureType;
+import newworldorder.client.model.TerrainType;
+import newworldorder.client.model.UnitType;
+import newworldorder.client.model.VillageType;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -45,7 +54,8 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		camera.setToOrtho(false, w, h);
 		camera.update();
 
-		tiledMap = new TmxMapLoader().load("lunar.tmx");
+		tiledMap = new TmxMapLoader().load("./map/tester.tmx");
+		
 		MapProperties prop = tiledMap.getProperties();
 		int mapWidth = prop.get("width", Integer.class);
 		int mapHeight = prop.get("height", Integer.class);
@@ -63,15 +73,36 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		sprite = new Sprite(texture);
 
 		Stage stage = new TiledMapStage(tiledMap);
-		Gdx.input.setInputProcessor(stage);
-		/*
-		 * objectLayer = tiledMap.getLayers().get("objects"); textureRegion =
-		 * new TextureRegion(texture,64,64);
-		 * 
-		 * TextureMapObject tmo = new TextureMapObject(textureRegion);
-		 * tmo.setX(0); tmo.setY(0); objectLayer.getObjects().add(tmo);
-		 */
+		Gdx.input.setInputProcessor(stage);	
+		renderTest(stage);
 
+	}
+	
+	public void renderTest(Stage stage){
+		
+		int x = 1;
+		int y = 2;
+		int x2 = 3;
+		int y2 = 3;
+		TerrainType testTerrain = TerrainType.TREE; 
+		StructureType testStructure = StructureType.ROAD;
+		UnitType testUnit = UnitType.PEASANT;
+		VillageType testVillage = VillageType.TOWN;
+		ColourType testColour = ColourType.BLUE;
+		
+		UITileDescriptor testDescriptor1 = new UITileDescriptor(x,y,testTerrain,testStructure,
+				testUnit,testVillage,testColour);
+		
+		UITileDescriptor testDescriptor2= new UITileDescriptor(x2,y2,testTerrain,testStructure,
+				testUnit,testVillage,testColour); 
+		
+		
+		ArrayList<UITileDescriptor> testList = new ArrayList<UITileDescriptor>();
+		testList.add(testDescriptor1);
+		testList.add(testDescriptor2);
+		
+		((TiledMapStage) stage).tiledMapRenderUpdate(testList);
+		
 	}
 
 	@Override
@@ -120,19 +151,6 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-		TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get("base");
-		System.out.println(layer);
-		TiledMapTileLayer.Cell cell = layer.getCell(0, 0);
-		System.out.println(cell.getTile());
-
-		TiledMapTileSet tileset = tiledMap.getTileSets().getTileSet("heximage");
-		/* added code for practice */
-		Vector3 touch = new Vector3(screenX, screenY, 0);
-
-		TiledMapTile brown = tileset.getTile(2);
-
-		cell.setTile(brown);
 
 		return true;
 

@@ -5,6 +5,9 @@ sourceCompatibility = 1.6
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
+dependencies {
+    compile project(':medieval-warfare-client')
+}
 
 eclipse.project {
     name = "medieval-warfare-game-core"
