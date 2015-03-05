@@ -73,7 +73,7 @@ public class MatchMakingPanel extends BasePanel {
 		public LoadingPane() {
 			super();
 			setOpaque(false);
-			paintTimer = new Timer(5, new ActionListener() {
+			paintTimer = new Timer(50, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					cycle += 0.02f;
@@ -83,17 +83,18 @@ public class MatchMakingPanel extends BasePanel {
 						invert = !invert;
 					}
 					if (count == 10) {
-						setRuning(false);
-						panelController.setMatched();
+						// setRuning(false);
+						// panelController.setMatched();
+						// Removing for now, since something else will show this panel.
 					}
 					repaint();
 				}
 			});
 			paintTimer.setRepeats(true);
-			setRuning(true);
+			setRunning(true);
 		}
 
-		public void setRuning(boolean running) {
+		public void setRunning(boolean running) {
 			if (running) {
 				paintTimer.start();
 			} else {

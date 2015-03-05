@@ -18,6 +18,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import newworldorder.client.controller.IController;
+import newworldorder.client.controller.ISession;
 import newworldorder.common.network.AmqpAdapter;
 
 @Configuration
@@ -48,6 +49,9 @@ public class ClientConfiguration {
 	
 	@Autowired
 	IController controller;
+	
+	@Autowired
+	ISession session;
 
 	@Bean
 	ConnectionFactory connectionFactory() {

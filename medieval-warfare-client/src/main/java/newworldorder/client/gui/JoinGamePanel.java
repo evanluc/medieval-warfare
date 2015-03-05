@@ -55,38 +55,8 @@ public class JoinGamePanel extends BasePanel {
 		join.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				controller.requestGame(2);
 				panelController.setMatchMaking();
-				// try {
-				// String msgHost = "104.236.30.10";
-				// MessageProducer producer =
-				// ActorFactory.createDirectProducer(msgHost, "requestQueue");
-				// GameRequest curRequest = new GameRequest(aMainView.getName(),
-				// 2);
-				// JoinGameCommand joinGameCommand = new
-				// JoinGameCommand(aMainView.getName(), curRequest);
-				// producer.sendCommand(joinGameCommand);
-				//
-				// // Now wait for a response from server
-				// MessageConsumer consumer =
-				// ActorFactory.createDirectConsumer(msgHost, "notifyExchange",
-				// aMainView.getName(),
-				// new MessageHandler() {
-				//
-				// @Override
-				// public void handle(byte[] message) {
-				// JOptionPane.showMessageDialog(null, "Game found!");
-				// }
-				//
-				// });
-				//
-				// consumer.startConsuming();
-				// } catch (IOException e1) {
-				// // TODO Auto-generated catch block
-				// e1.printStackTrace();
-				// } catch (Exception ex) {
-				// // TODO Auto-generated catch block
-				// ex.printStackTrace();
-				// }
 			}
 		});
 		southPanel.add(join);

@@ -31,7 +31,6 @@ public class PanelController {
 
 	public void setLogin() {
 		aMainView.remove(aMainMenuPanel);
-//		aLoginPanel = new LoginPanel(this); TODO
 		aMainView.add(aLoginPanel);
 		aMainView.revalidate();
 		aMainView.repaint();

@@ -13,23 +13,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import newworldorder.client.controller.IController;
-
 @org.springframework.stereotype.Component
 public class LoginPanel extends BasePanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Autowired private IController controller;
+	
+	private final JTextField field = new JTextField(20);
 
 	public LoginPanel() {
 		super();
-//		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-//		controller = ctx.getBean(IController.class);
-//		ctx.close();
 		setLayout(new BorderLayout());
 
 		JPanel northPanel = new JPanel();
@@ -53,7 +47,7 @@ public class LoginPanel extends BasePanel {
 		});
 
 		JPanel subCenterPanel = new JPanel();
-		final JTextField field = new JTextField(20);
+		
 //		field.setText(aMainView.getName()); TODO: fix
 		field.setAlignmentX(Component.CENTER_ALIGNMENT);
 		field.addActionListener(new ActionListener() {
@@ -75,6 +69,7 @@ public class LoginPanel extends BasePanel {
 //				aMainView.setName(username);
 				controller.login(username, "password");
 				panelController.setJoinGame();
+				field.setText("");
 			}
 		});
 		subCenterPanel.add(field);
