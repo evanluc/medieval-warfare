@@ -1,4 +1,4 @@
-package newworldorder.server;
+package newworldorder.client;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
@@ -9,21 +9,21 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
+import newworldorder.client.controller.IController;
 import newworldorder.common.network.AmqpAdapter;
-import newworldorder.common.network.command.CommandHandler;
 
 @Configuration
+@ComponentScan
 @PropertySource("classpath:/rabbitmq.properties")
-public class ServerConfig {
+public class ClientConfiguration {
 
 	@Value("${rabbitmq.host}")
 	private String host;
@@ -38,16 +38,16 @@ public class ServerConfig {
 	private String password;
 
 	@Value("${rabbitmq.consumeFrom}")
-	private String requestExchange;
+	private String consumerExchange;
 	
 	@Value("${rabbitmq.publishTo}")
-	private String notifyExchange;
-	
-	@Value("${rabbitmq.routingKey}")
-	private String routingKey;
+	private String commandExchange;
 
+//	@Autowired
+//	CommandHandler handler;
+	
 	@Autowired
-	CommandHandler handler;
+	IController controller;
 
 	@Bean
 	ConnectionFactory connectionFactory() {
@@ -78,33 +78,33 @@ public class ServerConfig {
 	}
 
 	@Bean
-	DirectExchange requestExchange() {
-		return new DirectExchange(requestExchange);
+	DirectExchange commandExchange() {
+		return new DirectExchange(commandExchange);
 	}
 	
 	@Bean
-	DirectExchange notifyExchange() {
-		return new DirectExchange(notifyExchange);
+	DirectExchange consumerExchange() {
+		return new DirectExchange(consumerExchange);
 	}
 	
 	@Bean
 	Binding binding() {
-		return BindingBuilder.bind(genQueue()).to(requestExchange()).with(routingKey);
+		return BindingBuilder.bind(genQueue()).to(consumerExchange()).withQueueName();
 	}
 
-	@Bean
-	SimpleMessageListenerContainer container() {
-		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-		container.setConnectionFactory(connectionFactory());
-		container.setQueues(genQueue());
-		container.setMessageListener(listenerAdapter());
-		return container;
-	}
-
-	@Bean
-	MessageListenerAdapter listenerAdapter() {
-		return new MessageListenerAdapter(handler, "handle");
-	}
+//	@Bean
+//	SimpleMessageListenerContainer container() {
+//		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//		container.setConnectionFactory(connectionFactory());
+//		container.setQueues(genQueue());
+//		container.setMessageListener(listenerAdapter());
+//		return container;
+//	}
+//
+//	@Bean
+//	MessageListenerAdapter listenerAdapter() {
+//		return new MessageListenerAdapter(handler, "handle");
+//	}
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {

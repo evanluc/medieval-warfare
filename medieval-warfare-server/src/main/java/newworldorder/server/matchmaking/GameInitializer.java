@@ -18,7 +18,7 @@ public class GameInitializer {
 	private final Logger logger = LoggerFactory.getLogger(GameInitializer.class);
 	private final AmqpAdapter amqpAdapter;
 	
-	@Value("${rabbitmq.publishTo")
+	@Value("${rabbitmq.publishTo}")
 	private String exchange;
 
 	@Autowired

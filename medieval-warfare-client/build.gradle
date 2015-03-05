@@ -5,9 +5,11 @@ buildscript {
 
 apply plugin:'application'
 
-mainClassName = "newworldorder.ui.MainView"
+mainClassName = "newworldorder.client.ClientApplication"
 
 dependencies {
+    compile 'org.springframework:spring-context'
+    compile 'org.springframework.amqp:spring-rabbit'
     compile project(':medieval-warfare-common')
     compile project(':medieval-warfare-game-core')
 }

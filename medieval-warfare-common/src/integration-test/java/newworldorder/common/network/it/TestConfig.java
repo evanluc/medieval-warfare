@@ -19,7 +19,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import newworldorder.common.network.AmqpAdapter;
 
 @Configuration
-@PropertySource("classpath:/application.properties")
+@PropertySource("classpath:/rabbitmq.properties")
 public class TestConfig {
 
 	@Value("${rabbitmq.host}")
