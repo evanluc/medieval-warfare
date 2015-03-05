@@ -9,6 +9,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component;
 public class MainView extends JFrame {
 	private String aName;	// TODO, this should go somewhere else
 
-	public MainView() {
+	@Autowired
+	public MainView(MainMenuPanel mainMenu) {
 		super();
 		BufferedImage img=null;
 		try {
@@ -29,15 +31,11 @@ public class MainView extends JFrame {
 		
 		setContentPane(new BackgroundPanel(img));
 		setTitle("Medieval Warfare");
-
+		this.add(mainMenu);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		pack();
 		setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		new MainView();
 	}
 
 	@Override

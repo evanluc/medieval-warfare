@@ -22,12 +22,6 @@ public class PanelController {
 	@Autowired private MatchedPanel aMatchedPanel;
 	@Autowired private LoginPanel aLoginPanel;
 	
-	public void showMainView() {
-		aMainView.add(aMainMenuPanel);
-		aMainView.revalidate();
-		aMainView.repaint();
-	}
-	
 	public void setCredits() {
 		aMainView.remove(aMainMenuPanel);
 		aMainView.add(aCreditsPanel);
