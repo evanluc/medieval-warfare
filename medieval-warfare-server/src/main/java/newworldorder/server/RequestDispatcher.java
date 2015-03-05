@@ -26,7 +26,7 @@ public class RequestDispatcher implements CommandHandler {
 		
 		if (command instanceof RemoteCommand) {
 			RemoteCommand remoteCommand = (RemoteCommand) command;
-			logger.info("Command: " + command.toString());;
+			logger.info("Command: " + command.toString());
 			remoteCommand.setServiceLocator(locator);
 			remoteCommand.execute();
 		}

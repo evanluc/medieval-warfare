@@ -1,14 +1,13 @@
 package newworldorder.client;
 
 import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +18,11 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import newworldorder.client.controller.IController;
 import newworldorder.client.controller.ISession;
+import newworldorder.client.service.GameLauncher;
 import newworldorder.common.network.AmqpAdapter;
+import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CommandHandler;
+import newworldorder.common.service.IGameLauncher;
 
 @Configuration
 @ComponentScan
@@ -44,7 +46,7 @@ public class ClientConfiguration {
 	
 	@Value("${rabbitmq.publishTo}")
 	private String commandExchange;
-
+	
 	@Autowired
 	CommandHandler handler;
 	
@@ -53,18 +55,22 @@ public class ClientConfiguration {
 	
 	@Autowired
 	ISession session;
+	
+	@Bean IGameLauncher gameLauncher() {
+		return new GameLauncher();
+	}
+	
+	@Bean
+	public AmqpAdapter adapter() {
+		return new AmqpAdapter(rabbitTemplate());
+	}
 
 	@Bean
-	ConnectionFactory connectionFactory() {
+	public ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host, port);
 		connectionFactory.setUsername(username);
 		connectionFactory.setPassword(password);
 		return connectionFactory;
-	}
-	
-	@Bean
-	public AmqpAdapter amqpAdapter() {
-		return new AmqpAdapter(rabbitTemplate());
 	}
 	
 	@Bean
@@ -76,11 +82,6 @@ public class ClientConfiguration {
     public RabbitTemplate rabbitTemplate() {
         return new RabbitTemplate(connectionFactory());
     }
-	
-	@Bean
-	Queue genQueue() {
-		return amqpAdmin().declareQueue();
-	}
 
 	@Bean
 	DirectExchange commandExchange() {
@@ -93,23 +94,23 @@ public class ClientConfiguration {
 	}
 	
 	@Bean
-	Binding binding() {
-		return BindingBuilder.bind(genQueue()).to(consumerExchange()).withQueueName();
+	CommandConsumer consumer() {
+		return new CommandConsumer(amqpAdmin(), container());
 	}
 
-//	@Bean
-//	SimpleMessageListenerContainer container() {
-//		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//		container.setConnectionFactory(connectionFactory());
-//		container.setQueues(genQueue());
-//		container.setMessageListener(listenerAdapter());
-//		return container;
-//	}
-//
-//	@Bean
-//	MessageListenerAdapter listenerAdapter() {
-//		return new MessageListenerAdapter(handler, "handle");
-//	}
+	@Bean
+	SimpleMessageListenerContainer container() {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setAutoStartup(false);
+		container.setConnectionFactory(connectionFactory());
+		container.setMessageListener(listenerAdapter());
+		return container;
+	}
+
+	@Bean
+	MessageListenerAdapter listenerAdapter() {
+		return new MessageListenerAdapter(handler, "handle");
+	}
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {

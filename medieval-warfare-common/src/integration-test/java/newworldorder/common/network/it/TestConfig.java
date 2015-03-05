@@ -39,18 +39,18 @@ public class TestConfig {
 	}
 	
 	@Bean
-	AmqpAdapter amqpAdapter(AmqpTemplate template) {
-		return new AmqpAdapter(template);
+	AmqpAdapter amqpAdapter() {
+		return new AmqpAdapter(rabbitTemplate());
 	}
 	
 	@Bean
-	AmqpTemplate rabbitTemplate(ConnectionFactory factory) {
-		return new RabbitTemplate(factory);
+	AmqpTemplate rabbitTemplate() {
+		return new RabbitTemplate(connectionFactory());
 	}
 
 	@Bean
-	AmqpAdmin admin(ConnectionFactory factory) {
-		return new RabbitAdmin(factory);
+	AmqpAdmin admin() {
+		return new RabbitAdmin(connectionFactory());
 	}
 	
 	@Bean

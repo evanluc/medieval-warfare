@@ -1,12 +1,14 @@
 package newworldorder.common.network;
 
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import newworldorder.common.network.command.Command;
 
 public class AmqpAdapter {
 	private final AmqpTemplate template;
 	
+	@Autowired
 	public AmqpAdapter(AmqpTemplate template) {
 		super();
 		this.template = template;
