@@ -1,16 +1,16 @@
 package newworldorder.game.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 /**
  * Player class clean and complete.
  */
-public class Player {
+public class Player implements Serializable {
     
-
+	private static final long serialVersionUID = -3711737223282059721L;
+	private final int playerId;
     private final String username;
     private final String password;
     private PlayerStatus status;
@@ -21,14 +21,29 @@ public class Player {
     private List<Village> controlledVillages;
     
     /**
+     * @param playerId
      * @param username
      * @param password
      * @param wins
      * @param losses
      * @param currentGame
      */
+    public Player(int playerId, String username, String password, int wins, int losses, Game currentGame)
+    {
+    	this.playerId = playerId;
+        this.username = username;
+        this.password = password;
+        this.status = null;
+        this.wins = wins;
+        this.losses = losses;
+        this.colour = null;
+        this.currentGame = currentGame;
+        this.controlledVillages = new ArrayList<Village>();
+    }
+    
     public Player(String username, String password, int wins, int losses, Game currentGame)
     {
+    	this.playerId = 0;
         this.username = username;
         this.password = password;
         this.status = null;
@@ -49,7 +64,11 @@ public class Player {
         }
     }
 
-    public String getUsername()
+    public int getPlayerId() {
+		return playerId;
+	}
+
+	public String getUsername()
     {
         return username;
     }

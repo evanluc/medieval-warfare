@@ -25,9 +25,9 @@ public class Map implements Serializable {
 		height = pHeight;
 		totalTiles = pWidth * pHeight;
 		tiles = new Hashtable<Integer, Tile>();
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				Tile t = new Tile(i, j, this);
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				Tile t = new Tile(x, y, this);
 				tiles.put(t.hashCode(), t);
 			}
 		}
@@ -203,5 +203,10 @@ public class Map implements Serializable {
 		assert (x < width && x >= 0);
 		assert (y < height && y >= 0);
 		return tiles.get(y * width + x);
+	}
+	
+	public Tile getTile(int hashCode) {
+		assert (hashCode < width * height && hashCode >= 0);
+		return tiles.get(hashCode);
 	}
 }

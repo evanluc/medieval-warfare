@@ -1,20 +1,22 @@
 package newworldorder.game.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Message class clean and complete.
  */
-public class Message {
+public class Message implements Serializable {
     
-    private final String message;
+	private static final long serialVersionUID = -4444110926298066700L;
+	private final String message;
     private final Date timestamp;
     private final Player sender;
     
     public Message(String pMessage, Player pSender) {
         message = pMessage;
         sender = pSender;
-        timestamp = Clock.getNow();
+        timestamp = new Date();
     }
 
     public String getMessage() {

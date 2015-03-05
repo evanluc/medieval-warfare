@@ -1,13 +1,14 @@
 package newworldorder.game.model;
 
-
+import java.io.Serializable;
 
 /**
  * Unit class clean and complete.
  */
-public class Unit {
-    
-    private UnitType unitType;
+public class Unit implements Serializable {
+
+	private static final long serialVersionUID = -2187574739448732604L;
+	private UnitType unitType;
     private ActionType currentAction;
     private int immobileUntilRound;
     private Tile tile;

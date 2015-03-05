@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 /**
  * Tile class is clean.
  */
@@ -31,7 +29,6 @@ public class Tile implements Serializable {
         mapHeight = myMap.getHeight();
         mapWidth = myMap.getWidth();
         neighbours = new ArrayList<Tile>();
-     
     }
     
     public void cacheNeighbours() {
@@ -125,7 +122,7 @@ public class Tile implements Serializable {
     }
 
     public int hashCode() {
-        return y * mapHeight + x;
+        return y * mapWidth + x;
     }
     
     public boolean equals(Object o) {

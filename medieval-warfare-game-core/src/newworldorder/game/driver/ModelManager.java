@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import newworldorder.game.model.ColourType;
+import newworldorder.game.model.Game;
 import newworldorder.game.model.GameEngine;
+import newworldorder.game.model.Player;
 import newworldorder.game.model.StructureType;
 import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Tile;
@@ -207,20 +209,36 @@ public class ModelManager implements IModelCommunicator {
 
 	@Override
 	public void loadGame(String filePath) {
-		// TODO Auto-generated method stub
-		
+		Game gameState = null;
+		try {
+			gameState = ModelSerializer.loadGameState(filePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		engine.setGameState(gameState);
 	}
 
 	@Override
 	public void saveGame(String filePath) {
-		// TODO Auto-generated method stub
-		
+		Game gameState = engine.getGameState();
+		try {
+			ModelSerializer.saveGameState(gameState, filePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void newGame(List<String> playerIds, String mapFilePath) {
-		// TODO Auto-generated method stub
-		
+		// TODO how to initialize players?
+		newworldorder.game.model.Map presetMap = null;
+		List<Player> players = null;
+		try {
+			presetMap = ModelSerializer.loadMap(mapFilePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		engine.newGame(players, presetMap);
 	}
 
 	@Override

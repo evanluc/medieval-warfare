@@ -1,14 +1,16 @@
 package newworldorder.game.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Region class is clean and complete.
  */
-public class Region {
+public class Region implements Serializable {
     
-    private List<Tile> tiles;
+	private static final long serialVersionUID = 5056315454979573917L;
+	private List<Tile> tiles;
     private Village controllingVillage = null;
     private final Player controllingPlayer;
     

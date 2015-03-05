@@ -1,5 +1,6 @@
 package newworldorder.game.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,9 +9,10 @@ import java.util.Set;
 /**
  * Village class is clean and complete.
  */
-public class Village {
+public class Village implements Serializable {
     
-    private VillageType villageType;
+	private static final long serialVersionUID = -3748359571009668032L;
+	private VillageType villageType;
     private int gold;
     private int wood;
     private final Player controlledBy;

@@ -1,16 +1,16 @@
 package newworldorder.game.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 /**
  * Game class clean and complete.
  */
-public class Game {
+public class Game implements Serializable {
     
-    private int roundCount = 0;
+	private static final long serialVersionUID = 2079718066507692385L;
+	private int roundCount = 0;
     private boolean hasWon = false;
     private final List<Player> players;
     private List<Message> chat;
