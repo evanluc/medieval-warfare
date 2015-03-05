@@ -1,4 +1,4 @@
-package newworldorder.server.it;
+package newworldorder.common.network.it;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.Command;
-import newworldorder.common.network.command.CommandExecutor;
+import newworldorder.common.network.command.CommandHandler;
 import newworldorder.common.network.command.LoginCommand;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,7 +38,7 @@ public class AmqpAdapterTest {
 	@Autowired FanoutExchange fanoutExchange;
 	@Autowired AmqpAdapter adapter;
 	@Autowired SimpleMessageListenerContainer container;
-	@Mock CommandExecutor listener;
+	@Mock CommandHandler listener;
 	private LoginCommand expected;
 	
 	@Before
@@ -135,13 +135,13 @@ public class AmqpAdapterTest {
 		admin.declareBinding(BindingBuilder.bind(queue).to(directExchange).withQueueName());
 		
 		container.addQueues(queue);
-		container.setMessageListener(new MessageListenerAdapter(listener, "execute"));
+		container.setMessageListener(new MessageListenerAdapter(listener, "handle"));
 		container.start();
 		
 		adapter.send(expected, directExchange.getName(), queue.getName());
 		Thread.sleep(1000);
 		
-		then(listener).should().execute(expected);
+		then(listener).should().handle(expected);
 		
 		container.stop();
 	}

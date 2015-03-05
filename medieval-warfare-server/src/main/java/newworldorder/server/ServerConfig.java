@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-import newworldorder.common.network.command.CommandExecutor;
+import newworldorder.common.network.command.CommandHandler;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
@@ -34,7 +34,7 @@ public class ServerConfig {
 
 	@Autowired RabbitTemplate rabbitTemplate;
 
-	@Autowired CommandExecutor executor;
+	@Autowired CommandHandler handler;
 
 	@Bean
 	ConnectionFactory connectionFactory() {
@@ -69,8 +69,8 @@ public class ServerConfig {
 	}
 
 	@Bean
-	MessageListenerAdapter listenerAdapter(CommandExecutor executor) {
-		return new MessageListenerAdapter(executor, "execute");
+	MessageListenerAdapter listenerAdapter(CommandHandler handler) {
+		return new MessageListenerAdapter(handler, "handle");
 	}
 
 	@Bean

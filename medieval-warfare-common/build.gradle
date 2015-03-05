@@ -1,6 +1,7 @@
 sourceSets {
     integTest {
         java.srcDir file('src/integration-test/java')
+        resources.srcDir file('src/integration-test/resources')
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
     }
@@ -23,4 +24,5 @@ dependencies {
     compile 'org.springframework.amqp:spring-rabbit'
 
     testCompile "org.mockito:mockito-core:1.+"
+    testCompile 'org.springframework:spring-test'
 }

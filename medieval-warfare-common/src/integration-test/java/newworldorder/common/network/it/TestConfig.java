@@ -1,4 +1,4 @@
-package newworldorder.server.it;
+package newworldorder.common.network.it;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;

@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import newworldorder.common.network.command.AbstractCommand;
-import newworldorder.common.network.command.CommandExecutor;
+import newworldorder.common.network.command.CommandHandler;
 import newworldorder.common.network.command.RemoteCommand;
 
 import newworldorder.common.service.IServerServiceLocator;
 
 @Component
-public class RequestDispatcher implements CommandExecutor {
+public class RequestDispatcher implements CommandHandler {
 	private final IServerServiceLocator locator;
 
 	@Autowired
@@ -19,7 +19,7 @@ public class RequestDispatcher implements CommandExecutor {
 	}
 
 	@Override
-	public void execute(AbstractCommand command) {
+	public void handle(AbstractCommand command) {
 		if (command instanceof RemoteCommand) {
 			RemoteCommand remoteCommand = (RemoteCommand) command;
 			remoteCommand.setServiceLocator(locator);
