@@ -1,5 +1,6 @@
 package newworldorder.game.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +9,10 @@ import java.util.List;
 /**
  * Tile class is clean.
  */
-public class Tile {
+public class Tile implements Serializable {
     
-    private TerrainType terrainType;
+	private static final long serialVersionUID = -1574156206965797597L;
+	private TerrainType terrainType;
     private final int x;
     private final int y;
     private final int mapHeight;
