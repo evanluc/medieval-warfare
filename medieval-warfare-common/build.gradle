@@ -1,10 +1,17 @@
 sourceSets {
     integTest {
         java.srcDir file('src/integration-test/java')
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
     }
 }
 
-task integTest(type: Test) {
+configurations {
+    integTestCompile.extendsFrom testCompile
+    integTestRuntime.extendsFrom testRuntime
+}
+
+task integTest(type: Test, dependsOn: test) {
     testClassesDir = sourceSets.integTest.output.classesDir
     classpath = sourceSets.integTest.runtimeClasspath
 }
@@ -16,9 +23,4 @@ dependencies {
     compile 'org.springframework.amqp:spring-rabbit'
 
     testCompile "org.mockito:mockito-core:1.+"
-    
-    integTestCompile sourceSets.main.output
-    integTestCompile configurations.testCompile
-    integTestCompile sourceSets.test.output
-    integTestRuntime configurations.testRuntime
 }
