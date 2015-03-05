@@ -37,10 +37,10 @@ public class ServerConfig {
 	@Value("${rabbitmq.password}")
 	private String password;
 
-	@Value("${rabbitmq.consumeFrom")
+	@Value("${rabbitmq.consumeFrom}")
 	private String requestExchange;
 	
-	@Value("${rabbitmq.publishTo")
+	@Value("${rabbitmq.publishTo}")
 	private String notifyExchange;
 
 	@Autowired
