@@ -114,6 +114,16 @@ public class GameEngine {
     public void buildUnit(Village v, Tile t, UnitType type) {
     	Region r = v.getRegion();
     	if (t.getUnit() == null && v.getGold() >= Unit.unitCost(type) && r.getTiles().contains(t)) {
+    		if(v.getVillageType() == VillageType.HOVEL){
+    			//Checks if village is allowed to create strong units
+    			if(type == UnitType.SOLDIER || type == UnitType.KNIGHT){
+    				return;
+    			}
+    		}else if(v.getVillageType() == VillageType.TOWN){
+    			if( type == UnitType.KNIGHT){
+    				return;
+    			}
+    		}
     		v.transactGold(-1 * Unit.unitCost(type));
     		new Unit(type, v, t);
     	}
@@ -121,6 +131,16 @@ public class GameEngine {
 
     public void upgradeUnit(Unit u, UnitType newLevel) {
         Village v = u.getVillage();
+        if(v.getVillageType() == VillageType.HOVEL){
+        	if(newLevel == UnitType.SOLDIER || newLevel == UnitType.KNIGHT){
+        		return;
+        	}
+        }
+        if(v.getVillageType() == VillageType.TOWN){
+        	if(newLevel == UnitType.KNIGHT){
+        		return;
+        	}
+        }
         int cost = Unit.unitLevel(newLevel) - Unit.unitLevel(u.getUnitType());
         if (v.getGold() >= cost) {
             u.setUnitType(newLevel);
@@ -344,16 +364,18 @@ public class GameEngine {
 
     private void combineUnits(Unit dest, Unit moved) {
     	UnitType newLevel = null;
-    	
+    	int villageLevel = Village.villageLevel(dest.getVillage().getVillageType());
     	if(dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.PEASANT ){
     		newLevel = UnitType.INFANTRY;
-    	} else if (dest.getUnitType() == UnitType.INFANTRY && moved.getUnitType() == UnitType.INFANTRY ){
+    	} else if (villageLevel == 2 && dest.getUnitType() == UnitType.INFANTRY && moved.getUnitType() == UnitType.INFANTRY ){
     		newLevel = UnitType.KNIGHT;
-    	} else if ( (dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.INFANTRY)
-    			|| (dest.getUnitType() == UnitType.INFANTRY && moved.getUnitType() == UnitType.PEASANT)){
+    	} else if ( villageLevel >= 1 && 
+    			((dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.INFANTRY)
+    			|| (dest.getUnitType() == UnitType.INFANTRY && moved.getUnitType() == UnitType.PEASANT))){
     		newLevel = UnitType.SOLDIER;
-    	} else if ( (dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.SOLDIER)
-    			|| (dest.getUnitType() == UnitType.SOLDIER && moved.getUnitType() == UnitType.PEASANT)){
+    	} else if ( villageLevel == 2 && 
+    			((dest.getUnitType() == UnitType.PEASANT && moved.getUnitType() == UnitType.SOLDIER)
+    			|| (dest.getUnitType() == UnitType.SOLDIER && moved.getUnitType() == UnitType.PEASANT))){
     		newLevel = UnitType.KNIGHT;
     	} else {
     		return;

@@ -11,19 +11,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import newworldorder.game.model.ActionType;
-import newworldorder.game.model.Game;
-import newworldorder.game.model.GameEngine;
-import newworldorder.game.model.Map;
-import newworldorder.game.model.Player;
-import newworldorder.game.model.StructureType;
-import newworldorder.game.model.TerrainType;
-import newworldorder.game.model.Tile;
-import newworldorder.game.model.Unit;
-import newworldorder.game.model.UnitType;
-import newworldorder.game.model.Village;
-import newworldorder.game.model.VillageType;
-
 public class GameEngineTest {
 	private Map aMap;
 	private Village village1, village2;
@@ -66,6 +53,10 @@ public class GameEngineTest {
 		//Now try making a unit without enough money
 		gameEngine.buildUnit(village1, aMap.getTile(1, 0), UnitType.PEASANT);
 		assertEquals(aMap.getTile(1, 0).getUnit(), null);
+		//Try to make a unit that is too strong
+		village1.transactGold(50);
+		gameEngine.buildUnit(village1, aMap.getTile(1, 0), UnitType.SOLDIER);
+		assertEquals(aMap.getTile(1, 0).getUnit(), null);
 	}
 	@Test
 	public void testBuildRoad() {
@@ -97,6 +88,7 @@ public class GameEngineTest {
 	@Test
 	public void testUpgradeUnit() {
 		Unit aUnit = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
+		village1.setVillageType(VillageType.FORT);
 		assertEquals(aUnit.getVillage().getWood(), 0);
 		gameEngine.upgradeUnit(aUnit, UnitType.KNIGHT);
 		assertEquals(aUnit.getUnitType(), UnitType.PEASANT);
@@ -206,6 +198,7 @@ public class GameEngineTest {
 	public void testMoveUnit_CombineUnits() {
 		Unit u1 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(0, 1));
 		Unit u2 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
+		village1.setVillageType(VillageType.FORT);
 		gameEngine.moveUnit(u1, aMap.getTile(1, 0));
 		assertEquals(aMap.getTile(0, 1).getUnit(), null);
 		assertEquals(aMap.getTile(1, 0).getUnit().getUnitType(), UnitType.KNIGHT);
@@ -286,4 +279,6 @@ public class GameEngineTest {
 		assertEquals(u1.getVillage(), village3);
 		assertEquals(u2.getVillage(), village3);
 	}
+
+	
 }
