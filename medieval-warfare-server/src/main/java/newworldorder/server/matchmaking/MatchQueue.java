@@ -2,7 +2,6 @@ package newworldorder.server.matchmaking;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MatchQueue {
@@ -20,8 +19,6 @@ public class MatchQueue {
 	}
 	
 	public List<String> popGame() {
-		if (!hasGame()) throw new NoSuchElementException();
-		
 		List<String> players = new ArrayList<>();
 		
 		for (int i = 0; i < numPlayers; i++) {

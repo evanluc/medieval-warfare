@@ -2,6 +2,8 @@ package newworldorder.server.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,7 @@ import newworldorder.server.matchmaking.MatchQueue;
 
 @Component
 public class MatchController implements IMatchController {
+	private final Logger logger = LoggerFactory.getLogger(MatchController.class);
 	private final MatchQueue twoPlayerQueue;
 	private final MatchQueue threePlayerQueue;
 	private final MatchQueue fourPlayerQueue;
@@ -29,6 +32,9 @@ public class MatchController implements IMatchController {
 	synchronized public void addToQueue(GameRequest gameRequest) {
 		String username = gameRequest.getUsername();
 		int numPlayers = gameRequest.getNumPlayers();
+		
+		logger.info("Adding user '" + username + "' to queue for " + numPlayers + "-player game.");
+		
 		MatchQueue queue = getQueue(numPlayers);
 		queue.insertPlayer(username);
 

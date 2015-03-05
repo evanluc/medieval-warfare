@@ -24,6 +24,10 @@ sourceSets {
 configurations {
     integTestCompile.extendsFrom testCompile
     integTestRuntime.extendsFrom testRuntime
+    
+    // exclude commons-logging
+    all*.exclude group: 'commons-logging'
+    all*.exclude group: 'ch.qos.logback'
 }
 
 task integTest(type: Test, dependsOn: test) {
@@ -45,6 +49,11 @@ distDocker {
 }
 
 dependencies {
+    compile 'org.slf4j:jcl-over-slf4j:1.7.10'
+    compile 'org.slf4j:slf4j-api:1.7.10'
+    compile 'org.slf4j:slf4j-log4j12:1.7.10'
+    compile 'log4j:log4j:1.2.17'
+
     compile 'org.springframework:spring-context'
     compile 'org.springframework.boot:spring-boot-starter-amqp'
     compile 'org.hibernate:hibernate-core:4.3.8.Final'

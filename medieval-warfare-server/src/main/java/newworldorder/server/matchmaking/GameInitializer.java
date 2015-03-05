@@ -2,6 +2,8 @@ package newworldorder.server.matchmaking;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,7 @@ import newworldorder.common.network.command.StartGameCommand;
 
 @Component
 public class GameInitializer {
+	private final Logger logger = LoggerFactory.getLogger(GameInitializer.class);
 	private final AmqpAdapter amqpAdapter;
 
 	@Autowired
@@ -23,6 +26,8 @@ public class GameInitializer {
 		String gameExchangeName = String.valueOf(players.hashCode());
 
 		GameInfo gameInfo = new GameInfo(players, gameExchangeName);
+		logger.info("Initializing game: " + gameInfo.toString());
+		
 		ClientCommand command = new StartGameCommand("server", gameInfo);
 
 		for (String player : players) {
