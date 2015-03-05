@@ -20,6 +20,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import newworldorder.client.controller.IController;
 import newworldorder.client.controller.ISession;
 import newworldorder.common.network.AmqpAdapter;
+import newworldorder.common.network.command.CommandHandler;
 
 @Configuration
 @ComponentScan
@@ -44,8 +45,8 @@ public class ClientConfiguration {
 	@Value("${rabbitmq.publishTo}")
 	private String commandExchange;
 
-//	@Autowired
-//	CommandHandler handler;
+	@Autowired
+	CommandHandler handler;
 	
 	@Autowired
 	IController controller;

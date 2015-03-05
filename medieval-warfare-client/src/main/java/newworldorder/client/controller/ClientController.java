@@ -40,5 +40,6 @@ public class ClientController implements IController {
 		GameRequest curRequest = new GameRequest(username, numPlayers);
 		JoinGameCommand joinGameCommand = new JoinGameCommand(username, curRequest);
 		adapter.send(joinGameCommand, commandExchange, routingKey);
+		// Start consuming from notify exchange.
 	}
 }
