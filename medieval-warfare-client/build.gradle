@@ -1,6 +1,6 @@
 buildscript {
-    sourceSets.main.resources.srcDir "../medieval-warfare-game/core/assets"
-    sourceSets.test.resources.srcDir "../medieval-warfare-game/core/assets"
+    sourceSets.main.resources.srcDir "../medieval-warfare-game-core/assets"
+    sourceSets.test.resources.srcDir "../medieval-warfare-game-core/assets"
 }
 
 apply plugin:'application'
@@ -9,7 +9,7 @@ mainClassName = "newworldorder.ui.MainView"
 
 dependencies {
     compile project(':medieval-warfare-common')
-    compile project(':desktop')
+    compile project(':medieval-warfare-game-desktop')
 }
 
 run {

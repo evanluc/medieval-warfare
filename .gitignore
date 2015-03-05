@@ -3,3 +3,5 @@
 *.settings
 *.project
 *.classpath
+medieval-warfare-game-desktop/bin/
+medieval-warfare-game-core/bin/
