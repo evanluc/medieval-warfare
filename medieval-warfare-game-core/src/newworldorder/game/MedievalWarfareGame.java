@@ -16,14 +16,9 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.StructureType;
 import newworldorder.game.model.TerrainType;
@@ -55,7 +50,7 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		camera.setToOrtho(false, w, h);
 		camera.update();
 
-		tiledMap = new TmxMapLoader().load("./map/tester.tmx");
+		tiledMap = new TmxMapLoader().load("./map/biggerTiles.tmx");
 		
 		MapProperties prop = tiledMap.getProperties();
 		int mapWidth = prop.get("width", Integer.class);

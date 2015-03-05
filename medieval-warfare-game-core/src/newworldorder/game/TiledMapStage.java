@@ -1,20 +1,18 @@
 package newworldorder.game;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import newworldorder.game.model.ColourType;
-import newworldorder.game.model.TerrainType;
+import java.util.List;
 
 import newworldorder.game.driver.UITileDescriptor;
-
-import java.util.Iterator;
-import java.util.List;
+import newworldorder.game.model.ColourType;
+import newworldorder.game.model.StructureType;
+import newworldorder.game.model.TerrainType;
+import newworldorder.game.model.UnitType;
 public class TiledMapStage extends Stage {
 
 	private TiledMap tiledMap;
@@ -55,16 +53,16 @@ public class TiledMapStage extends Stage {
 	}
 
 	public void tiledMapRenderUpdate (List<UITileDescriptor> UpdateTilesList) {
-		Iterator itrTilesList = UpdateTilesList.iterator();
 		UITileDescriptor currentTile; 
 		int i = 0; 
-		int x;
-		int y;
 		while (i < UpdateTilesList.size()) {
 			currentTile = UpdateTilesList.get(i);
 			i++;
 			tiledMapColourUpdate(currentTile);
 			tiledMapTerrainUpdate(currentTile);
+			tiledMapUnitUpdate(currentTile);
+			tiledMapStructureUpdate(currentTile);
+
 		}
 	}
 
@@ -128,5 +126,53 @@ public class TiledMapStage extends Stage {
 		
 		
 	}
+
+	public void tiledMapUnitUpdate(UITileDescriptor updatedDescription){
+		int x = updatedDescription.x;
+		int y = updatedDescription.y;
+		Cell updateCell = tiledMapDescriptors.unitLayer.getCell(x,y);
+		
+		UnitType newUnit = updatedDescription.unitType;
+		
+		switch(newUnit){
+		case PEASANT: updateCell.setTile(tiledMapDescriptors.peasantTile);
+		break;
+		
+		case INFANTRY: updateCell.setTile(tiledMapDescriptors.infantryTile);
+		break;
+		
+		case SOLDIER: updateCell.setTile(tiledMapDescriptors.soldierTile);
+		break;
+		
+		case KNIGHT: updateCell.setTile(tiledMapDescriptors.knightTile);
+		break;
+			
+		}
+		
+	}
+	
+	public void tiledMapStructureUpdate(UITileDescriptor updatedDescription){
+		int x = updatedDescription.x;
+		int y = updatedDescription.y;
+		Cell updateCell = tiledMapDescriptors.structureLayer.getCell(x,y);
+		
+		StructureType newStructure = updatedDescription.structureType;
+		
+		switch(newStructure){
+		
+		case ROAD: updateCell.setTile(tiledMapDescriptors.roadTile);
+		break;
+		
+		case WATCHTOWER: updateCell.setTile(tiledMapDescriptors.towerTile);
+		break;
+		
+		case TOMBSTONE: updateCell.setTile(tiledMapDescriptors.tombstoneTile);
+		break;
+			
+		}
+		
+		
+	}
+	
 }
 
