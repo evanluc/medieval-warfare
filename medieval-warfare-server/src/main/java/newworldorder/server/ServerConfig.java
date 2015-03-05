@@ -1,11 +1,13 @@
 package newworldorder.server;
 
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
@@ -16,25 +18,33 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
+import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.CommandHandler;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
 public class ServerConfig {
 
-	@Value("${rabbitmq.host}") private String host;
+	@Value("${rabbitmq.host}")
+	private String host;
 
-	@Value("${rabbitmq.port}") private int port;
+	@Value("${rabbitmq.port}")
+	private int port;
 
-	@Value("${rabbitmq.username}") private String username;
+	@Value("${rabbitmq.username}")
+	private String username;
 
-	@Value("${rabbitmq.password}") private String password;
+	@Value("${rabbitmq.password}")
+	private String password;
 
-	@Value("${rabbitmq.request-queue-name") private String requestQueue;
+	@Value("${rabbitmq.consumeFrom")
+	private String requestExchange;
+	
+	@Value("${rabbitmq.publishTo")
+	private String notifyExchange;
 
-	@Autowired RabbitTemplate rabbitTemplate;
-
-	@Autowired CommandHandler handler;
+	@Autowired
+	CommandHandler handler;
 
 	@Bean
 	ConnectionFactory connectionFactory() {
@@ -43,33 +53,53 @@ public class ServerConfig {
 		connectionFactory.setPassword(password);
 		return connectionFactory;
 	}
-
+	
 	@Bean
-	Queue queue() {
-		return new Queue(requestQueue, false);
+	public AmqpAdapter amqpAdapter() {
+		return new AmqpAdapter(rabbitTemplate());
+	}
+	
+	@Bean
+    public AmqpAdmin amqpAdmin() {
+        return new RabbitAdmin(connectionFactory());
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        return new RabbitTemplate(connectionFactory());
+    }
+	
+	@Bean
+	Queue genQueue() {
+		return amqpAdmin().declareQueue();
 	}
 
 	@Bean
-	DirectExchange exchange() {
-		return new DirectExchange("");
+	DirectExchange requestExchange() {
+		return new DirectExchange(requestExchange);
+	}
+	
+	@Bean
+	DirectExchange notifyExchange() {
+		return new DirectExchange(notifyExchange);
+	}
+	
+	@Bean
+	Binding binding() {
+		return BindingBuilder.bind(genQueue()).to(requestExchange()).withQueueName();
 	}
 
 	@Bean
-	Binding binding(Queue queue, DirectExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).withQueueName();
-	}
-
-	@Bean
-	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+	SimpleMessageListenerContainer container() {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames(requestQueue);
-		container.setMessageListener(listenerAdapter);
+		container.setConnectionFactory(connectionFactory());
+		container.setQueues(genQueue());
+		container.setMessageListener(listenerAdapter());
 		return container;
 	}
 
 	@Bean
-	MessageListenerAdapter listenerAdapter(CommandHandler handler) {
+	MessageListenerAdapter listenerAdapter() {
 		return new MessageListenerAdapter(handler, "handle");
 	}
 

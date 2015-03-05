@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.network.AmqpAdapter;
@@ -18,11 +19,13 @@ import newworldorder.common.network.command.StartGameCommand;
 public class GameInitializerTest {
 	@Mock private AmqpAdapter amqpAdapter;
 	private GameInitializer gameInitializer;
+	private String exchange = "test-exchange";
 
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		gameInitializer = new GameInitializer(amqpAdapter);
+		ReflectionTestUtils.setField(gameInitializer, "exchange", exchange);
 	}
 
 	@Test
@@ -39,7 +42,7 @@ public class GameInitializerTest {
 		gameInitializer.initializeGame(players);
 
 		for (String p : players) {
-			then(amqpAdapter).should().send(command, "notify-exchange", p);
+			then(amqpAdapter).should().send(command, exchange, p);
 		}
 	}
 
