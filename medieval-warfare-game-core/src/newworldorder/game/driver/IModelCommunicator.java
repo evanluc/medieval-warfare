@@ -4,13 +4,15 @@ import java.util.List;
 
 public interface IModelCommunicator {
 	
-	public IModelCommunicator getInstance();
-	
 	public void loadGame(String filePath);
 	
 	public void saveGame(String filePath);
 	
 	public void newGame(List<String> playerIds, String mapFilePath);
+	
+	public int getMapHeight();
+	
+	public int getMapWidth();
 	
 	public void informOfUserAction(UIActionType action);
 	

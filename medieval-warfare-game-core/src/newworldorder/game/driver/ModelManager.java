@@ -23,7 +23,7 @@ import newworldorder.game.model.VillageType;
 
 public class ModelManager implements IModelCommunicator, Observer {
 	
-	private ModelManager instance;
+	private static ModelManager instance = null;
 	private GameEngine engine;
 	private boolean gameRunning;
 	private Set<Tile> updatedTiles;
@@ -34,8 +34,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 		updatedTiles = new HashSet<Tile>();
 	}
 	
-	@Override
-	public ModelManager getInstance() {
+	public static ModelManager getInstance() {
 		if (instance == null) {
 			instance = new ModelManager();
 		}
@@ -261,9 +260,8 @@ public class ModelManager implements IModelCommunicator, Observer {
 
 	@Override
 	public void newGame(List<String> playerIds, String mapFilePath) {
-		// TODO how to initialize players?
 		newworldorder.game.model.Map presetMap = null;
-		List<Player> players = null;
+		List<Player> players = initPlayers(playerIds);
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
 		} catch (Exception e) {
@@ -274,6 +272,16 @@ public class ModelManager implements IModelCommunicator, Observer {
 			addObserverToTiles(engine.getGameState().getMap());
 			gameRunning = true;
 		}
+	}
+	
+	private List<Player> initPlayers(List<String> playerIds) {
+		// TODO how to initialize players?
+		List<Player> ret = new ArrayList<Player>();
+		
+		for (String s : playerIds) {
+			ret.add(new Player(Integer.parseInt(s), s, s, 0, 0, null));
+		}
+		return ret;
 	}
 
 	@Override
@@ -296,8 +304,10 @@ public class ModelManager implements IModelCommunicator, Observer {
 
 	@Override
 	public void leaveGame() {
-		// TODO Auto-generated method stub
-		
+		// TODO Correct implementation
+		engine.setGameState(null);
+		gameRunning = false;
+		updatedTiles.clear();
 	}
 
 	@Override
@@ -310,6 +320,22 @@ public class ModelManager implements IModelCommunicator, Observer {
 			t.addObserver(this);
 			updatedTiles.add(t);
 		}
+	}
+
+	@Override
+	public int getMapHeight() {
+		if (gameRunning)
+			return engine.getGameState().getMap().getHeight();
+		else
+			return -1;
+	}
+
+	@Override
+	public int getMapWidth() {
+		if (gameRunning)
+			return engine.getGameState().getMap().getWidth();
+		else
+			return -1;
 	}
 
 }

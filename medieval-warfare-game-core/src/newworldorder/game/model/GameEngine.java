@@ -80,7 +80,7 @@ public class GameEngine {
     public void newGame(List<Player> players, Map map) {
     	Map.setUpMap(players, map);
         Game game = new Game(players, map);
-        Player.setUpPlayers(players);
+        Player.setUpPlayers(players, game);
         setGameState(game);
     }
 

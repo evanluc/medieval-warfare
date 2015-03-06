@@ -68,7 +68,7 @@ public class ModelSerializer {
 		}
     }
     
-    private static void writeSerializedObject(Object o, String path) throws FileNotFoundException, IOException {
+    private synchronized static void writeSerializedObject(Object o, String path) throws FileNotFoundException, IOException {
 		// The "ObjectOutputStream" class have the default
 		// definition to serialize an object.
 		// By using "FileOutputStream" we will
@@ -76,18 +76,32 @@ public class ModelSerializer {
 		// It could have been a Socket to another
 		// machine, a database, an in memory array, etc.
     	// - stackoverflow.com
-		ObjectOutputStream oos = new ObjectOutputStream( new FileOutputStream( new File(path) ) );
-		oos.writeObject(o);
-		oos.close();
+    	ObjectOutputStream oos = null;
+    	
+		try {
+			oos = new ObjectOutputStream( new FileOutputStream( new File(path) ) );
+			oos.writeObject(o);
+		} catch (Exception ex) {
+			throw ex;
+		} finally {
+			oos.close();
+		}
     }
     
-    private static Object readSerializedObject(String path) throws FileNotFoundException, IOException, ClassNotFoundException {
+    private synchronized static Object readSerializedObject(String path) throws FileNotFoundException, IOException, ClassNotFoundException {
     	// The idea from the above method also applies here,
     	// we can easily chance the FileInputStream to a Socket
     	// or another machine or anything really.
-		ObjectInputStream ois = new ObjectInputStream( new FileInputStream( new File(path) ) );
-		Object o = ois.readObject();
-		ois.close();
+    	ObjectInputStream ois = null;
+    	Object o;
+    	try {
+    		ois = new ObjectInputStream( new FileInputStream( new File(path) ) );
+    		o = ois.readObject();
+    	} catch (Exception ex) {
+    		throw ex;
+    	}finally {
+    		ois.close();
+    	}
 		return o;
     }
     

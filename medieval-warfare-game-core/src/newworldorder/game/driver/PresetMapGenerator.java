@@ -38,7 +38,7 @@ public class PresetMapGenerator {
 			bufferedReader = new BufferedReader( new FileReader(inputFileName) );
 			
 			String[] settings = bufferedReader.readLine().split("\\s");
-			outputFileName = settings[0];
+			outputFileName = "maps/"+settings[0];
 			width = Integer.parseInt(settings[1]);
 			height = Integer.parseInt(settings[2]);
 			
@@ -114,6 +114,7 @@ public class PresetMapGenerator {
 		// change the name below to generate from any text file you specify
 		// when running from within eclipse, the root directory is the home
 		// directory of the project (/medieval-warfare-game-core/test.txt)
-		generateMapFromDescFile("testfiles/test.txt");
+		generateMapFromDescFile("maps/seaside-skirmish.txt");
+		System.out.println("done");
 	}
 }

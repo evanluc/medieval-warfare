@@ -99,7 +99,11 @@ public class Map implements Serializable {
 							// if curTile did not border the player, then add it
 							// to the newRegion
 							newRegion.add(curTile);
-							curTile = randTileNeighbours.get(0);
+							if (newRegion.size() < INIT_VILLAGE_REGION_SIZE && randTileNeighbours.size() > 0) {
+								curTile = randTileNeighbours.get(0);
+							} else {
+								break;
+							}
 						} else {
 							// otherwise, check if there are more tiles that can
 							// be considered

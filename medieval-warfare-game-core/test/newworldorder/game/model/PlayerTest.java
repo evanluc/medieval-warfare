@@ -32,7 +32,7 @@ public class PlayerTest {
 
 	@Test
 	public void testSetUpPlayers() {
-		Player.setUpPlayers(players);
+		Player.setUpPlayers(players, null);
 		assertTrue(p1.getColour() != null);
 		assertTrue(p2.getColour() != null);
 		assertTrue(p3.getColour() != null);

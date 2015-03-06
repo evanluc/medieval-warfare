@@ -54,12 +54,13 @@ public class Player implements Serializable {
         this.controlledVillages = new ArrayList<Village>();
     }
     
-    public static void setUpPlayers(List<Player> players) {
+    public static void setUpPlayers(List<Player> players, Game g) {
         int i = 0;
         for (Player p : players) {
             ColourType c = ColourType.values()[i];
             p.setColour(c);
             p.setStatus(PlayerStatus.ONLINE);
+            p.setCurrentGame(g);
             i++;
         }
     }

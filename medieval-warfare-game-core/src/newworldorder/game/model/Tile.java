@@ -2,8 +2,10 @@ package newworldorder.game.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
 
 /**
  * Tile class is clean.
@@ -21,7 +23,7 @@ public class Tile extends Observable implements Serializable {
     private Village villageOnTile;
     private StructureType occupyingStructure;
     private final Map map;
-    private final List<Tile> neighbours;
+    private final Set<Tile> neighbours;
     
     public Tile(int px, int py, Map myMap) {
         x = px;
@@ -29,7 +31,7 @@ public class Tile extends Observable implements Serializable {
         map = myMap;
         mapHeight = myMap.getHeight();
         mapWidth = myMap.getWidth();
-        neighbours = new ArrayList<Tile>();
+        neighbours = new HashSet<Tile>();
     }
     
     public void cacheNeighbours() {
