@@ -33,33 +33,41 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void cacheNeighbours() {
-        final int yp = y+1;
-        final int ym = y-1;
-        final int xp = x+1;
-        final int xm = x-1;
-        final int mod2 = x % 2;
+        final int yp = y + 1;
+        final int ym = y - 1;
+        final int xp = x + 1;
+        final int xm = x - 1;
+        final int xparity = x % 2;
 
-        // North
+        // Bottom
         if (ym >= 0) neighbours.add(map.getTile(x, ym));
-        // South
+        
+        // Top
         if (yp < mapHeight) neighbours.add(map.getTile(x, yp));
-        // East
-        if (xp < mapWidth) {
-            // N-E
-            if (mod2 == 0 && ym >= 0) neighbours.add(map.getTile(xp, ym));
-            else if (mod2 == 1) neighbours.add(map.getTile(xp, y));
-            // S-E
-            if (mod2 == 0) neighbours.add(map.getTile(xp, y));
-            else if (mod2 == 1 && yp < mapHeight) neighbours.add(map.getTile(xp, yp));
+        
+        if (xp < mapWidth) { // Right
+            if (xparity == 0) { // Even
+            	neighbours.add(map.getTile(xp, y)); // Bottom-Right
+            	if (yp < mapHeight) 
+            		neighbours.add(map.getTile(xp, yp)); // Top-Right
+            } else { // Odd
+            	neighbours.add(map.getTile(xp, y)); // Top-Right
+            	if (ym >= 0)
+            		neighbours.add(map.getTile(xp, ym)); // Bottom-Right
+            }
         }
-        // West
-        if (xm >= 0) {
-            // N-W
-            if (mod2 == 0 && ym >= 0) neighbours.add(map.getTile(xm, ym));
-            else if (mod2 == 1) neighbours.add(map.getTile(xm, y));
-            // S-W
-            if (mod2 == 0) neighbours.add(map.getTile(xm, y));
-            else if (mod2 == 1 && yp < mapHeight) neighbours.add(map.getTile(xm, yp));
+        
+        if (xm >= 0) { // Left     
+            if (xparity == 0) { // Even
+            	neighbours.add(map.getTile(xp, y)); // Bottom-Left
+            	if (yp < mapHeight) 
+            		neighbours.add(map.getTile(xp, yp)); // Top-Left
+            } 
+            else { // Odd
+            	neighbours.add(map.getTile(xp, y)); // Top-Left
+            	if (ym >= 0) 
+            		neighbours.add(map.getTile(xp, ym)); // Bottom-Left
+            }
         }
     }
     
