@@ -1,8 +1,13 @@
 package newworldorder.game.driver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Game;
@@ -16,15 +21,17 @@ import newworldorder.game.model.UnitType;
 import newworldorder.game.model.Village;
 import newworldorder.game.model.VillageType;
 
-public class ModelManager implements IModelCommunicator {
+public class ModelManager implements IModelCommunicator, Observer {
 	
-	ModelManager instance;
-	GameEngine engine;
-	boolean gameRunning;
+	private ModelManager instance;
+	private GameEngine engine;
+	private boolean gameRunning;
+	private Set<Tile> updatedTiles;
 	
 	private ModelManager() {
 		engine = new GameEngine();
 		gameRunning = false;
+		updatedTiles = new HashSet<Tile>();
 	}
 	
 	@Override
@@ -177,13 +184,33 @@ public class ModelManager implements IModelCommunicator {
 				vt = t.getVillage().getVillageType();
 		}
 		
+		updatedTiles.remove(t);
+		
 		return new UITileDescriptor(x, y, tt, st, ut, vt, ct);
 	}
 
 	@Override
 	public List<UITileDescriptor> getUpdatedTiles() {
-		// TODO Auto-generated method stub
-		return null;
+		List<UITileDescriptor> ret = new ArrayList<UITileDescriptor>();
+		for (Tile t : updatedTiles) {
+			TerrainType tt = t.getTerrainType();
+			UnitType ut = null;
+			StructureType st = t.getStructure();
+			VillageType vt = null;
+			ColourType ct = null;
+			
+			if (t.getControllingPlayer() != null) {
+				ct = t.getControllingPlayer().getColour();
+				if (t.getUnit() != null)
+					ut = t.getUnit().getUnitType();
+				if (t.getVillage() != null)
+					vt = t.getVillage().getVillageType();
+			}
+			
+			ret.add( new UITileDescriptor(t.getX(), t.getY(), tt, st, ut, vt, ct) );
+		}
+		updatedTiles.clear();
+		return ret;
 	}
 	
 	@Override
@@ -215,7 +242,11 @@ public class ModelManager implements IModelCommunicator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		engine.setGameState(gameState);
+		if (gameState != null) {
+			engine.setGameState(gameState);
+			addObserverToTiles(gameState.getMap());
+			gameRunning = true;
+		}
 	}
 
 	@Override
@@ -238,7 +269,11 @@ public class ModelManager implements IModelCommunicator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		engine.newGame(players, presetMap);
+		if (presetMap != null) {
+			engine.newGame(players, presetMap);
+			addObserverToTiles(engine.getGameState().getMap());
+			gameRunning = true;
+		}
 	}
 
 	@Override
@@ -263,6 +298,18 @@ public class ModelManager implements IModelCommunicator {
 	public void leaveGame() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void update(Observable tile, Object ignoredParameter) {
+		updatedTiles.add((Tile) tile);
+	}
+	
+	private void addObserverToTiles(newworldorder.game.model.Map map) {
+		for (Tile t : map.getTiles()) {
+			t.addObserver(this);
+			updatedTiles.add(t);
+		}
 	}
 
 }

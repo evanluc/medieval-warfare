@@ -67,6 +67,7 @@ public class Village implements Serializable {
     }
 
     public void setVillageType(VillageType pVillageType) {
+    	tile.notifyObservers();
         villageType = pVillageType;
     }
 

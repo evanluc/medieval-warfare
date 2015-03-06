@@ -3,11 +3,12 @@ package newworldorder.game.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Tile class is clean.
  */
-public class Tile implements Serializable {
+public class Tile extends Observable implements Serializable {
     
 	private static final long serialVersionUID = -1574156206965797597L;
 	private TerrainType terrainType;
@@ -62,12 +63,21 @@ public class Tile implements Serializable {
         }
     }
     
+    public int getX() {
+    	return x;
+    }
+    
+    public int getY() {
+    	return y;
+    }
+    
     public StructureType getStructure() {
         return occupyingStructure;
     }
     
     public void setStructure(StructureType structure) {
-        occupyingStructure = structure;
+    	super.notifyObservers();
+    	occupyingStructure = structure;
     }
 
     public Village getVillage() {
@@ -75,7 +85,8 @@ public class Tile implements Serializable {
     }
     
     public void setVillage(Village myVillage) {
-        villageOnTile = myVillage;
+    	super.notifyObservers();
+    	villageOnTile = myVillage;
     }
 
     public Region getRegion() {
@@ -83,7 +94,8 @@ public class Tile implements Serializable {
     }
     
     public void setRegion(Region newRegion) {
-        region = newRegion;
+    	super.notifyObservers();
+    	region = newRegion;
     }
 
     public Unit getUnit() {
@@ -91,7 +103,8 @@ public class Tile implements Serializable {
     }
 
     public void setUnit(Unit newUnit) {
-        unit = newUnit;
+    	super.notifyObservers();
+    	unit = newUnit;
     }
 
     public TerrainType getTerrainType() {
@@ -99,7 +112,8 @@ public class Tile implements Serializable {
     }
 
     public void setTerrainType(TerrainType type) {
-        terrainType = type;
+    	super.notifyObservers();
+    	terrainType = type;
     }
 
     public List<Tile> getNeighbours() {
@@ -107,6 +121,7 @@ public class Tile implements Serializable {
     }
 
     public void killUnit() {
+    	super.notifyObservers();
         if (unit != null)
         {
             unit.kill();
