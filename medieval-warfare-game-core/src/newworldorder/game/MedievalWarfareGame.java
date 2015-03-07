@@ -19,12 +19,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.StructureType;
 import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.UnitType;
 import newworldorder.game.model.VillageType;
-
 import newworldorder.game.driver.UITileDescriptor;
 
 public class MedievalWarfareGame extends ApplicationAdapter implements InputProcessor {
@@ -38,6 +40,7 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 	TiledMapRenderer tiledMapRenderer;
 
 	TextureRegion textureRegion;
+	private ApplicationAdapter stage;
 
 	@Override
 	public void create() {
@@ -50,7 +53,7 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		camera.setToOrtho(false, w, h);
 		camera.update();
 
-		tiledMap = new TmxMapLoader().load("./map/biggerTiles.tmx");
+		tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
 		
 		MapProperties prop = tiledMap.getProperties();
 		int mapWidth = prop.get("width", Integer.class);
@@ -70,9 +73,29 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 
 		Stage stage = new TiledMapStage(tiledMap);
 		Gdx.input.setInputProcessor(stage);	
-		renderTest(stage);
+		//renderTest(stage);
 
+		Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+
+		Dialog testDia = new Dialog("Testing", skin) {
+
+			{
+				text("Hello");
+				button("foo", "goodbye");
+				button("bar", "glad you stay");
+			}
+
+			@Override
+			protected void result(final Object object) {
+				System.out.print(object);
+			}
+
+		}.show(stage);
+		
+		stage.addActor(testDia);
+		stage.draw();
 	}
+	
 	
 	public void renderTest(Stage stage){
 		
@@ -114,6 +137,8 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		tiledMapRenderer.render();
 		sb.setProjectionMatrix(camera.combined);
 
+		stage.render();
+		
 		sb.begin();
 		sprite.draw(sb);
 		sb.end();
