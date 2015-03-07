@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="hexagonal" renderorder="right-down" width="28" height="18" tilewidth="55" tileheight="48" hexsidelength="28" staggeraxis="x" staggerindex="odd" nextobjectid="1">
+ <tileset firstgid="1" name="colourtiles" tilewidth="55" tileheight="48">
+  <tile id="0">
+   <image width="55" height="48" source="colourtiles/biggerBlue.png"/>
+  </tile>
+  <tile id="1">
+   <image width="55" height="48" source="colourtiles/biggerBrown.png"/>
+  </tile>
+  <tile id="2">
+   <image width="55" height="48" source="colourtiles/biggerGreen.png"/>
+  </tile>
+  <tile id="3">
+   <image width="55" height="48" source="colourtiles/biggerOrange.png"/>
+  </tile>
+  <tile id="4">
+   <image width="55" height="48" source="colourtiles/biggerPink.png"/>
+  </tile>
+  <tile id="5">
+   <image width="55" height="48" source="colourtiles/biggerPurple.png"/>
+  </tile>
+  <tile id="6">
+   <image width="55" height="48" source="colourtiles/biggerRed.png"/>
+  </tile>
+  <tile id="7">
+   <image width="55" height="48" source="colourtiles/biggerYellow.png"/>
+  </tile>
+  <tile id="8">
+   <image width="55" height="48" source="colourtiles/neutral.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="10" name="terraintiles" tilewidth="56" tileheight="48">
+  <tile id="0">
+   <image width="55" height="48" source="terraintiles/oceantile.png"/>
+  </tile>
+  <tile id="1">
+   <image width="55" height="48" source="terraintiles/grasstile.png"/>
+  </tile>
+  <tile id="2">
+   <image width="55" height="48" source="terraintiles/meadowtile.png"/>
+  </tile>
+  <tile id="3">
+   <image width="56" height="48" source="terraintiles/null.png"/>
+  </tile>
+  <tile id="4">
+   <image width="55" height="48" source="terraintiles/treetile.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="15" name="unittiles" tilewidth="55" tileheight="48">
+  <tile id="0">
+   <image width="55" height="48" source="unitTiles/infantrytile.png"/>
+  </tile>
+  <tile id="1">
+   <image width="55" height="48" source="unitTiles/knighttile.png"/>
+  </tile>
+  <tile id="2">
+   <image width="55" height="48" source="unitTiles/peasanttile.png"/>
+  </tile>
+  <tile id="3">
+   <image width="55" height="48" source="unitTiles/soldiertile.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="19" name="structuretiles" tilewidth="55" tileheight="48">
+  <tile id="0">
+   <image width="55" height="48" source="structureTiles/roadtile.png"/>
+  </tile>
+  <tile id="1">
+   <image width="55" height="48" source="structureTiles/tombstonetile.png"/>
+  </tile>
+  <tile id="2">
+   <image width="55" height="48" source="structureTiles/towertile.png"/>
+  </tile>
+ </tileset>
+ <layer name="colour" width="28" height="18">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
+ <layer name="terrain" width="28" height="18">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
+ <layer name="structure" width="28" height="18">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
+ <layer name="unit" width="28" height="18">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
+</map>
