@@ -1,10 +1,13 @@
 package newworldorder.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.List;
 
@@ -174,5 +177,33 @@ public class TiledMapStage extends Stage {
 		
 	}
 	
-}
+	public void dialogTest(){
+		
+		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+
+		new Dialog("Available actions", skin) {
+
+			{
+				text("Choose a course of action: ");
+				button("Build unit", "goodbye");
+				button("Build structure", "goodbye");
+				button("Structure upgrade", "goodbye");
+				button("Move unit", "glad you stay");
+				button("End turn", "glad you stay");
+				
+			}
+
+			protected void result(final Object object) {
+				System.out.println("clicked");
+				
+			}
+		}.show(this);
+		
+		this.draw();
+
+	}
+	
+	}
+
+	
 

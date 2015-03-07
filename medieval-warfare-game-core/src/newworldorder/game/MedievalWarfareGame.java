@@ -41,6 +41,7 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 
 	TextureRegion textureRegion;
 	private ApplicationAdapter stage;
+	private ApplicationAdapter diaTut;
 
 	@Override
 	public void create() {
@@ -53,18 +54,10 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		camera.setToOrtho(false, w, h);
 		camera.update();
 
-		tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
-		
-		MapProperties prop = tiledMap.getProperties();
-		int mapWidth = prop.get("width", Integer.class);
-		int mapHeight = prop.get("height", Integer.class);
-		int tilePixelWidth = prop.get("tilewidth", Integer.class); // size of
-																	// each tile
-		int tilePixelHeight = prop.get("tileheight", Integer.class);
-		int viewPortHeight = tilePixelHeight * 10 * 3 / 4;
+		tiledMap = new TmxMapLoader().load("./map/biggerTiles.tmx");
 
 		tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
-		Gdx.input.setInputProcessor(this);
+//		Gdx.input.setInputProcessor(this);
 
 		sb = new SpriteBatch();
 
@@ -73,28 +66,37 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 
 		Stage stage = new TiledMapStage(tiledMap);
 		Gdx.input.setInputProcessor(stage);	
+		
+		
+		((TiledMapStage) stage).dialogTest();
 		//renderTest(stage);
 
-		Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-
-		Dialog testDia = new Dialog("Testing", skin) {
-
-			{
-				text("Hello");
-				button("foo", "goodbye");
-				button("bar", "glad you stay");
-			}
-
-			@Override
-			protected void result(final Object object) {
-				System.out.print(object);
-			}
-
-		}.show(stage);
+//		Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+//
+//		Dialog testDia = new Dialog("Testing", skin) {
+//
+//			{
+//				text("Hello");
+//				button("foo", "goodbye");
+//				button("bar", "glad you stay");
+//			}
+//
+//			@Override
+//			protected void result(final Object object) {
+//				System.out.print(object);
+//			}
+//
+//		}.show(stage);
+//		
+//		stage.addActor(testDia);
+//		stage.draw();
+//		
+//		
+	
 		
-		stage.addActor(testDia);
-		stage.draw();
 	}
+	
+
 	
 	
 	public void renderTest(Stage stage){
@@ -135,6 +137,7 @@ public class MedievalWarfareGame extends ApplicationAdapter implements InputProc
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
+		
 		sb.setProjectionMatrix(camera.combined);
 
 		stage.render();
