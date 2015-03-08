@@ -61,14 +61,14 @@ public class Tile extends Observable implements Serializable {
         
         if (xm >= 0) { // Left     
             if (xparity == 0) { // Even
-            	neighbours.add(map.getTile(xp, y)); // Bottom-Left
+            	neighbours.add(map.getTile(xm, y)); // Bottom-Left
             	if (yp < mapHeight) 
-            		neighbours.add(map.getTile(xp, yp)); // Top-Left
+            		neighbours.add(map.getTile(xm, yp)); // Top-Left
             } 
             else { // Odd
-            	neighbours.add(map.getTile(xp, y)); // Top-Left
+            	neighbours.add(map.getTile(xm, y)); // Top-Left
             	if (ym >= 0) 
-            		neighbours.add(map.getTile(xp, ym)); // Bottom-Left
+            		neighbours.add(map.getTile(xm, ym)); // Bottom-Left
             }
         }
     }

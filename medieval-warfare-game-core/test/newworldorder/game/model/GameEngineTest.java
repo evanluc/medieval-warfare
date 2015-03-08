@@ -165,48 +165,53 @@ public class GameEngineTest {
 
 	@Test
 	public void testMoveUnit_FreeMove() {
-		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
+		Unit ally = new Unit(UnitType.KNIGHT, village1, aMap.getTile(1, 0));
 		Unit enemy = new Unit(UnitType.SOLDIER, village2, aMap.getTile(1, 1));
-		aMap.getTile(0, 1).setTerrainType(TerrainType.GRASS);
-		//Move onto grass in own territory
-		gameEngine.moveUnit(ally, aMap.getTile(0,1));
-		assertEquals(aMap.getTile(0,1).getUnit(), ally);
-		//Move onto meadow as weak unit
-		aMap.getTile(1, 0).setTerrainType(TerrainType.MEADOW);
-		gameEngine.moveUnit(ally, aMap.getTile(1, 0));
-		assertEquals(aMap.getTile(1, 0).getTerrainType(), TerrainType.MEADOW);
 		//Kill enemy unit
-		ally.setUnitType(UnitType.KNIGHT);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
 		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
 		assertEquals(aMap.getTile(1, 1).getRegion(), aMap.getTile(1, 0).getRegion());
+		//Move onto grass in own territory
+		aMap.getTile(0, 1).setTerrainType(TerrainType.GRASS);
+		ally.setImmobileUntilRound(0);
+		gameEngine.moveUnit(ally, aMap.getTile(0, 1));
+		assertEquals(aMap.getTile(0, 1).getUnit(), ally);
+		ally.setImmobileUntilRound(0);
+		aMap.getTile(1, 2).setTerrainType(TerrainType.GRASS);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 2));
+		assertEquals(aMap.getTile(1, 2).getUnit(), ally);
 		//Take over village
 		ally.setImmobileUntilRound(0);
 		gameEngine.moveUnit(ally, aMap.getTile(2,2));
 		assertEquals(aMap.getTile(2,2).getUnit(), ally);
+		//Move onto meadow as weak unit
+		ally.setUnitType(UnitType.PEASANT);
+		aMap.getTile(1, 2).setTerrainType(TerrainType.MEADOW);
+		ally.setImmobileUntilRound(0);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 2));
+		assertEquals(aMap.getTile(1, 2).getTerrainType(), TerrainType.MEADOW);
+		assertEquals(aMap.getTile(1, 2).getUnit(), ally);
+
 		//Walk into neutral territory
 		ally.setImmobileUntilRound(0);
-		aMap.getTile(0, 2).setTerrainType(TerrainType.GRASS);
-		aMap.getTile(1,1).setStructure(null);
-		aMap.getTile(1,1).setTerrainType(TerrainType.GRASS);
-		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
-		gameEngine.moveUnit(ally, aMap.getTile(0, 2));
-		assertEquals(aMap.getTile(0, 2).getUnit(), ally);
+		aMap.getTile(1, 3).setTerrainType(TerrainType.GRASS);
+		gameEngine.moveUnit(ally, aMap.getTile(1, 3));
+		assertEquals(aMap.getTile(1, 3).getUnit(), ally);
 	}
 
 	@Test
 	public void testMoveUnit_CombineUnits() {
-		Unit u1 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(0, 1));
+		Unit u1 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 1));
 		Unit u2 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
 		village1.setVillageType(VillageType.FORT);
 		gameEngine.moveUnit(u1, aMap.getTile(1, 0));
-		assertEquals(aMap.getTile(0, 1).getUnit(), null);
+		assertEquals(aMap.getTile(1, 1).getUnit(), null);
 		assertEquals(aMap.getTile(1, 0).getUnit().getUnitType(), UnitType.KNIGHT);
 	}
 
 	@Test
 	public void testMoveUnit_TrampleMeadow() {
-		Unit u1 = new Unit(UnitType.KNIGHT, village1, aMap.getTile(0, 1));
+		Unit u1 = new Unit(UnitType.KNIGHT, village1, aMap.getTile(1, 1));
 		aMap.getTile(1, 0).setTerrainType(TerrainType.MEADOW);
 		gameEngine.moveUnit(u1, aMap.getTile(1, 0));
 		assertEquals(aMap.getTile(1, 0).getUnit(), u1);
@@ -215,7 +220,7 @@ public class GameEngineTest {
 	
 	@Test
 	public void testMoveUnit_ClearTomb() {
-		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(0, 1));
+		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 1));
 		Tile dest = aMap.getTile(1, 0);
 		dest.setStructure(StructureType.TOMBSTONE);
 		gameEngine.moveUnit(u1, dest);
@@ -225,7 +230,7 @@ public class GameEngineTest {
 	
 	@Test
 	public void testMoveUnit_GatherWood(){
-		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(0, 1));
+		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(0, 0));
 		Tile dest = aMap.getTile(1, 0);
 		dest.setTerrainType(TerrainType.TREE);
 		gameEngine.moveUnit(u1, dest);
