@@ -17,9 +17,10 @@ public class Unit implements Serializable {
     private int upkeep;
     
     public Unit(UnitType pUnitType, Village pVillage, Tile pTile) {
-        this.setUnitType(pUnitType);
+
         myVillage = pVillage;
         tile = pTile;
+        this.setUnitType(pUnitType);
         immobileUntilRound = -1;
         currentAction = ActionType.READYFORORDERS;
         controllingPlayer = myVillage.getControlledBy();
