@@ -54,10 +54,11 @@ public class TileTest {
 		List<Tile> adj = aMap.getTile(0,0).getNeighbours();
 		assertTrue(adj.contains(aMap.getTile(0,1)));
 		assertTrue(adj.contains(aMap.getTile(1,0)));
+		assertTrue(adj.contains(aMap.getTile(1,1)));
 
 		adj.remove(aMap.getTile(0, 1));
 		adj.remove(aMap.getTile(1,0));
-
+		adj.remove(aMap.getTile(1, 1));
 		assertTrue(adj.isEmpty());
 	}
 	@Test
@@ -116,12 +117,12 @@ public class TileTest {
     @Test
     public void testGetNeighbours() {
     	List<Tile> nbrs = aMap.getTile(1, 1).getNeighbours();
+    	assertTrue(nbrs.contains(aMap.getTile(0, 0)));
     	assertTrue(nbrs.contains(aMap.getTile(0, 1)));
-    	assertTrue(nbrs.contains(aMap.getTile(0, 2)));
     	assertTrue(nbrs.contains(aMap.getTile(1, 0)));
     	assertTrue(nbrs.contains(aMap.getTile(1, 2)));
     	assertTrue(nbrs.contains(aMap.getTile(2, 1)));
-    	assertTrue(nbrs.contains(aMap.getTile(2, 2)));
+    	assertTrue(nbrs.contains(aMap.getTile(2, 0)));
     }
     @Test
     public void testKillUnit() {
