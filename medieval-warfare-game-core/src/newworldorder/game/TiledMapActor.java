@@ -14,7 +14,6 @@ public class TiledMapActor extends Actor {
 
     TiledMapTileLayer.Cell cell;
     
-
     private int x; 
 	private int y;
 	
@@ -27,11 +26,13 @@ public class TiledMapActor extends Actor {
         this.y = y;
     }
     
-    public void upgradeToMeadowGUI(){
-        TiledMapTile meadowTile = ((TiledMapTileSet)this.tiledMap.getTileSets().getTileSet("terrain")).getTile(8);
-    	((TiledMapTileLayer) this.tiledMap.getLayers().get("terrain")).getCell(x,y).setTile(meadowTile);
-    	
+    public int getXCell() {
+    	return x;     	
     }
 
+    public int getYCell(){
+    	return y;
+    }
+    
 
 }

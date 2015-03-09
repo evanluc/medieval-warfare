@@ -47,8 +47,8 @@ public class TiledMapDescriptors {
 		this.soldierTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(18);
 
 		this.roadTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(19);
-		this.towerTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(20);
-		this.tombstoneTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(21);
+		this.tombstoneTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(20);
+		this.towerTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(21);
 		
 		
 	}
