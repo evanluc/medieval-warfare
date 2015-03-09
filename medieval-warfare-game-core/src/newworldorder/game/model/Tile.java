@@ -146,11 +146,13 @@ public class Tile extends Observable implements Serializable {
         return null;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return y * mapWidth + x;
     }
     
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         return this.hashCode() == o.hashCode();
     }
 }

@@ -1,10 +1,10 @@
 package newworldorder.game;
 
-import newworldorder.game.driver.UIActionType;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import newworldorder.game.driver.UIActionType;
 
 public class DoubleClickListener extends ClickListener{
 	private TiledMapActor actor;

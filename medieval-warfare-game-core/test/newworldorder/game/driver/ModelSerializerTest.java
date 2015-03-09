@@ -7,15 +7,15 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import newworldorder.game.model.Game;
 import newworldorder.game.model.Map;
 import newworldorder.game.model.Player;
 import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Tile;
 import newworldorder.game.model.Village;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class ModelSerializerTest {
 
@@ -66,7 +66,8 @@ public class ModelSerializerTest {
 		try {
 			loadMap = ModelSerializer.loadMap("testfiles/junit-test-map-load.mwm");
 		} catch (Exception e) {
-			fail("Missing junit-test-map-load.mwm");
+			e.printStackTrace();
+			fail();
 		}
 		
 		for (Tile t : loadMap.getTiles()) {
@@ -89,7 +90,8 @@ public class ModelSerializerTest {
 		try {
 			loadGame = ModelSerializer.loadGameState("testfiles/junit-test-game-load.mwm");
 		} catch (Exception e) {
-			fail("Missing junit-test-game-load.mwm");
+			e.printStackTrace();
+			fail();
 		}
 		
 		assertEquals(loadGame.getPlayers().size(), testGame.getPlayers().size());
