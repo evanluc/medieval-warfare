@@ -12,11 +12,11 @@ import org.junit.Test;
 import newworldorder.common.matchmaking.GameInfo;
 
 public class ModelManagerGameplayTest {
-	
+
 	private IModelCommunicator model;
 	private List<String> playerIds;
-	private static final String mappath = "maps/seaside-skirmish.mwm";
-	private static final String savepath = "saves/junit-saved-game.mwg";
+	private static final String mappath = "/maps/seaside-skirmish.mwm";
+	private static final String savepath = "/saves/junit-saved-game.mwg";
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,7 +35,7 @@ public class ModelManagerGameplayTest {
 		model.newGame(info, mappath);
 
 		assertFalse(model.getUpdatedTiles().isEmpty());
-		
+
 		randx = (int) Math.floor(Math.random() * (model.getMapWidth() - 1));
 		randy = (int) Math.floor(Math.random() * (model.getMapHeight() - 1));
 
@@ -46,11 +46,11 @@ public class ModelManagerGameplayTest {
 		model.leaveGame();
 
 		model.loadGame(savepath);
-		
+
 		assertFalse(model.getUpdatedTiles().isEmpty());
-		
+
 		b = model.getTile(randx, randy);
-		
+
 		assertEquals(a.terrainType, b.terrainType);
 		assertEquals(a.colourType, b.colourType);
 		assertEquals(a.structureType, b.structureType);

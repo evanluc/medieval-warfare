@@ -66,8 +66,9 @@ public class ModelSerializerTest {
 	public void testLoadMap() {
 		Map loadMap = null;
 		try {
-			loadMap = ModelSerializer.loadMap("testfiles/junit-test-map-load.mwm");
-		} catch (Exception e) {
+			loadMap = ModelSerializer.loadMap("/testfiles/junit-test-map-load.mwm");
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -80,8 +81,9 @@ public class ModelSerializerTest {
 	@Test
 	public void testSaveMap() {
 		try {
-			ModelSerializer.saveMap(testMap, "testfiles/junit-test-map-save.mwm");
-		} catch (Exception e) {
+			ModelSerializer.saveMap(testMap, "/testfiles/junit-test-map-save.mwm");
+		}
+		catch (Exception e) {
 			fail("Unable to save, test failed");
 		}
 	}
@@ -90,8 +92,9 @@ public class ModelSerializerTest {
 	public void testLoadGameState() {
 		Game loadGame = null;
 		try {
-			loadGame = ModelSerializer.loadGameState("testfiles/junit-test-game-load.mwm");
-		} catch (Exception e) {
+			loadGame = ModelSerializer.loadGameState("/testfiles/junit-test-game-load.mwm");
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -118,8 +121,7 @@ public class ModelSerializerTest {
 				assertEquals(lt.getTerrainType(), tt.getTerrainType());
 				if (lt.getVillage() != null) {
 					assertEquals(lt.getVillage().getVillageType(), tt.getVillage().getVillageType());
-					assertEquals(lt.getVillage().getControlledBy().getPlayerId(), tt.getVillage().getControlledBy()
-							.getPlayerId());
+					assertEquals(lt.getVillage().getControlledBy().getPlayerId(), tt.getVillage().getControlledBy().getPlayerId());
 				}
 			}
 		}
@@ -128,8 +130,9 @@ public class ModelSerializerTest {
 	@Test
 	public void testSaveGameState() {
 		try {
-			ModelSerializer.saveGameState(testGame, "testfiles/junit-test-game-save.mwm");
-		} catch (Exception e) {
+			ModelSerializer.saveGameState(testGame, "/testfiles/junit-test-game-save.mwm");
+		}
+		catch (Exception e) {
 			fail("Unable to save, test failed");
 		}
 	}

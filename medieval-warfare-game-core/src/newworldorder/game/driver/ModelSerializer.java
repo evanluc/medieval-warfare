@@ -87,9 +87,8 @@ public class ModelSerializer {
 		// machine, a database, an in memory array, etc.
 		// - stackoverflow.com
 		ObjectOutputStream oos = null;
-
 		try {
-			oos = new ObjectOutputStream(new FileOutputStream(new File(path)));
+			oos = new ObjectOutputStream(new FileOutputStream(new File(ModelSerializer.class.getResource(path).getPath())));
 			oos.writeObject(o);
 		}
 		catch (Exception ex) {

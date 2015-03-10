@@ -2,6 +2,11 @@ apply plugin: "java"
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
+buildscript {
+    sourceSets.main.resources.srcDir "assets"
+    sourceSets.test.resources.srcDir "assets"
+}
+
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.test.java.srcDirs = [ "test/" ]
 

@@ -44,6 +44,10 @@ public class CommandFactory {
 	}
 
 	private static class EndTurnCommand implements IGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2144057378224658285L;
 		private GameEngine engine;
 
 		@Override
@@ -58,6 +62,10 @@ public class CommandFactory {
 	}
 
 	private static class MoveUnitCommand implements IGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4408577083911356294L;
 		private GameEngine engine;
 		private int x1, x2, y1, y2;
 
@@ -85,6 +93,11 @@ public class CommandFactory {
 	}
 
 	private static class BuildRoadCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 2362284179466757218L;
+
 		private BuildRoadCommand(int x, int y) {
 			super(x, y);
 		}
@@ -98,6 +111,11 @@ public class CommandFactory {
 	}
 
 	private static class BuildTowerCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4592501404786423313L;
+
 		private BuildTowerCommand(int x, int y) {
 			super(x, y);
 		}
@@ -109,6 +127,11 @@ public class CommandFactory {
 	}
 
 	private static class CultivateMeadowCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1561192796063811126L;
+
 		private CultivateMeadowCommand(int x, int y) {
 			super(x, y);
 		}
@@ -122,6 +145,11 @@ public class CommandFactory {
 	}
 
 	private static class UpgradeUnitSoldierCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2188245023255296834L;
+
 		private UpgradeUnitSoldierCommand(int x, int y) {
 			super(x, y);
 		}
@@ -135,6 +163,11 @@ public class CommandFactory {
 	}
 
 	private static class UpgradeUnitInfantryCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7444476144425981205L;
+
 		private UpgradeUnitInfantryCommand(int x, int y) {
 			super(x, y);
 		}
@@ -148,6 +181,11 @@ public class CommandFactory {
 	}
 
 	private static class UpgradeUnitKnightCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -566497323829082815L;
+
 		private UpgradeUnitKnightCommand(int x, int y) {
 			super(x, y);
 		}
@@ -161,6 +199,11 @@ public class CommandFactory {
 	}
 
 	private static class UpgradeVillageTownCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8383246949202504034L;
+
 		private UpgradeVillageTownCommand(int x, int y) {
 			super(x, y);
 		}
@@ -174,6 +217,11 @@ public class CommandFactory {
 	}
 
 	private static class UpgradeVillageFortCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6713037942187272726L;
+
 		private UpgradeVillageFortCommand(int x, int y) {
 			super(x, y);
 		}
@@ -187,6 +235,10 @@ public class CommandFactory {
 	}
 
 	private static abstract class SingleTileGameCommand implements IGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6257373390683253415L;
 		protected GameEngine engine;
 		protected Tile t;
 		private int x, y;

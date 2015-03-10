@@ -9,12 +9,18 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.network.AmqpAdapter;
+import newworldorder.common.network.CommandConsumer;
 import newworldorder.game.command.CommandFactory;
+import newworldorder.game.command.GameCommandHandler;
 import newworldorder.game.command.IGameCommand;
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Game;
@@ -34,6 +40,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	private boolean gameRunning;
 	private Set<Tile> updatedTiles;
 	private AmqpAdapter amqpAdapter;
+	private CommandConsumer consumer;
 	private String exchange;
 	private int localPlayerId;
 
@@ -41,10 +48,6 @@ public class ModelManager implements IModelCommunicator, Observer {
 		engine = new GameEngine();
 		gameRunning = false;
 		updatedTiles = new HashSet<Tile>();
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("104.236.30.10", 5672);
-		connectionFactory.setUsername("newworldorder");
-		connectionFactory.setPassword("warfare");
-		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
 	}
 
 	public static ModelManager getInstance() {
@@ -63,10 +66,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 			return;
 
 		IGameCommand command = CommandFactory.createCommand(action);
-		command.setGameEngine(engine);
 		amqpAdapter.send(command, exchange, "");
-		// Temporary
-		command.execute();
 	}
 
 	/**
@@ -88,10 +88,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 			return;
 
 		IGameCommand command = CommandFactory.createCommand(action, x, y);
-		command.setGameEngine(engine);
 		amqpAdapter.send(command, exchange, "");
-		// Temporary
-		command.execute();
 	}
 
 	/**
@@ -107,10 +104,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 			return;
 
 		IGameCommand command = CommandFactory.createCommand(action, x1, y1, x2, y2);
-		command.setGameEngine(engine);
 		amqpAdapter.send(command, exchange, "");
-		// Temporary
-		command.execute();
 	}
 
 	@Override
@@ -215,6 +209,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 		newworldorder.game.model.Map presetMap = null;
 		List<Player> players = initPlayers(gameInfo.getPlayers());
 		exchange = gameInfo.getGameExchange();
+		this.setupNetworking();
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
 		}
@@ -295,4 +290,18 @@ public class ModelManager implements IModelCommunicator, Observer {
 		return localPlayerId;
 	}
 
+	private void setupNetworking() {
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("104.236.30.10", 5672);
+		connectionFactory.setUsername("newworldorder");
+		connectionFactory.setPassword("warfare");
+		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setAutoStartup(false);
+		container.setConnectionFactory(connectionFactory);
+		GameCommandHandler handler = new GameCommandHandler(engine);
+		container.setMessageListener(new MessageListenerAdapter(handler, "handle"));
+		AmqpAdmin admin = new RabbitAdmin(connectionFactory);
+		consumer = new CommandConsumer(admin, container);
+		consumer.startConsumingFromFanoutExchange(exchange);
+	}
 }
