@@ -32,7 +32,6 @@ public class TiledMapStage extends Stage {
 		this.tiledMap = tiledMap;
 		System.out.println("Get stage height = " + this.getHeight());
 		System.out.println("Get stage width = " + this.getWidth());
-
 		TiledMapTileLayer tiledLayer = (TiledMapTileLayer) tiledMap.getLayers().get("colour");
 		createActorsForLayer(tiledLayer);
 

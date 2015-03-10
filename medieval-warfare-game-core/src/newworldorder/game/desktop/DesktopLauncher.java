@@ -9,9 +9,14 @@ public class DesktopLauncher {
 	public DesktopLauncher() {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Medieval Warfare - By newWorldOrder();";
-		cfg.resizable = false;
+//		cfg.resizable = false;
 		cfg.height = 744;
 		cfg.width = 839;
+//		cfg.fullscreen = true;
 		new LwjglApplication(new MedievalWarfareGame(), cfg);
+	}
+	
+	public static void main(String[] args) {
+		new DesktopLauncher();
 	}
 }

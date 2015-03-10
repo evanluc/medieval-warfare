@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 	// private Stage stage = new Stage();
@@ -13,6 +15,7 @@ public class GameScreen implements Screen {
 	private OrthographicCamera camera;
 	private TiledMapStage stage;
 	private Game game;
+	private Viewport viewport;
 
 	public GameScreen(final MedievalWarfareGame game, TiledMapRenderer tiledMapRenderer, TiledMapStage stage,
 			OrthographicCamera camera) {
@@ -20,12 +23,12 @@ public class GameScreen implements Screen {
 		this.camera = camera;
 		this.stage = stage;
 		this.game = game;
+		viewport = new ExtendViewport(839, 744, camera);
 	}
 
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-
 	}
 
 	@Override
@@ -41,8 +44,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
+		viewport.update(width, height);
 	}
 
 	@Override
