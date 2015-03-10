@@ -16,7 +16,7 @@ public class Map implements Serializable {
 	private static final int INIT_VILLAGE_REGION_SIZE = 3;
 	private static final int INIT_VILLAGE_GOLD_AMT = 7;
 	private static final double INIT_VILLAGE_PERC_OF_AVAIL_TILE_FACTOR = 0.05;
-	private static final double TREE_GROWTH_PROB = 0.5;
+	private static final double TREE_GROWTH_PROB = 0.10;
 	private final int width;
 	private final int height;
 	private final int totalTiles;
@@ -195,8 +195,11 @@ public class Map implements Serializable {
 			double prob = Math.random();
 			if (prob > TREE_GROWTH_PROB) {
 				for (Tile n : t.getNeighbours()) {
-					if (n.getTerrainType() == TerrainType.MEADOW
-							|| n.getTerrainType() == TerrainType.GRASS) {
+					if ( (n.getTerrainType() == TerrainType.MEADOW
+							|| n.getTerrainType() == TerrainType.GRASS)
+							&& n.getUnit() == null
+							&& n.getStructure() == null
+							&& n.getVillage() == null){
 						n.setTerrainType(TerrainType.TREE);
 						break;
 					}
