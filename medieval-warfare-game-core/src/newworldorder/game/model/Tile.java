@@ -135,16 +135,6 @@ public class Tile extends Observable implements Serializable {
         return new ArrayList<Tile>(neighbours);
     }
 
-    public void killUnit() {
-    	super.setChanged();
-    	super.notifyObservers();
-        if (unit != null)
-        {
-            unit.kill();
-            unit = null;
-        }
-    }
-
     public Player getControllingPlayer() {
         if (region != null) {
             return region.getControllingPlayer();

@@ -127,12 +127,6 @@ public class TileTest {
     	assertTrue(nbrs.contains(aMap.getTile(2, 0)));
     }
     @Test
-    public void testKillUnit() {
-    	assertTrue(aMap.getTile(1, 1).getUnit() == u);
-    	aMap.getTile(1, 1).killUnit();
-    	assertTrue(aMap.getTile(1 ,1).getUnit() == null);
-    }
-    @Test
     public void testGetControllingPlayer() {
        assertTrue(aMap.getTile(0, 1).getControllingPlayer() == p1);
        assertTrue(aMap.getTile(5, 5).getControllingPlayer() == null);

@@ -142,7 +142,9 @@ public class GameEngineTest {
 		gameEngine.moveUnit(ally, enemy.getTile());
 		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
 		// Case where there is just a watchtower
-		enemy.kill();
+		enemy.getVillage().removeUnit(enemy);
+		enemy.getTile().setUnit(null);
+		enemy.getTile().setStructure(StructureType.TOMBSTONE);
 		aMap.getTile(1, 1).setStructure(StructureType.WATCHTOWER);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
 		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
