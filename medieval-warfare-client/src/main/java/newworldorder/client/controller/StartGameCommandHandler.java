@@ -9,11 +9,11 @@ import newworldorder.common.network.command.CommandHandler;
 import newworldorder.common.service.IClientServiceLocator;
 
 @Component
-public class GameCommandHandler implements CommandHandler {
+public class StartGameCommandHandler implements CommandHandler {
 	private final IClientServiceLocator locator;
 
 	@Autowired
-	public GameCommandHandler(IClientServiceLocator locator) {
+	public StartGameCommandHandler(IClientServiceLocator locator) {
 		this.locator = locator;
 	}
 
