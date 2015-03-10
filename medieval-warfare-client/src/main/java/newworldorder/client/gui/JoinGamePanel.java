@@ -31,7 +31,7 @@ public class JoinGamePanel extends BasePanel {
 		northPanel.setOpaque(false);
 		add(northPanel, BorderLayout.NORTH);
 
-		JButton back = new JButton("Back");
+		JButton back = new JButton("Logout");
 		back.setBackground(new Color(220, 20, 60));
 		back.setForeground(Color.WHITE);
 		back.setFocusPainted(false);
@@ -40,6 +40,7 @@ public class JoinGamePanel extends BasePanel {
 		back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				panelController.setLoginFromJoin();
 			}
 		});

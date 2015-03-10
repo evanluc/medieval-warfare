@@ -9,11 +9,11 @@ import newworldorder.game.model.Village;
 import newworldorder.game.model.VillageType;
 
 public class CommandFactory {
-	
+
 	public static IGameCommand createCommand(UIActionType action) {
 		return new EndTurnCommand();
 	}
-	
+
 	public static IGameCommand createCommand(UIActionType action, int x, int y) {
 		switch (action) {
 		case BUILDROAD:
@@ -32,15 +32,17 @@ public class CommandFactory {
 			return new UpgradeVillageTownCommand(x, y);
 		case UPGRADEVILLAGEFORT:
 			return new UpgradeVillageFortCommand(x, y);
+		case ENDTURN:
+			return new EndTurnCommand();
 		default:
 			return null; // TODO throw exception instead
 		}
 	}
-	
+
 	public static IGameCommand createCommand(UIActionType action, int x1, int y1, int x2, int y2) {
 		return new MoveUnitCommand(x1, y1, x2, y2);
 	}
-	
+
 	private static class EndTurnCommand implements IGameCommand {
 		private GameEngine engine;
 
@@ -54,18 +56,18 @@ public class CommandFactory {
 			this.engine = engine;
 		}
 	}
-	
+
 	private static class MoveUnitCommand implements IGameCommand {
 		private GameEngine engine;
 		private int x1, x2, y1, y2;
-		
+
 		private MoveUnitCommand(int x1, int y1, int x2, int y2) {
 			this.x1 = x1;
 			this.x2 = x2;
 			this.y1 = y1;
 			this.y2 = y2;
 		}
-		
+
 		@Override
 		public void execute() {
 			Tile t1 = engine.getGameState().getMap().getTile(x1, y1);
@@ -79,7 +81,7 @@ public class CommandFactory {
 		public void setGameEngine(GameEngine engine) {
 			this.engine = engine;
 		}
-		
+
 	}
 
 	private static class BuildRoadCommand extends SingleTileGameCommand {

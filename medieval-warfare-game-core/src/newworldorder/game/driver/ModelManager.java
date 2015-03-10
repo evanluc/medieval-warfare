@@ -36,7 +36,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	private AmqpAdapter amqpAdapter;
 	private String exchange;
 	private int localPlayerId;
-	
+
 	private ModelManager() {
 		engine = new GameEngine();
 		gameRunning = false;
@@ -46,14 +46,13 @@ public class ModelManager implements IModelCommunicator, Observer {
 		connectionFactory.setPassword("warfare");
 		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
 	}
-	
+
 	public static ModelManager getInstance() {
 		if (instance == null) {
 			instance = new ModelManager();
 		}
 		return instance;
 	}
-
 
 	/**
 	 * This method handles ENDTURN.
@@ -62,45 +61,56 @@ public class ModelManager implements IModelCommunicator, Observer {
 	public void informOfUserAction(UIActionType action) {
 		if (!gameRunning)
 			return;
-		
+
 		IGameCommand command = CommandFactory.createCommand(action);
 		command.setGameEngine(engine);
 		amqpAdapter.send(command, exchange, "");
+		// Temporary
+		command.execute();
 	}
-	
+
 	/**
-	 * This method handles BUILDROAD, BUILDTOWER, CULTIVATEMEADOW, UPGRADEUNIT*, 
-	 * UPGRADEVILLAGE*, and BUILDUNIT*. All other UIActionTypes are ignored. 
-	 * @param action The UIActionType
-	 * @param x x-coordinate
-	 * @param y y-coordinate
+	 * This method handles BUILDROAD, BUILDTOWER, CULTIVATEMEADOW, UPGRADEUNIT*,
+	 * UPGRADEVILLAGE*, and BUILDUNIT*. All other UIActionTypes are ignored.
+	 * 
+	 * @param action
+	 *            The UIActionType
+	 * @param x
+	 *            x-coordinate
+	 * @param y
+	 *            y-coordinate
 	 */
 	@Override
 	public void informOfUserAction(UIActionType action, int x, int y) {
 		System.out.println("Received action");
-		
+
 		if (!gameRunning)
 			return;
-		
+
 		IGameCommand command = CommandFactory.createCommand(action, x, y);
 		command.setGameEngine(engine);
 		amqpAdapter.send(command, exchange, "");
+		// Temporary
+		command.execute();
 	}
 
 	/**
-	 * This method handles MOVEUNIT. For BUILDUNIT* the first coordinate (x1, y1) is
-	 * interpreted as the village while the second coordinate (x2, y2) is interpreted as the tile to
-	 * place the new unit. For MOVEUNIT the first coordinate is interpreted as the unit while the 
-	 * second coordinate is interpreted as the destination tile.
+	 * This method handles MOVEUNIT. For BUILDUNIT* the first coordinate (x1,
+	 * y1) is interpreted as the village while the second coordinate (x2, y2) is
+	 * interpreted as the tile to place the new unit. For MOVEUNIT the first
+	 * coordinate is interpreted as the unit while the second coordinate is
+	 * interpreted as the destination tile.
 	 */
 	@Override
 	public void informOfUserAction(UIActionType action, int x1, int y1, int x2, int y2) {
 		if (!gameRunning)
 			return;
-		
+
 		IGameCommand command = CommandFactory.createCommand(action, x1, y1, x2, y2);
 		command.setGameEngine(engine);
 		amqpAdapter.send(command, exchange, "");
+		// Temporary
+		command.execute();
 	}
 
 	@Override
@@ -111,7 +121,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 		StructureType st = t.getStructure();
 		VillageType vt = null;
 		ColourType ct = null;
-		
+
 		if (t.getControllingPlayer() != null) {
 			ct = t.getControllingPlayer().getColour();
 			if (t.getUnit() != null)
@@ -119,9 +129,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 			if (t.getVillage() != null)
 				vt = t.getVillage().getVillageType();
 		}
-		
+
 		updatedTiles.remove(t);
-		
+
 		return new UITileDescriptor(x, y, tt, st, ut, vt, ct);
 	}
 
@@ -134,7 +144,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 			StructureType st = t.getStructure();
 			VillageType vt = null;
 			ColourType ct = null;
-			
+
 			if (t.getControllingPlayer() != null) {
 				ct = t.getControllingPlayer().getColour();
 				if (t.getUnit() != null)
@@ -142,30 +152,33 @@ public class ModelManager implements IModelCommunicator, Observer {
 				if (t.getVillage() != null)
 					vt = t.getVillage().getVillageType();
 			}
-			
-			ret.add( new UITileDescriptor(t.getX(), t.getY(), tt, st, ut, vt, ct) );
+
+			ret.add(new UITileDescriptor(t.getX(), t.getY(), tt, st, ut, vt, ct));
 		}
 		updatedTiles.clear();
 		return ret;
 	}
-	
+
 	@Override
 	public UIVillageDescriptor getVillage(int x, int y) {
 		Tile t = engine.getGameState().getMap().getTile(x, y);
 		Village v = t.getVillage();
 		if (v != null) {
-			Map<UnitType,Integer> unittypes = new HashMap<UnitType,Integer>(4);
+			Map<UnitType, Integer> unittypes = new HashMap<UnitType, Integer>(4);
 			List<Unit> units = v.getSupportedUnits();
 			for (Unit u : units) {
 				Integer count = unittypes.get(u.getUnitType());
 				if (count == null) {
 					unittypes.put(u.getUnitType(), 1);
-				} else {
+				}
+				else {
 					unittypes.put(u.getUnitType(), count + 1);
 				}
 			}
-			return new UIVillageDescriptor(x, y, v.getVillageType(), v.getGold(), v.getWood(), unittypes, v.getTotalIncome(), v.getTotalUpkeep());
-		} else {
+			return new UIVillageDescriptor(x, y, v.getVillageType(), v.getGold(), v.getWood(), unittypes, v.getTotalIncome(),
+					v.getTotalUpkeep());
+		}
+		else {
 			return null;
 		}
 	}
@@ -175,7 +188,8 @@ public class ModelManager implements IModelCommunicator, Observer {
 		Game gameState = null;
 		try {
 			gameState = ModelSerializer.loadGameState(filePath);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		if (gameState != null) {
@@ -190,7 +204,8 @@ public class ModelManager implements IModelCommunicator, Observer {
 		Game gameState = engine.getGameState();
 		try {
 			ModelSerializer.saveGameState(gameState, filePath);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -202,7 +217,8 @@ public class ModelManager implements IModelCommunicator, Observer {
 		exchange = gameInfo.getGameExchange();
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		if (presetMap != null) {
@@ -211,11 +227,11 @@ public class ModelManager implements IModelCommunicator, Observer {
 			gameRunning = true;
 		}
 	}
-	
+
 	private List<Player> initPlayers(List<String> playerIds) {
 		// TODO how to initialize players?
 		List<Player> ret = new ArrayList<Player>();
-		
+
 		for (String s : playerIds) {
 			ret.add(new Player(Integer.parseInt(s), s, s, 0, 0, null));
 		}
@@ -234,7 +250,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	public void update(Observable tile, Object ignoredParameter) {
 		updatedTiles.add((Tile) tile);
 	}
-	
+
 	private void addObserverToTiles(newworldorder.game.model.Map map) {
 		for (Tile t : map.getTiles()) {
 			t.addObserver(this);
