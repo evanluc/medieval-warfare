@@ -53,7 +53,6 @@ public class Unit implements Serializable {
     }
     
     public void setUnitType(UnitType pUnitType) {
-    	tile.notifyObservers();
         unitType = pUnitType;
         int level, cost;
         level = Unit.unitLevel(unitType);
@@ -62,6 +61,7 @@ public class Unit implements Serializable {
             cost = cost * 3;
         }
         upkeep = cost;
+        tile.setUnit(this);
     }
 
     public ActionType getCurrentAction() {

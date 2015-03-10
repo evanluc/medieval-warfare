@@ -33,4 +33,6 @@ public interface IModelCommunicator {
 	public void joinGame(String gameExchange);
 	
 	public void leaveGame();
+
+	public boolean hasUpdatedTiles();
 }
