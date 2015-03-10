@@ -102,6 +102,7 @@ public class GameEngine {
     	if (turnPosition == players.size() - 1) {
     		gameState.incrementRoundCount();
     		turnPosition = 0;
+    		gameState.getMap().growNewTrees();
     	} else {
     		turnPosition++;
     	}
@@ -183,6 +184,13 @@ public class GameEngine {
             StructureType structureOnDest = dest.getStructure();
             Unit unitOnDest = dest.getUnit();
             Village villageOnDest = dest.getVillage();
+            Region regionOnDest = dest.getRegion();
+            
+            if (regionOnDest != null) {
+            	if (regionOnDest.getControllingPlayer() != u.getControllingPlayer() && u.getUnitType() == UnitType.PEASANT) {
+            		return MoveType.INVALIDMOVE;
+            	}
+            }
             
             if (unitOnDest != null) {
                 if (unitOnDest.getControllingPlayer() == u.getControllingPlayer()) {
@@ -464,12 +472,20 @@ public class GameEngine {
             /* This is a set of tiles with insufficient tiles to form a region */ 
             if (l.size() < 3) {
                 for (Tile t : l) {
-                    if (t.getVillage() != null) {
-                    	destroyAndRemoveReferences(t.getVillage());
-                    }
+                	r.removeTile(t);
+                	t.setRegion(null);
                     if (t.getUnit() != null) {
                         t.getUnit().kill();
-                        t.setRegion(null);
+                    }
+                    if (t.getVillage() != null) {
+                    	t.setVillage(null);
+                    	r.setVillage(null);
+                    	r.createVillage();
+                    	List<Unit> temp = new ArrayList<Unit>(originalVillage.getSupportedUnits());
+                    	for (Unit u : temp) {
+                    		originalVillage.removeUnit(u);
+                    		r.getVillage().addUnit(u);
+                    	}
                     }
                 }
             }
