@@ -1,12 +1,15 @@
 package newworldorder.game.driver;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import newworldorder.common.matchmaking.GameInfo;
 
 public class ModelManagerGameplayTest {
 	
@@ -28,8 +31,8 @@ public class ModelManagerGameplayTest {
 	public void testGameplay() {
 		UITileDescriptor a, b;
 		int randx = 0, randy = 0;
-		
-		model.newGame(playerIds, mappath);
+		GameInfo info = new GameInfo(playerIds, "dummy-exchange");
+		model.newGame(info, mappath);
 
 		assertFalse(model.getUpdatedTiles().isEmpty());
 		

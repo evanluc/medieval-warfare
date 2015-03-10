@@ -2,13 +2,15 @@ package newworldorder.game.driver;
 
 import java.util.List;
 
+import newworldorder.common.matchmaking.GameInfo;
+
 public interface IModelCommunicator {
 	
 	public void loadGame(String filePath);
 	
 	public void saveGame(String filePath);
 	
-	public void newGame(List<String> playerIds, String mapFilePath);
+	public void newGame(GameInfo gameInfo, String mapFilePath);
 	
 	public int getMapHeight();
 	

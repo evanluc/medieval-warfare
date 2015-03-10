@@ -9,6 +9,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
+import newworldorder.common.matchmaking.GameInfo;
+import newworldorder.common.network.AmqpAdapter;
+import newworldorder.game.command.CommandFactory;
+import newworldorder.game.command.IGameCommand;
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Game;
 import newworldorder.game.model.GameEngine;
@@ -22,16 +29,20 @@ import newworldorder.game.model.Village;
 import newworldorder.game.model.VillageType;
 
 public class ModelManager implements IModelCommunicator, Observer {
-	
 	private static ModelManager instance = null;
 	private GameEngine engine;
 	private boolean gameRunning;
 	private Set<Tile> updatedTiles;
+	private AmqpAdapter amqpAdapter;
 	
 	private ModelManager() {
 		engine = new GameEngine();
 		gameRunning = false;
 		updatedTiles = new HashSet<Tile>();
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("104.236.30.10", 5672);
+		connectionFactory.setUsername("newworldorder");
+		connectionFactory.setPassword("Warfare");
+		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
 	}
 	
 	public static ModelManager getInstance() {
@@ -71,52 +82,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 		if (!gameRunning)
 			return;
 		
-		Unit u;
-		Village v;
-		Tile t = engine.getGameState().getMap().getTile(x, y);
-		
-		switch (action) {
-		case BUILDROAD:
-			u = t.getUnit();
-			if (u != null)
-				engine.buildRoad(u);
-			break;
-		case BUILDTOWER:
-			engine.buildTower(t);
-			break;
-		case CULTIVATEMEADOW:
-			u = t.getUnit();
-			if (u != null)
-				engine.cultivateMeadow(u);
-			break;
-		case UPGRADEUNITSOLDIER:
-			u = t.getUnit();
-			if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.SOLDIER))
-				engine.upgradeUnit(u, UnitType.SOLDIER);
-			break;
-		case UPGRADEUNITINFANTRY:
-			u = t.getUnit();
-			if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.INFANTRY))
-				engine.upgradeUnit(u, UnitType.INFANTRY);
-			break;
-		case UPGRADEUNITKNIGHT:
-			u = t.getUnit();
-			if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
-				engine.upgradeUnit(u, UnitType.KNIGHT);
-			break;
-		case UPGRADEVILLAGETOWN:
-			v = t.getVillage();
-			if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.TOWN))
-				engine.upgradeVillage(v, VillageType.TOWN);
-			break;
-		case UPGRADEVILLAGEFORT:
-			v = t.getVillage();
-			if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT))
-				engine.upgradeVillage(v, VillageType.FORT);
-			break;
-		default:
-			break;
-		}
+		IGameCommand command = CommandFactory.createCommand(action, x, y);
+		command.setGameEngine(engine);
+		amqpAdapter.send(command, "this-game's-exchange", "");
 	}
 
 	/**
@@ -259,9 +227,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 	}
 
 	@Override
-	public void newGame(List<String> playerIds, String mapFilePath) {
+	public void newGame(GameInfo gameInfo, String mapFilePath) {
 		newworldorder.game.model.Map presetMap = null;
-		List<Player> players = initPlayers(playerIds);
+		List<Player> players = initPlayers(gameInfo.getPlayers());
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
 		} catch (Exception e) {
