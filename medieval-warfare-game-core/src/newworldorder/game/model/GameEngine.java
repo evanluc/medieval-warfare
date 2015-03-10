@@ -81,6 +81,7 @@ public class GameEngine {
         Game game = new Game(players, map);
         Player.setUpPlayers(players, game);
         setGameState(game);
+        beginTurn(gameState.getCurrentTurnPlayer());
     }
 
     public void beginTurn(Player p) {
@@ -199,7 +200,7 @@ public class GameEngine {
                 } else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(u.getUnitType())) {
                     // Enemy unit is stronger
                 	return MoveType.INVALIDMOVE;
-                } else {
+                } else if (villageOnDest == null) {
                 	// Enemy unit is weaker
                     if (structureOnDest == StructureType.WATCHTOWER && 
                     		Unit.unitLevel(u.getUnitType()) <= Unit.unitLevel(UnitType.INFANTRY)) {
@@ -223,6 +224,12 @@ public class GameEngine {
     			// Unit invades enemy village
     			if ( (u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER) && 
     					villageOnDest.getControlledBy() != u.getVillage().getControlledBy() ) {
+    				if (dest.getUnit() != null && Unit.unitLevel(u.getUnitType()) > Unit.unitLevel(dest.getUnit().getUnitType())) {
+    					return MoveType.FREEMOVE;
+    				} else {
+    					return MoveType.INVALIDMOVE;
+    				}
+    			} else if (villageOnDest.getControlledBy() == u.getVillage().getControlledBy()) {
     				return MoveType.FREEMOVE;
     			} else {
     				return MoveType.INVALIDMOVE;
@@ -477,7 +484,7 @@ public class GameEngine {
                     if (t.getUnit() != null) {
                         t.getUnit().kill();
                     }
-                    if (t.getVillage() != null) {
+                    if (t.getVillage() != null && r.getTiles().size() > 0) {
                     	t.setVillage(null);
                     	r.setVillage(null);
                     	r.createVillage();
