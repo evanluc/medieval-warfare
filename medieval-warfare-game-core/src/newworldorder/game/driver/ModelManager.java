@@ -42,7 +42,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 		updatedTiles = new HashSet<Tile>();
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("104.236.30.10", 5672);
 		connectionFactory.setUsername("newworldorder");
-		connectionFactory.setPassword("Warfare");
+		connectionFactory.setPassword("warfare");
 		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
 	}
 	
