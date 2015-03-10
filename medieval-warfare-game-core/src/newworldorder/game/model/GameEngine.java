@@ -224,7 +224,7 @@ public class GameEngine {
     			// Unit invades enemy village
     			if ( (u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER) && 
     					villageOnDest.getControlledBy() != u.getVillage().getControlledBy() ) {
-    				if (dest.getUnit() != null && Unit.unitLevel(u.getUnitType()) > Unit.unitLevel(dest.getUnit().getUnitType())) {
+    				if (dest.getUnit() == null || Unit.unitLevel(u.getUnitType()) > Unit.unitLevel(dest.getUnit().getUnitType())) {
     					return MoveType.FREEMOVE;
     				} else {
     					return MoveType.INVALIDMOVE;
@@ -340,7 +340,7 @@ public class GameEngine {
         	// If there is an enemy unit, we kill it because we checked whether it was defeatable in getMoveType
             if (dest.getControllingPlayer() != u.getControllingPlayer()) {
             	if (dest.getUnit() != null) {
-            		dest.getUnit().kill();
+            		killUnit(dest.getUnit());
             	}
             	if (dest.getStructure() == StructureType.WATCHTOWER) {
             		dest.setTerrainType(null);
@@ -442,7 +442,8 @@ public class GameEngine {
 					newV.addUnit(u);
 				}
 				
-				destroyAndRemoveReferences(oldV);
+				oldV.getTile().setVillage(null);
+				oldV.getControlledBy().removeVillage(oldV);
         	}
         }
     }
@@ -475,45 +476,41 @@ public class GameEngine {
             newRegionTiles.add(temp);
         }
         
-        for (Set<Tile> l : newRegionTiles) {
-            /* This is a set of tiles with insufficient tiles to form a region */ 
-            if (l.size() < 3) {
-                for (Tile t : l) {
-                	r.removeTile(t);
-                	t.setRegion(null);
-                    if (t.getUnit() != null) {
-                        t.getUnit().kill();
-                    }
-                    if (t.getVillage() != null && r.getTiles().size() > 0) {
-                    	t.setVillage(null);
-                    	r.setVillage(null);
-                    	r.createVillage();
-                    	List<Unit> temp = new ArrayList<Unit>(originalVillage.getSupportedUnits());
-                    	for (Unit u : temp) {
-                    		originalVillage.removeUnit(u);
-                    		r.getVillage().addUnit(u);
-                    	}
-                    }
-                }
-            }
-            /* This is the 'original' region */
-            else if (originalVillage != null && l.contains(originalVillage.getTile())) {
-                List<Tile> notInRegion = new ArrayList<Tile>(r.getTiles());
-                notInRegion.removeAll(l);
-                for (Tile t : notInRegion) {
-                    r.removeTile(t);
-                }
-                if (r.getVillage() == null) r.createVillage();
-            }
-            /* This is newly created region with > 3 non-village tiles, with no controlling village */
-            else {
-                Region newRegion = new Region(l, controllingPlayer);
-                newRegion.createVillage();
-                for (Tile t : l) {
-                    t.setRegion(newRegion);
-                    if (t.getUnit() != null) t.getUnit().setVillage(newRegion.getVillage());
-                }
-            }
+        
+        for (Set<Tile> regCandidate : newRegionTiles) {
+        	if (regCandidate.size() < 3) {
+        		for (Tile t : regCandidate) {
+        			t.setRegion(null);
+        			if (t.getUnit() != null) {
+        				killUnit(t.getUnit());
+        			}
+        			if (t.getVillage() != null) {
+        				t.setVillage(null);
+        				t.setTerrainType(TerrainType.TREE);
+        			}
+        		}
+			} else {
+				Region newRegion;
+				Village newVillage;
+				newRegion = new Region(regCandidate, controllingPlayer);
+				if (regCandidate.contains(originalVillage.getTile())) {
+					newVillage = new Village(originalVillage.getTile(),
+							controllingPlayer, regCandidate);
+					newRegion.setVillage(newVillage);
+				} else {
+					newRegion.createVillage();
+					newVillage = newRegion.getVillage();
+				}
+				
+				for (Tile t : regCandidate) {
+					newRegion.addTile(t);
+					t.setRegion(newRegion);
+					if (t.getUnit() != null) {
+						newVillage.addUnit(t.getUnit());
+						t.getUnit().setVillage(newVillage);
+					}
+				}
+			}
         }
     }
     
@@ -533,24 +530,18 @@ public class GameEngine {
         }
         return new HashSet<Tile>(reached);
     }
-    
-    private void destroyAndRemoveReferences(Village v) {
-    	killAllUnits(v);
-    	
-    	for (Tile t : v.getRegion().getTiles()) {
-    		t.setRegion(null);
-    	}
-    	v.getTile().setVillage(null);
-    	v.getControlledBy().removeVillage(v);
-    }
-    
+
     private void killAllUnits(Village v) {
     	List<Unit> units = new ArrayList<Unit>(v.getSupportedUnits());
     	
     	for (Unit u : units) {
-    		v.removeUnit(u);
-        	u.getTile().setUnit(null);
-        	u.getTile().setStructure(StructureType.TOMBSTONE);
+    		killUnit(u);
     	}
+    }
+    
+    private void killUnit(Unit u) {
+        u.getVillage().removeUnit(u);
+        u.getTile().setUnit(null);
+        u.getTile().setStructure(StructureType.TOMBSTONE);
     }
 }

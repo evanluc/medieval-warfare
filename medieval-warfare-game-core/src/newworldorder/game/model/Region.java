@@ -70,20 +70,25 @@ public class Region implements Serializable {
      * This will do nothing if the region still has a controlling village.
      */
     public void createVillage() {
-        /* TODO Handle a region of tiles that are all unsuitable for building a village */
         if (controllingVillage == null) {
             // Randomly select a tile in the region that is a grass terrain.
-            // Place a new village on that tile.
-            int tileIndex = (int)Math.floor(Math.random() * (tiles.size() - 1));
+            // Place a new village on that tile. If no such tile exists, pick one
+        	// tree tile and replace it with a grass tile.
             
             List<Tile> temp = new ArrayList<Tile>(tiles);
+            int tileIndex;
+            Tile tile;
             
-            while (temp.get(tileIndex).getTerrainType() == TerrainType.TREE) {
+			do {
                 // Right now this will infinite loop if, say, we have a 3-region of just trees
-                tileIndex = (int)Math.floor(Math.random() * (tiles.size() - 1));
-            }
-            Village village = new Village(temp.get(tileIndex), controllingPlayer, this);
-            temp.get(tileIndex).setVillage(village);
+                tileIndex = (int)Math.floor(Math.random() * (temp.size() - 1));
+                tile = temp.get(tileIndex);
+            } while (tile.getTerrainType() == TerrainType.TREE && temp.size() > 0);
+			
+            Village village = new Village(tile, controllingPlayer, this);
+            tile.setVillage(village);
+            tile.setTerrainType(TerrainType.GRASS);
+            
             controllingVillage = village;
         }
     }
