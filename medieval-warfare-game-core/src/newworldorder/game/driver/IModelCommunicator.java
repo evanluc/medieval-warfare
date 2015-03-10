@@ -26,11 +26,5 @@ public interface IModelCommunicator {
 	
 	public UIVillageDescriptor getVillage(int x, int y);
 	
-	public void login(String username, String password);
-	
-	public void logout();
-	
-	public void joinGame(String gameExchange);
-	
 	public void leaveGame();
 }
