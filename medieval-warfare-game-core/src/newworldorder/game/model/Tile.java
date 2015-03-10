@@ -86,6 +86,7 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void setStructure(StructureType structure) {
+    	super.setChanged();
     	super.notifyObservers();
     	occupyingStructure = structure;
     }
@@ -95,6 +96,7 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void setVillage(Village myVillage) {
+    	super.setChanged();
     	super.notifyObservers();
     	villageOnTile = myVillage;
     }
@@ -104,6 +106,7 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void setRegion(Region newRegion) {
+    	super.setChanged();
     	super.notifyObservers();
     	region = newRegion;
     }
@@ -113,6 +116,7 @@ public class Tile extends Observable implements Serializable {
     }
 
     public void setUnit(Unit newUnit) {
+    	super.setChanged();
     	super.notifyObservers();
     	unit = newUnit;
     }
@@ -122,6 +126,7 @@ public class Tile extends Observable implements Serializable {
     }
 
     public void setTerrainType(TerrainType type) {
+    	super.setChanged();
     	super.notifyObservers();
     	terrainType = type;
     }
@@ -131,6 +136,7 @@ public class Tile extends Observable implements Serializable {
     }
 
     public void killUnit() {
+    	super.setChanged();
     	super.notifyObservers();
         if (unit != null)
         {

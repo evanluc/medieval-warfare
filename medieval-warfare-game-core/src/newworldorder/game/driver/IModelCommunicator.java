@@ -29,4 +29,6 @@ public interface IModelCommunicator {
 	public UIVillageDescriptor getVillage(int x, int y);
 	
 	public void leaveGame();
+
+	public boolean hasUpdatedTiles();
 }

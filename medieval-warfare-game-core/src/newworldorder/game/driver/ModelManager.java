@@ -20,6 +20,7 @@ import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Game;
 import newworldorder.game.model.GameEngine;
 import newworldorder.game.model.Player;
+import newworldorder.game.model.Region;
 import newworldorder.game.model.StructureType;
 import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Tile;
@@ -71,14 +72,16 @@ public class ModelManager implements IModelCommunicator, Observer {
 	}
 	
 	/**
-	 * This method handles BUILDROAD, BUILDTOWER, CULTIVATEMEADOW, UPGRADEUNIT*, and 
-	 * UPGRADEVILLAGE*. All other UIActionTypes are ignored. 
+	 * This method handles BUILDROAD, BUILDTOWER, CULTIVATEMEADOW, UPGRADEUNIT*, 
+	 * UPGRADEVILLAGE*, and BUILDUNIT*. All other UIActionTypes are ignored. 
 	 * @param action The UIActionType
 	 * @param x x-coordinate
 	 * @param y y-coordinate
 	 */
 	@Override
 	public void informOfUserAction(UIActionType action, int x, int y) {
+		System.out.println("Received action");
+		
 		if (!gameRunning)
 			return;
 		
@@ -88,7 +91,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	}
 
 	/**
-	 * This method handles BUILDUNIT* and MOVEUNIT. For BUILDUNIT* the first coordinate (x1, y1) is
+	 * This method handles MOVEUNIT. For BUILDUNIT* the first coordinate (x1, y1) is
 	 * interpreted as the village while the second coordinate (x2, y2) is interpreted as the tile to
 	 * place the new unit. For MOVEUNIT the first coordinate is interpreted as the unit while the 
 	 * second coordinate is interpreted as the destination tile.
@@ -99,31 +102,10 @@ public class ModelManager implements IModelCommunicator, Observer {
 			return;
 		
 		Unit u;
-		Village v;
 		Tile t1 = engine.getGameState().getMap().getTile(x1, y1);
 		Tile t2 = engine.getGameState().getMap().getTile(x2, y2);
 		
 		switch (action) {
-		case BUILDUNITINFANTRY:
-			v = t1.getVillage();
-			if (v != null)
-				engine.buildUnit(v, t2, UnitType.INFANTRY);
-			break;
-		case BUILDUNITKNIGHT:
-			v = t1.getVillage();
-			if (v != null)
-				engine.buildUnit(v, t2, UnitType.KNIGHT);
-			break;
-		case BUILDUNITPEASANT:
-			v = t1.getVillage();
-			if (v != null)
-				engine.buildUnit(v, t2, UnitType.PEASANT);
-			break;
-		case BUILDUNITSOLDIER:
-			v = t1.getVillage();
-			if (v != null)
-				engine.buildUnit(v, t2, UnitType.SOLDIER);
-			break;
 		case MOVEUNIT:
 			u = t1.getUnit();
 			if (u != null)
@@ -286,6 +268,12 @@ public class ModelManager implements IModelCommunicator, Observer {
 			return engine.getGameState().getMap().getWidth();
 		else
 			return -1;
+	}
+
+	@Override
+	public boolean hasUpdatedTiles() {
+		// System.out.println("Received call to hasUpdatedTiles");
+		return !updatedTiles.isEmpty();
 	}
 
 }
