@@ -28,6 +28,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	private GameEngine engine;
 	private boolean gameRunning;
 	private Set<Tile> updatedTiles;
+	private int localPlayerId;
 	
 	private ModelManager() {
 		engine = new GameEngine();
@@ -333,6 +334,21 @@ public class ModelManager implements IModelCommunicator, Observer {
 	public boolean hasUpdatedTiles() {
 		// System.out.println("Received call to hasUpdatedTiles");
 		return !updatedTiles.isEmpty();
+	}
+
+	@Override
+	public boolean isLocalPlayersTurn() {
+		return (engine.getGameState().getCurrentTurnPlayer().getPlayerId() == localPlayerId);
+	}
+
+	@Override
+	public void setLocalPlayerId(int localPlayerId) {
+		this.localPlayerId = localPlayerId;
+	}
+
+	@Override
+	public int getLocalPlayerId() {
+		return localPlayerId;
 	}
 
 }

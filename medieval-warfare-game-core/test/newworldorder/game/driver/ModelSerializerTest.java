@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,13 +48,13 @@ public class ModelSerializerTest {
 		p1.setCurrentGame(testGame);
 		p2.setCurrentGame(testGame);
 		testGame.setTurnOf(p1);
-		List<Tile> reg1 = new ArrayList<Tile>();
+		Set<Tile> reg1 = new HashSet<Tile>();
 		reg1.add(aMap.getTile(0, 0));
 		reg1.add(aMap.getTile(1, 0));
 		reg1.add(aMap.getTile(0, 1));
 		new Village(aMap.getTile(0, 0), p1, reg1);
 
-		List<Tile> reg2 = new ArrayList<Tile>();
+		Set<Tile> reg2 = new HashSet<Tile>();
 		reg2.add(aMap.getTile(1, 1));
 		reg2.add(aMap.getTile(2, 1));
 		reg2.add(aMap.getTile(1, 2));

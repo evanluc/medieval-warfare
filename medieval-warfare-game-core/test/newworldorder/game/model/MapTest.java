@@ -4,7 +4,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +33,7 @@ public class MapTest {
 		}
 		aMap.getTile(1, 1).setTerrainType(TerrainType.TREE);
 		aMap.getTile(2, 2).setStructure(StructureType.ROAD);
-		List<Tile> aList = new ArrayList<Tile>();
+		Set<Tile> aList = new HashSet<Tile>();
 		aList.add(aMap.getTile(1, 2));
 		aList.add(aMap.getTile(2, 1));
 		p1 = new Player("Yung", "Lean", 0, 0, null);

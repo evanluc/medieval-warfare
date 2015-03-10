@@ -24,14 +24,27 @@ public class Village implements Serializable {
      * Creating a Village with the list of 
      * @param pTile The tile the Village is on. This object must be in the pControlledTiles list of tiles.
      * @param pPlayer The Player who controls this village.
-     * @param pControlledTiles The Tiles this village controls.
+     * @param tiles The Tiles this village controls.
      */
-    public Village(Tile pTile, Player pPlayer, List<Tile> pControlledTiles) {
-        assert(pControlledTiles.contains(pTile));
+    public Village(Tile pTile, Player pPlayer, Set<Tile> tiles) {
+        assert(tiles.contains(pTile));
         tile = pTile;
         tile.setVillage(this);
         controlledBy = pPlayer;
-        controlledRegion = new Region(pControlledTiles, pPlayer);
+        controlledRegion = new Region(tiles, pPlayer);
+        controlledRegion.setVillage(this);
+        supportedUnits = new HashSet<Unit>();
+        villageType = VillageType.HOVEL;
+        gold = 0;
+        wood = 0;
+        controlledBy.addVillage(this);
+    }
+    
+    public Village(Tile pTile, Player pPlayer, Region r) {
+        tile = pTile;
+        tile.setVillage(this);
+        controlledBy = pPlayer;
+        controlledRegion = r;
         controlledRegion.setVillage(this);
         supportedUnits = new HashSet<Unit>();
         villageType = VillageType.HOVEL;
@@ -128,17 +141,5 @@ public class Village implements Serializable {
         meadow = controlledRegion.getTileCount(TerrainType.MEADOW);
         total = grass + 2 * meadow;
         return total;
-    }
-
-    public void kill() {
-        killUnits();
-        this.controlledBy.removeVillage(this);
-    }
-    
-    public void killUnits() {
-    	List<Unit> aList = new ArrayList<Unit>(supportedUnits);
-    	for(Unit u : aList){
-    		u.kill();
-    	}
     }
 }

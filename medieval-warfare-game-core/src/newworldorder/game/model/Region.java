@@ -2,7 +2,9 @@ package newworldorder.game.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Region class is clean and complete.
@@ -10,12 +12,12 @@ import java.util.List;
 public class Region implements Serializable {
     
 	private static final long serialVersionUID = 5056315454979573917L;
-	private List<Tile> tiles;
+	private Set<Tile> tiles;
     private Village controllingVillage = null;
     private final Player controllingPlayer;
     
-    public Region(List<Tile> pTiles, Player pPlayer) {
-        tiles = new ArrayList<Tile>(pTiles);
+    public Region(Set<Tile> pTiles, Player pPlayer) {
+        tiles = new HashSet<Tile>(pTiles);
         controllingPlayer = pPlayer;
         for(Tile t : tiles){
         	t.setRegion(this);
@@ -39,7 +41,7 @@ public class Region implements Serializable {
     }
 
     public List<Tile> getTiles() {
-        return tiles;
+        return new ArrayList<Tile>(tiles);
     }
 
     public Village getVillage() {
@@ -73,12 +75,15 @@ public class Region implements Serializable {
             // Randomly select a tile in the region that is a grass terrain.
             // Place a new village on that tile.
             int tileIndex = (int)Math.floor(Math.random() * (tiles.size() - 1));
-            while (tiles.get(tileIndex).getTerrainType() == TerrainType.TREE) {
+            
+            List<Tile> temp = new ArrayList<Tile>(tiles);
+            
+            while (temp.get(tileIndex).getTerrainType() == TerrainType.TREE) {
                 // Right now this will infinite loop if, say, we have a 3-region of just trees
                 tileIndex = (int)Math.floor(Math.random() * (tiles.size() - 1));
             }
-            Village village = new Village(tiles.get(tileIndex), controllingPlayer, tiles);
-            tiles.get(tileIndex).setVillage(village);
+            Village village = new Village(temp.get(tileIndex), controllingPlayer, this);
+            temp.get(tileIndex).setVillage(village);
             controllingVillage = village;
         }
     }

@@ -40,7 +40,7 @@ public class GameEngine {
         }
     }
 
-    public void takeoverTile(Tile dest) {
+    private void takeoverTile(Tile dest) {
         Unit unit = dest.getUnit();
         Region destRegion = dest.getRegion();
         Village destVillage = dest.getVillage();
@@ -50,7 +50,6 @@ public class GameEngine {
             unitsVillage.transactGold(destVillage.getGold());
             unitsVillage.transactWood(destVillage.getWood());
             dest.setVillage(null);
-            destVillage.kill();
         }
         
         destRegion.removeTile(dest);
@@ -99,7 +98,7 @@ public class GameEngine {
      */
     public void endTurn() {
     	List<Player> players = gameState.getPlayers();
-    	int turnPosition = players.indexOf(gameState.getTurnOf());
+    	int turnPosition = players.indexOf(gameState.getCurrentTurnPlayer());
     	if (turnPosition == players.size() - 1) {
     		gameState.incrementRoundCount();
     		turnPosition = 0;
@@ -111,7 +110,9 @@ public class GameEngine {
     
     public void buildUnit(Village v, Tile t, UnitType type) {
     	Region r = v.getRegion();
-    	if (t.getUnit() == null && v.getGold() >= Unit.unitCost(type) && r.getTiles().contains(t)) {
+    	// Check pre-requisites for building a unit
+    	if (t.getUnit() == null && v.getGold() >= Unit.unitCost(type) && r.getTiles().contains(t) 
+    			&& r.getControllingPlayer() == gameState.getCurrentTurnPlayer()) {
     		if(v.getVillageType() == VillageType.HOVEL){
     			//Checks if village is allowed to create strong units
     			if(type == UnitType.SOLDIER || type == UnitType.KNIGHT){
@@ -173,10 +174,11 @@ public class GameEngine {
     }
 
     private MoveType getMoveType(Unit u, Tile dest) {
-        Tile origin = u.getTile();;
+        Tile origin = u.getTile();
         List<Tile> adjacent = origin.getNeighbours();
 
-        if (u.getImmobileUntilRound() <= gameState.getRoundCount() && adjacent.contains(dest)) {
+        if (u.getImmobileUntilRound() <= gameState.getRoundCount() && adjacent.contains(dest)
+        		&& u.getControllingPlayer() == gameState.getCurrentTurnPlayer()) {
             TerrainType landOnDest = dest.getTerrainType();
             StructureType structureOnDest = dest.getStructure();
             Unit unitOnDest = dest.getUnit();
@@ -305,7 +307,7 @@ public class GameEngine {
         for (Village v : villages) {
             int totalUpkeep = v.getTotalUpkeep();
             if (v.getGold() < totalUpkeep) {
-                v.killUnits();
+                killAllUnits(v);
             } else {
                 v.transactGold(-1 * totalUpkeep);
             }
@@ -407,21 +409,25 @@ public class GameEngine {
 					newV = newR.getVillage();
 				}
 				
+				// add the old village's gold and wood to the new village
+				newV.transactWood(oldV.getWood());
+				newV.transactGold(oldV.getGold());
+				
 				// loop through all tiles in old region and update
 				for (Tile oldTile : oldR.getTiles()) {
-					oldTile.setRegion(t.getRegion());
+					oldR.removeTile(oldTile);
+					oldTile.setRegion(newR);
 					newR.addTile(oldTile);
 				}
 				
 				// loop through all units in old region and update
 				for (Unit u : oldV.getSupportedUnits()) {
+					oldV.removeUnit(u);
 					u.setVillage(newV);
 					newV.addUnit(u);
 				}
 				
-				// add the old village's gold and wood to the new village
-				newV.transactWood(oldV.getWood());
-				newV.transactGold(oldV.getGold());
+				destroyAndRemoveReferences(oldV);
         	}
         }
     }
@@ -436,12 +442,12 @@ public class GameEngine {
         Player controllingPlayer = r.getControllingPlayer();
         Village originalVillage = r.getVillage();
         List<Tile> unreached = new ArrayList<Tile>(r.getTiles());
-        List<List<Tile>> newRegionList = new ArrayList<List<Tile>>();
+        List<Set<Tile>> newRegionTiles = new ArrayList<Set<Tile>>();
         
         while (unreached.size() > 0) {
             // Take the first tile (an arbitrary tile)
             Tile begin = unreached.get(0);
-            List<Tile> temp = new ArrayList<Tile>();
+            Set<Tile> temp = new HashSet<Tile>();
             // Move the tile from the unreached list to the the temp list
             temp.add(begin);
             unreached.remove(begin);
@@ -451,15 +457,15 @@ public class GameEngine {
             temp.addAll(connected);
             unreached.removeAll(connected);
             // Add the temp list to the new region list
-            newRegionList.add(temp);
+            newRegionTiles.add(temp);
         }
         
-        for (List<Tile> l : newRegionList) {
+        for (Set<Tile> l : newRegionTiles) {
             /* This is a set of tiles with insufficient tiles to form a region */ 
             if (l.size() < 3) {
                 for (Tile t : l) {
                     if (t.getVillage() != null) {
-                        t.getVillage().kill();
+                    	destroyAndRemoveReferences(t.getVillage());
                     }
                     if (t.getUnit() != null) {
                         t.getUnit().kill();
@@ -503,5 +509,25 @@ public class GameEngine {
             }
         }
         return new HashSet<Tile>(reached);
+    }
+    
+    private void destroyAndRemoveReferences(Village v) {
+    	killAllUnits(v);
+    	
+    	for (Tile t : v.getRegion().getTiles()) {
+    		t.setRegion(null);
+    	}
+    	v.getTile().setVillage(null);
+    	v.getControlledBy().removeVillage(v);
+    }
+    
+    private void killAllUnits(Village v) {
+    	List<Unit> units = new ArrayList<Unit>(v.getSupportedUnits());
+    	
+    	for (Unit u : units) {
+    		v.removeUnit(u);
+        	u.getTile().setUnit(null);
+        	u.getTile().setStructure(StructureType.TOMBSTONE);
+    	}
     }
 }

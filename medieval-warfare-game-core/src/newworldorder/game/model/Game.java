@@ -41,7 +41,7 @@ public class Game implements Serializable {
         return players;
     }
     
-    public Player getTurnOf() {
+    public Player getCurrentTurnPlayer() {
         return turnOf;
     }
 

@@ -64,7 +64,7 @@ public class GameTest {
 	@Test
 	public void testGetSetTurnOf() {
 		game.setTurnOf(p1);
-		assertEquals(game.getTurnOf(), p1);
+		assertEquals(game.getCurrentTurnPlayer(), p1);
 		game.setTurnOf(p2);
 	}
 

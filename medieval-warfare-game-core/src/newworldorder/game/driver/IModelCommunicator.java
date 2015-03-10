@@ -29,4 +29,10 @@ public interface IModelCommunicator {
 	public void leaveGame();
 
 	public boolean hasUpdatedTiles();
+	
+	public boolean isLocalPlayersTurn();
+	
+	public void setLocalPlayerId(int playerId);
+	
+	public int getLocalPlayerId();
 }

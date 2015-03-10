@@ -2,8 +2,10 @@ package newworldorder.game.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Map class clean and complete.
@@ -74,13 +76,13 @@ public class Map implements Serializable {
 				// if the tile passed the above check,
 				// determine whether a region of size 3 can be made
 				if (canPlaceRegion) {
-					List<Tile> newRegion = new ArrayList<Tile>();
+					Set<Tile> newRegion = new HashSet<Tile>();
 					newRegion.add(randTile);
 					Tile curTile = randTileNeighbours.get(0);
 
 					while (newRegion.size() < INIT_VILLAGE_REGION_SIZE) {
-						// the tile must not be sea
-						if (curTile.getTerrainType() != TerrainType.SEA) {
+						// the tile must not be sea or already controlled by another player
+						if (curTile.getTerrainType() != TerrainType.SEA && curTile.getRegion() == null) {
 							for (Tile n : curTile.getNeighbours()) {
 								if (n.getControllingPlayer() == p) {
 									canPlaceRegion = false;

@@ -3,7 +3,9 @@ package newworldorder.game.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -36,7 +38,7 @@ public class RegionTest
 		Game aGame = new Game(playerList, aMap);
 		p1.setCurrentGame(aGame);
 		p2.setCurrentGame(aGame);
-		List<Tile> aReg = new ArrayList<Tile>();
+		Set<Tile> aReg = new HashSet<Tile>();
 		aReg.add(aMap.getTile(0, 0));
 		aReg.add(aMap.getTile(1, 0));
 		aReg.add(aMap.getTile(0, 1));
@@ -75,7 +77,7 @@ public class RegionTest
 
 	@Test
     public void testSetVillage() {
-    	List<Tile> newRegion = new ArrayList<Tile>();
+    	Set<Tile> newRegion = new HashSet<Tile>();
     	newRegion.add(aMap.getTile(5, 5));
     	Village testV = new Village(aMap.getTile(5,5), u.getControllingPlayer(), newRegion); 
     	reg.setVillage(testV);

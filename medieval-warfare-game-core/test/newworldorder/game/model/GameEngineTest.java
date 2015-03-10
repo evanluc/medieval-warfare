@@ -5,7 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,13 +31,13 @@ public class GameEngineTest {
 		p1.setCurrentGame(aGame);
 		p2.setCurrentGame(aGame);
 		aGame.setTurnOf(p1);
-		List<Tile> reg1 = new ArrayList<Tile>();
+		Set<Tile> reg1 = new HashSet<Tile>();
 		reg1.add(aMap.getTile(0, 0));
 		reg1.add(aMap.getTile(1, 0));
 		reg1.add(aMap.getTile(0, 1));
 		village1 = new Village(aMap.getTile(0, 0), p1, reg1);
 
-		List<Tile> reg2 = new ArrayList<Tile>();
+		Set<Tile> reg2 = new HashSet<Tile>();
 		reg2.add(aMap.getTile(1, 1));
 		reg2.add(aMap.getTile(2, 1));
 		reg2.add(aMap.getTile(1, 2));
@@ -79,9 +81,9 @@ public class GameEngineTest {
 	@Test
 	public void testEndTurn() {
 		gameEngine.endTurn();
-		assertEquals(gameEngine.getGameState().getTurnOf(), p2);
+		assertEquals(gameEngine.getGameState().getCurrentTurnPlayer(), p2);
 		gameEngine.endTurn();
-		assertEquals(gameEngine.getGameState().getTurnOf(), p1);
+		assertEquals(gameEngine.getGameState().getCurrentTurnPlayer(), p1);
 	}
 
 	@Test
@@ -181,6 +183,7 @@ public class GameEngineTest {
 		assertEquals(aMap.getTile(1, 2).getUnit(), ally);
 		// Take over village
 		ally.setImmobileUntilRound(0);
+		aMap.getTile(2, 2).setTerrainType(TerrainType.GRASS);
 		gameEngine.moveUnit(ally, aMap.getTile(2, 2));
 		assertEquals(aMap.getTile(2, 2).getUnit(), ally);
 		// Move onto meadow as weak unit
@@ -263,7 +266,7 @@ public class GameEngineTest {
 
 	@Test
 	public void testCombineRegions() {
-		List<Tile> reg3 = new ArrayList<Tile>();
+		Set<Tile> reg3 = new HashSet<Tile>();
 		reg3.add(aMap.getTile(0, 3));
 		reg3.add(aMap.getTile(0, 4));
 		reg3.add(aMap.getTile(1, 3));

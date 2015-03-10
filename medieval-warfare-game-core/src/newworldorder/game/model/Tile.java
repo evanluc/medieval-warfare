@@ -31,7 +31,7 @@ public class Tile extends Observable implements Serializable {
         map = myMap;
         mapHeight = myMap.getHeight();
         mapWidth = myMap.getWidth();
-        neighbours = new HashSet<Tile>();
+        neighbours = new HashSet<Tile>(6);
     }
     
     public void cacheNeighbours() {
@@ -86,9 +86,9 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void setStructure(StructureType structure) {
+    	occupyingStructure = structure;
     	super.setChanged();
     	super.notifyObservers();
-    	occupyingStructure = structure;
     }
 
     public Village getVillage() {
@@ -96,9 +96,9 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void setVillage(Village myVillage) {
+    	villageOnTile = myVillage;
     	super.setChanged();
     	super.notifyObservers();
-    	villageOnTile = myVillage;
     }
 
     public Region getRegion() {
@@ -106,9 +106,9 @@ public class Tile extends Observable implements Serializable {
     }
     
     public void setRegion(Region newRegion) {
+    	region = newRegion;
     	super.setChanged();
     	super.notifyObservers();
-    	region = newRegion;
     }
 
     public Unit getUnit() {
@@ -116,9 +116,9 @@ public class Tile extends Observable implements Serializable {
     }
 
     public void setUnit(Unit newUnit) {
+    	unit = newUnit;
     	super.setChanged();
     	super.notifyObservers();
-    	unit = newUnit;
     }
 
     public TerrainType getTerrainType() {
@@ -126,9 +126,9 @@ public class Tile extends Observable implements Serializable {
     }
 
     public void setTerrainType(TerrainType type) {
+    	terrainType = type;
     	super.setChanged();
     	super.notifyObservers();
-    	terrainType = type;
     }
 
     public List<Tile> getNeighbours() {

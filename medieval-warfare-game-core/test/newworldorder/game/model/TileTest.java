@@ -3,7 +3,9 @@ package newworldorder.game.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -24,7 +26,7 @@ public class TileTest {
 	private Map aMap;
 	private Village aVillage;
 	private Player p1, p2;
-	private List<Tile> aReg;
+	private Set<Tile> aReg;
 	@Before
 	public void setUp() {
 		p1 = new Player("Yung", "Lean", 0, 0, null);
@@ -36,7 +38,7 @@ public class TileTest {
 		Game aGame = new Game(playerList, aMap);
 		p1.setCurrentGame(aGame);
 		p2.setCurrentGame(aGame);
-		aReg = new ArrayList<Tile>();
+		aReg = new HashSet<Tile>();
 		aReg.add(aMap.getTile(0, 0));
 		aReg.add(aMap.getTile(1, 0));
 		aReg.add(aMap.getTile(0, 1));
@@ -77,7 +79,7 @@ public class TileTest {
     }
     @Test
     public void testSetVillage(){
-    	List<Tile> newRegion = new ArrayList<Tile>();
+    	Set<Tile> newRegion = new HashSet<Tile>();
     	newRegion.add(aMap.getTile(3, 3));
     	Village newV = new Village(aMap.getTile(3, 3), p1, newRegion);
     	aMap.getTile(3,3).setVillage(newV);
@@ -89,7 +91,7 @@ public class TileTest {
     }
     @Test
     public void testSetRegion() {
-    	List<Tile> tileList = new ArrayList<Tile>();
+    	Set<Tile> tileList = new HashSet<Tile>();
     	tileList.add(aMap.getTile(3, 3));
     	Region newRegion = new Region(tileList, p1);
     	aMap.getTile(3,3).setRegion(newRegion);

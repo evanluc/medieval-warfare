@@ -4,7 +4,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +16,7 @@ public class VillageTest {
 	private Map aMap;
 	private Village aVillage;
 	private Player p1, p2;
-	private List<Tile> aReg;
+	private Set<Tile> aReg;
 	@Before
 	public void setUp() {
 		p1 = new Player("Yung", "Lean", 0, 0, null);
@@ -26,7 +28,7 @@ public class VillageTest {
 		Game aGame = new Game(playerList, aMap);
 		p1.setCurrentGame(aGame);
 		p2.setCurrentGame(aGame);
-		aReg = new ArrayList<Tile>();
+		aReg = new HashSet<Tile>();
 		aReg.add(aMap.getTile(0, 0));
 		aReg.add(aMap.getTile(1, 0));
 		aReg.add(aMap.getTile(0, 1));
@@ -96,15 +98,5 @@ public class VillageTest {
     @Test
     public void testGetTotalIncome() {
     	assertTrue(aVillage.getTotalIncome() == 2);
-    }
-    @Test
-    public void testkill() {
-    	aVillage.kill();
-    	assertFalse(p1.getVillages().contains(aVillage));
-    }
-    @Test
-    public void testKillUnits() {
-    	aVillage.killUnits();
-    	assertTrue(aVillage.getSupportedUnits().isEmpty());
     }
 }
