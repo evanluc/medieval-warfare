@@ -32,7 +32,6 @@ public class DesktopLauncher {
 	}
 	
 	public DesktopLauncher(GameInfo info) {
-		List<String> playerIds = new ArrayList<String>();
 		IModelCommunicator model = ModelManager.getInstance();
 		
 		model.newGame(info, "maps/seaside-skirmish.mwm");

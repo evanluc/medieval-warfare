@@ -20,7 +20,6 @@ import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Game;
 import newworldorder.game.model.GameEngine;
 import newworldorder.game.model.Player;
-import newworldorder.game.model.Region;
 import newworldorder.game.model.StructureType;
 import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Tile;
@@ -35,6 +34,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	private boolean gameRunning;
 	private Set<Tile> updatedTiles;
 	private AmqpAdapter amqpAdapter;
+	private String exchange;
 	
 	private ModelManager() {
 		engine = new GameEngine();
@@ -62,13 +62,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 		if (!gameRunning)
 			return;
 		
-		switch (action) {
-		case ENDTURN:
-			engine.endTurn();
-			break;
-		default:
-			break;
-		}
+		IGameCommand command = CommandFactory.createCommand(action);
+		command.setGameEngine(engine);
+		amqpAdapter.send(command, exchange, "");
 	}
 	
 	/**
@@ -87,7 +83,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 		
 		IGameCommand command = CommandFactory.createCommand(action, x, y);
 		command.setGameEngine(engine);
-		amqpAdapter.send(command, "this-game's-exchange", "");
+		amqpAdapter.send(command, exchange, "");
 	}
 
 	/**
@@ -101,19 +97,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 		if (!gameRunning)
 			return;
 		
-		Unit u;
-		Tile t1 = engine.getGameState().getMap().getTile(x1, y1);
-		Tile t2 = engine.getGameState().getMap().getTile(x2, y2);
-		
-		switch (action) {
-		case MOVEUNIT:
-			u = t1.getUnit();
-			if (u != null)
-				engine.moveUnit(u, t2);
-			break;
-		default:
-			break;
-		}
+		IGameCommand command = CommandFactory.createCommand(action, x1, y1, x2, y2);
+		command.setGameEngine(engine);
+		amqpAdapter.send(command, exchange, "");
 	}
 
 	@Override
@@ -212,6 +198,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	public void newGame(GameInfo gameInfo, String mapFilePath) {
 		newworldorder.game.model.Map presetMap = null;
 		List<Player> players = initPlayers(gameInfo.getPlayers());
+		exchange = gameInfo.getGameExchange();
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
 		} catch (Exception e) {
