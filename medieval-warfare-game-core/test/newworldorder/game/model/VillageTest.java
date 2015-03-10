@@ -1,24 +1,13 @@
 package newworldorder.game.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
 import org.junit.Before;
-
-import newworldorder.game.model.Game;
-import newworldorder.game.model.Map;
-import newworldorder.game.model.Player;
-import newworldorder.game.model.Region;
-import newworldorder.game.model.StructureType;
-import newworldorder.game.model.TerrainType;
-import newworldorder.game.model.Tile;
-import newworldorder.game.model.Unit;
-import newworldorder.game.model.UnitType;
-import newworldorder.game.model.Village;
-import newworldorder.game.model.VillageType;
+import org.junit.Test;
 
 public class VillageTest {
 	private Unit u;

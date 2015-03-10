@@ -3,7 +3,6 @@ package newworldorder.game.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,21 +42,22 @@ public class GameEngineTest {
 		reg2.add(aMap.getTile(2, 2));
 		village2 = new Village(aMap.getTile(2, 2), p2, reg2);
 	}
-	
+
 	@Test
 	public void testBuildUnit() {
 		village1.transactGold(10);
 		assertEquals(aMap.getTile(0, 1).getUnit(), null);
 		gameEngine.buildUnit(village1, aMap.getTile(0, 1), UnitType.PEASANT);
 		assertEquals(aMap.getTile(0, 1).getUnit().getUnitType(), UnitType.PEASANT);
-		//Now try making a unit without enough money
+		// Now try making a unit without enough money
 		gameEngine.buildUnit(village1, aMap.getTile(1, 0), UnitType.PEASANT);
 		assertEquals(aMap.getTile(1, 0).getUnit(), null);
-		//Try to make a unit that is too strong
+		// Try to make a unit that is too strong
 		village1.transactGold(50);
 		gameEngine.buildUnit(village1, aMap.getTile(1, 0), UnitType.SOLDIER);
 		assertEquals(aMap.getTile(1, 0).getUnit(), null);
 	}
+
 	@Test
 	public void testBuildRoad() {
 		Unit aUnit = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
@@ -70,7 +70,6 @@ public class GameEngineTest {
 		gameEngine.buildRoad(aUnit2);
 		assertFalse(aMap.getTile(0, 1).getStructure() == StructureType.ROAD);
 	}
-
 
 	@Test
 	public void testNewGame() {
@@ -99,10 +98,10 @@ public class GameEngineTest {
 
 	@Test
 	public void testUpgradeVillage() {
-		//not enough wood
+		// not enough wood
 		gameEngine.upgradeVillage(village1, VillageType.FORT);
 		assertEquals(village1.getVillageType(), VillageType.HOVEL);
-		//proper upgrade
+		// proper upgrade
 		village1.transactWood(16);
 		gameEngine.upgradeVillage(village1, VillageType.FORT);
 		assertEquals(village1.getVillageType(), VillageType.FORT);
@@ -111,67 +110,67 @@ public class GameEngineTest {
 
 	@Test
 	public void testBuildTower() {
-		//not enough wood
+		// not enough wood
 		Tile buildOn = aMap.getTile(0, 1);
 		gameEngine.buildTower(buildOn);
 		assertEquals(buildOn.getStructure(), null);
-		//proper build
+		// proper build
 		village1.transactWood(5);
 		gameEngine.buildTower(buildOn);
 		assertEquals(buildOn.getStructure(), StructureType.WATCHTOWER);
 		assertEquals(village1.getWood(), 0);
 	}
 
-
 	@Test
 	public void testMoveUnit_InvalidMove() {
-		//Case where enemy unit is stronger
+		// Case where enemy unit is stronger
 		Unit ally = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
 		Unit enemy = new Unit(UnitType.KNIGHT, village2, aMap.getTile(1, 1));
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
-		assertEquals(aMap.getTile(1,0).getUnit(), ally);
-		assertEquals(aMap.getTile(1,1).getUnit(), enemy);
-		//Case where dest tile is not adjacent.
+		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
+		assertEquals(aMap.getTile(1, 1).getUnit(), enemy);
+		// Case where dest tile is not adjacent.
 		gameEngine.moveUnit(ally, aMap.getTile(2, 2));
-		assertEquals(aMap.getTile(1,0).getUnit(), ally);
-		//Case where enemy unit is weaker, but on a watchtower that is stronger than attacker
+		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
+		// Case where enemy unit is weaker, but on a watchtower that is stronger
+		// than attacker
 		ally.setUnitType(UnitType.INFANTRY);
 		enemy.setUnitType(UnitType.PEASANT);
 		enemy.getTile().setStructure(StructureType.WATCHTOWER);
 		gameEngine.moveUnit(ally, enemy.getTile());
 		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
-		//Case where there is just a watchtower
+		// Case where there is just a watchtower
 		enemy.kill();
 		aMap.getTile(1, 1).setStructure(StructureType.WATCHTOWER);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
 		assertEquals(aMap.getTile(1, 0).getUnit(), ally);
-		//Case where weak unit tries to take village
-		aMap.getTile(1, 1).setRegion(aMap.getTile(1,0).getRegion());
+		// Case where weak unit tries to take village
+		aMap.getTile(1, 1).setRegion(aMap.getTile(1, 0).getRegion());
 		aMap.getTile(1, 1).setTerrainType(TerrainType.GRASS);
-		gameEngine.moveUnit(ally, aMap.getTile(1,1));
+		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
 		assertEquals(aMap.getTile(1, 0).getRegion(), aMap.getTile(1, 1).getRegion());
 		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
-		gameEngine.moveUnit(ally, aMap.getTile(2,2));
-		assertEquals(aMap.getTile(1,1).getUnit(), ally);
-		//Knight cant walk onto trees or tombstones
+		gameEngine.moveUnit(ally, aMap.getTile(2, 2));
+		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
+		// Knight cant walk onto trees or tombstones
 		ally.setUnitType(UnitType.KNIGHT);
 		aMap.getTile(1, 0).setTerrainType(TerrainType.TREE);
 		aMap.getTile(0, 1).setStructure(StructureType.TOMBSTONE);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 0));
-		assertEquals(aMap.getTile(1,1).getUnit(), ally);
+		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
 		gameEngine.moveUnit(ally, aMap.getTile(0, 1));
-		assertEquals(aMap.getTile(1,1).getUnit(), ally);
+		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
 	}
 
 	@Test
 	public void testMoveUnit_FreeMove() {
 		Unit ally = new Unit(UnitType.KNIGHT, village1, aMap.getTile(1, 0));
 		Unit enemy = new Unit(UnitType.SOLDIER, village2, aMap.getTile(1, 1));
-		//Kill enemy unit
+		// Kill enemy unit
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
 		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
 		assertEquals(aMap.getTile(1, 1).getRegion(), aMap.getTile(1, 0).getRegion());
-		//Move onto grass in own territory
+		// Move onto grass in own territory
 		aMap.getTile(0, 1).setTerrainType(TerrainType.GRASS);
 		ally.setImmobileUntilRound(0);
 		gameEngine.moveUnit(ally, aMap.getTile(0, 1));
@@ -180,11 +179,11 @@ public class GameEngineTest {
 		aMap.getTile(1, 2).setTerrainType(TerrainType.GRASS);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 2));
 		assertEquals(aMap.getTile(1, 2).getUnit(), ally);
-		//Take over village
+		// Take over village
 		ally.setImmobileUntilRound(0);
-		gameEngine.moveUnit(ally, aMap.getTile(2,2));
-		assertEquals(aMap.getTile(2,2).getUnit(), ally);
-		//Move onto meadow as weak unit
+		gameEngine.moveUnit(ally, aMap.getTile(2, 2));
+		assertEquals(aMap.getTile(2, 2).getUnit(), ally);
+		// Move onto meadow as weak unit
 		ally.setUnitType(UnitType.PEASANT);
 		aMap.getTile(1, 2).setTerrainType(TerrainType.MEADOW);
 		ally.setImmobileUntilRound(0);
@@ -192,7 +191,7 @@ public class GameEngineTest {
 		assertEquals(aMap.getTile(1, 2).getTerrainType(), TerrainType.MEADOW);
 		assertEquals(aMap.getTile(1, 2).getUnit(), ally);
 
-		//Walk into neutral territory
+		// Walk into neutral territory
 		ally.setImmobileUntilRound(0);
 		aMap.getTile(1, 3).setTerrainType(TerrainType.GRASS);
 		gameEngine.moveUnit(ally, aMap.getTile(1, 3));
@@ -217,7 +216,7 @@ public class GameEngineTest {
 		assertEquals(aMap.getTile(1, 0).getUnit(), u1);
 		assertEquals(aMap.getTile(1, 0).getTerrainType(), TerrainType.GRASS);
 	}
-	
+
 	@Test
 	public void testMoveUnit_ClearTomb() {
 		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 1));
@@ -227,9 +226,9 @@ public class GameEngineTest {
 		assertEquals(dest.getStructure(), null);
 		assertEquals(dest.getUnit(), u1);
 	}
-	
+
 	@Test
-	public void testMoveUnit_GatherWood(){
+	public void testMoveUnit_GatherWood() {
 		Unit u1 = new Unit(UnitType.PEASANT, village1, aMap.getTile(0, 0));
 		Tile dest = aMap.getTile(1, 0);
 		dest.setTerrainType(TerrainType.TREE);
@@ -237,18 +236,18 @@ public class GameEngineTest {
 		assertEquals(dest.getTerrainType(), TerrainType.GRASS);
 		assertEquals(dest.getUnit(), u1);
 	}
-	
+
 	@Test
-	public void testCultivateMeadow(){
-		//Strong unit cant cultivate
+	public void testCultivateMeadow() {
+		// Strong unit cant cultivate
 		village1.transactGold(10);
-		
+
 		Tile t1 = aMap.getTile(0, 1);
-		Unit u1 = new Unit(UnitType.KNIGHT, village1, t1 );
+		Unit u1 = new Unit(UnitType.KNIGHT, village1, t1);
 		t1.setTerrainType(TerrainType.GRASS);
 		gameEngine.cultivateMeadow(u1);
 		assertEquals(t1.getTerrainType(), TerrainType.GRASS);
-		//Peasant can
+		// Peasant can
 		u1.setUnitType(UnitType.PEASANT);
 		gameEngine.cultivateMeadow(u1);
 		assertEquals(u1.getCurrentAction(), ActionType.STARTCULTIVATING);
@@ -261,9 +260,9 @@ public class GameEngineTest {
 		assertEquals(u1.getTile(), t1);
 		assertEquals(t1.getTerrainType(), TerrainType.MEADOW);
 	}
-	
+
 	@Test
-	public void testCombineRegions(){
+	public void testCombineRegions() {
 		List<Tile> reg3 = new ArrayList<Tile>();
 		reg3.add(aMap.getTile(0, 3));
 		reg3.add(aMap.getTile(0, 4));
@@ -285,5 +284,4 @@ public class GameEngineTest {
 		assertEquals(u2.getVillage(), village3);
 	}
 
-	
 }

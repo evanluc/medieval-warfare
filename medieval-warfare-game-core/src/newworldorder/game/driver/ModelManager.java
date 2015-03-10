@@ -285,24 +285,6 @@ public class ModelManager implements IModelCommunicator, Observer {
 	}
 
 	@Override
-	public void login(String username, String password) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void logout() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void joinGame(String gameExchange) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void leaveGame() {
 		// TODO Correct implementation
 		engine.setGameState(null);

@@ -6,7 +6,7 @@ import java.util.List;
 public class SampleSavedGameGenerator {
 
 	private static final String mappath = "maps/seaside-skirmish.mwm";
-	private static final String savepath = "saves/sample-saved-game.mwg";
+	private static final String savepath = "saves/sample-save-game.mwg";
 
 	public static void main(String[] args) {
 		IModelCommunicator model = ModelManager.getInstance();

@@ -7,6 +7,9 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import newworldorder.game.model.Game;
 import newworldorder.game.model.Map;
 import newworldorder.game.model.Player;
@@ -14,28 +17,25 @@ import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Tile;
 import newworldorder.game.model.Village;
 
-import org.junit.Before;
-import org.junit.Test;
-
 public class ModelSerializerTest {
 
 	private Map testMap;
-	
+
 	private Map aMap;
 	List<Player> playerList;
 	private Player p1, p2;
 	private Game testGame;
-	
+
 	@Before
 	public void setUp() throws Exception {
-		testMap = new Map(3,2);
+		testMap = new Map(3, 2);
 		testMap.getTile(0, 0).setTerrainType(TerrainType.SEA);
 		testMap.getTile(1, 0).setTerrainType(TerrainType.SEA);
 		testMap.getTile(2, 0).setTerrainType(TerrainType.GRASS);
 		testMap.getTile(0, 1).setTerrainType(TerrainType.GRASS);
 		testMap.getTile(1, 1).setTerrainType(TerrainType.MEADOW);
 		testMap.getTile(2, 1).setTerrainType(TerrainType.TREE);
-		
+
 		p1 = new Player(4873, "Yung", "Lean", 0, 0, null);
 		p2 = new Player(2134, "2", "Chainz", 0, 0, null);
 		playerList = new ArrayList<Player>();
@@ -66,9 +66,10 @@ public class ModelSerializerTest {
 		try {
 			loadMap = ModelSerializer.loadMap("testfiles/junit-test-map-load.mwm");
 		} catch (Exception e) {
-			fail("Missing junit-test-map-load.mwm");
+			e.printStackTrace();
+			fail();
 		}
-		
+
 		for (Tile t : loadMap.getTiles()) {
 			assertEquals(t.getTerrainType(), testMap.getTile(t.hashCode()).getTerrainType());
 		}
@@ -89,31 +90,34 @@ public class ModelSerializerTest {
 		try {
 			loadGame = ModelSerializer.loadGameState("testfiles/junit-test-game-load.mwm");
 		} catch (Exception e) {
-			fail("Missing junit-test-game-load.mwm");
+			e.printStackTrace();
+			fail();
 		}
-		
+
 		assertEquals(loadGame.getPlayers().size(), testGame.getPlayers().size());
 		assertEquals(loadGame.getRoundCount(), testGame.getRoundCount());
 		assertEquals(loadGame.getMap().getHeight(), testGame.getMap().getHeight());
 		assertEquals(loadGame.getMap().getWidth(), testGame.getMap().getWidth());
-		
+
 		for (Player p : loadGame.getPlayers()) {
 			boolean exists = false;
 			for (Player sp : testGame.getPlayers()) {
-				if (p.getPlayerId() == sp.getPlayerId()) exists = true;
+				if (p.getPlayerId() == sp.getPlayerId())
+					exists = true;
 			}
 			assertTrue(exists);
 		}
-		
+
 		for (int y = 0; y < loadGame.getMap().getHeight(); y++) {
 			for (int x = 0; x < loadGame.getMap().getWidth(); x++) {
 				Tile lt = loadGame.getMap().getTile(x, y);
 				Tile tt = testGame.getMap().getTile(x, y);
-				
+
 				assertEquals(lt.getTerrainType(), tt.getTerrainType());
 				if (lt.getVillage() != null) {
 					assertEquals(lt.getVillage().getVillageType(), tt.getVillage().getVillageType());
-					assertEquals(lt.getVillage().getControlledBy().getPlayerId(), tt.getVillage().getControlledBy().getPlayerId());
+					assertEquals(lt.getVillage().getControlledBy().getPlayerId(), tt.getVillage().getControlledBy()
+							.getPlayerId());
 				}
 			}
 		}

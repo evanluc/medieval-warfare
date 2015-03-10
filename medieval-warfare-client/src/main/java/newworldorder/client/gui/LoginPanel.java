@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -19,7 +20,7 @@ public class LoginPanel extends BasePanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final JTextField field = new JTextField(20);
 
 	public LoginPanel() {
@@ -66,9 +67,12 @@ public class LoginPanel extends BasePanel {
 			@Override
 			public void actionPerformed(ActionEvent pEvent) {
 				String username = field.getText();
-//				aMainView.setName(username);
-				controller.login(username, "password");
-				panelController.setJoinGame();
+				if (controller.login(username, "password")) {
+					panelController.setJoinGame();
+				}
+				else {
+					JOptionPane.showMessageDialog(enter, "Please enter a valid username.", "Invalid username", JOptionPane.ERROR_MESSAGE);
+				}
 				field.setText("");
 			}
 		});
