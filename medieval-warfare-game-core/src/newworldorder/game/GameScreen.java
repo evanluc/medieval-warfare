@@ -17,13 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+
+
 public class GameScreen implements Screen {
 	//private Stage stage = new Stage();
 	private TiledMapRenderer tiledMapRenderer;
 	private OrthographicCamera camera;
 	private TiledMapStage stage;
-	private Game game;
-
+	private MedievalWarfareGame game;
 
 	public GameScreen(final MedievalWarfareGame game, TiledMapRenderer tiledMapRenderer, TiledMapStage stage, OrthographicCamera camera){
 		this.tiledMapRenderer = tiledMapRenderer; 
@@ -31,22 +32,39 @@ public class GameScreen implements Screen {
 		this.stage = stage; 
 		this.game = game; 
 	}
-	
+
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);	
-
+		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
+		System.out.println(game.getModel().getUpdatedTiles());
+		stage.getViewport().setCamera(camera);
 	}
 
 	@Override
 	public void render(float delta) {
-	 	Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	
+		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 		stage.draw();
-			
+		move(delta);
+
+	}
+
+	public void move(float delta){
+		if(Gdx.input.isKeyPressed(Keys.LEFT)){
+            camera.translate(-3,0);		}
+		if(Gdx.input.isKeyPressed(Keys.RIGHT)){
+            camera.translate(3,0);		}
+		if(Gdx.input.isKeyPressed(Keys.UP)){
+			camera.translate(0,3);
+		}    
+		if(Gdx.input.isKeyPressed(Keys.DOWN)){
+			camera.translate(0,-3);
+		}
+
 	}
 
 	@Override

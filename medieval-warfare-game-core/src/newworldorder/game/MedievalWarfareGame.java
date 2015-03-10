@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Map;
 import newworldorder.game.model.StructureType;
@@ -31,6 +30,8 @@ import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Unit;
 import newworldorder.game.model.UnitType;
 import newworldorder.game.model.VillageType;
+import newworldorder.game.driver.IModelCommunicator;
+import newworldorder.game.driver.ModelManager;
 import newworldorder.game.driver.UITileDescriptor;
 
 public class MedievalWarfareGame extends Game {
@@ -40,17 +41,19 @@ public class MedievalWarfareGame extends Game {
 	Sprite sprite;
 	Texture texture;
 	OrthographicCamera camera;
-	@Override
-	public void create() {
+	private IModelCommunicator model = ModelManager.getInstance();
 
-		tiledMap = new TmxMapLoader().load("./map/biggerTiles.tmx");
+	@Override
+	public void create () {
+
+		tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);		
 
-		TiledMapStage stage = new TiledMapStage(tiledMap);
+		TiledMapStage stage = new TiledMapStage(tiledMap,model);
 		this.setScreen(new GameScreen(this, tiledMapRenderer, stage, camera));
 
 	}
@@ -59,5 +62,9 @@ public class MedievalWarfareGame extends Game {
 	public void render () {
 
 		super.render();
+	}
+	
+	public IModelCommunicator getModel(){
+		return model;
 	}
 }

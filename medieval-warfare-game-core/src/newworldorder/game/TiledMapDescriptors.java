@@ -11,14 +11,14 @@ public class TiledMapDescriptors {
 		this.terrainLayer = (TiledMapTileLayer) tiledMap.getLayers().get("terrain");
 		this.unitLayer = (TiledMapTileLayer) tiledMap.getLayers().get("unit");
 		this.structureLayer = (TiledMapTileLayer) tiledMap.getLayers().get("structure");
-
+		this.villageLayer = (TiledMapTileLayer) tiledMap.getLayers().get("village");
 		
 		
 		this.colourTileSet = tiledMap.getTileSets().getTileSet("colourtiles");
 		this.terrainTileSet = tiledMap.getTileSets().getTileSet("terraintiles");
 		this.unitTileSet = tiledMap.getTileSets().getTileSet("unittiles");
 		this.structureTileSet = tiledMap.getTileSets().getTileSet("structuretiles");
-
+		this.villageTileSet = tiledMap.getTileSets().getTileSet("villagetiles");
 		
 		//setting our tile colour for easy access
 		this.blueTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(1);
@@ -46,10 +46,15 @@ public class TiledMapDescriptors {
 		this.peasantTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(17);
 		this.soldierTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(18);
 
+		//setting our structure tiles for easy access
+		
 		this.roadTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(19);
 		this.tombstoneTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(20);
 		this.towerTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(21);
 		
+		//setting our village tiles for easy access
+		
+		this.hovelTile = villageTileSet.getTile(22);
 		
 	}
 	
@@ -58,6 +63,7 @@ public class TiledMapDescriptors {
 	public final TiledMapTileLayer terrainLayer;
 	public final TiledMapTileLayer unitLayer;
 	public final TiledMapTileLayer structureLayer;
+	public final TiledMapTileLayer villageLayer;
 	
 //OUr tileset for easy access.
 	
@@ -65,6 +71,7 @@ public class TiledMapDescriptors {
 	public final TiledMapTileSet terrainTileSet;
 	public final TiledMapTileSet unitTileSet;
 	public final TiledMapTileSet structureTileSet;
+	public final TiledMapTileSet villageTileSet;
 
 	
 //Our tiledMap colour tiles for easy access. 	
@@ -95,5 +102,9 @@ public class TiledMapDescriptors {
 	public final TiledMapTile roadTile;
 	public final TiledMapTile towerTile;
 	public final TiledMapTile tombstoneTile;
+	
+//our village tiles for easy access
+	
+	public final TiledMapTile hovelTile;
 	
 }

@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-
 import java.util.List;
 
+import newworldorder.game.driver.IModelCommunicator;
 import newworldorder.game.driver.UIActionType;
 import newworldorder.game.driver.UITileDescriptor;
 import newworldorder.game.model.ColourType;
@@ -20,16 +20,19 @@ import newworldorder.game.model.StructureType;
 import newworldorder.game.model.TerrainType;
 import newworldorder.game.model.Tile;
 import newworldorder.game.model.UnitType;
+import newworldorder.game.model.VillageType;
 public class TiledMapStage extends Stage {
-
+	
 	private TiledMap tiledMap;
 	private final TiledMapDescriptors tiledMapDescriptors; 
 	private boolean multiActionInput;
 	private TiledMapActor previousActor;
+	private IModelCommunicator model;
+	
+	public TiledMapStage(TiledMap tiledMap, IModelCommunicator model) {
 
-	public TiledMapStage(TiledMap tiledMap) {
-		
 		this.multiActionInput = false;
+		this.model = model;
 
 		//creating our tiledMapDescriptors for easy access when we update
 		this.tiledMapDescriptors = new TiledMapDescriptors(tiledMap);
@@ -73,6 +76,7 @@ public class TiledMapStage extends Stage {
 			tiledMapTerrainUpdate(currentTile);
 			tiledMapUnitUpdate(currentTile);
 			tiledMapStructureUpdate(currentTile);
+			tiledMapVillageUpdate(currentTile);
 
 		}
 	}
@@ -83,33 +87,41 @@ public class TiledMapStage extends Stage {
 		Cell updateCell = tiledMapDescriptors.colourLayer.getCell(x,y);
 
 		ColourType newColour = updatedDescription.colourType;
-		switch(newColour){
-		case BLUE: updateCell.setTile(tiledMapDescriptors.blueTile); 
-		break; 
+		if (newColour != null){
+			switch(newColour){
 
-		case RED: updateCell.setTile(tiledMapDescriptors.redTile);
-		break;
 
-		case GREEN: updateCell.setTile(tiledMapDescriptors.greenTile);
-		break;
+			case BLUE: updateCell.setTile(tiledMapDescriptors.blueTile); 
+			break; 
 
-		case PURPLE: updateCell.setTile(tiledMapDescriptors.purpleTile);
-		break;
+			case RED: updateCell.setTile(tiledMapDescriptors.redTile);
+			break;
 
-		case ORANGE: updateCell.setTile(tiledMapDescriptors.orangeTile);
-		break;
+			case GREEN: updateCell.setTile(tiledMapDescriptors.greenTile);
+			break;
 
-		case BROWN: updateCell.setTile(tiledMapDescriptors.brownTile);
-		break;			
+			case PURPLE: updateCell.setTile(tiledMapDescriptors.purpleTile);
+			break;
 
-		case PINK: updateCell.setTile(tiledMapDescriptors.pinkTile);
-		break;		
+			case ORANGE: updateCell.setTile(tiledMapDescriptors.orangeTile);
+			break;
 
-		case YELLOW: updateCell.setTile(tiledMapDescriptors.yellowTile);
-		break;					
+			case BROWN: updateCell.setTile(tiledMapDescriptors.brownTile);
+			break;			
 
+			case PINK: updateCell.setTile(tiledMapDescriptors.pinkTile);
+			break;		
+
+			case YELLOW: updateCell.setTile(tiledMapDescriptors.yellowTile);
+			break;
+
+			}
 		}
 
+		else{updateCell.setTile(tiledMapDescriptors.neutralTile); 
+
+
+		}
 
 	}
 
@@ -119,22 +131,23 @@ public class TiledMapStage extends Stage {
 		Cell updateCell = tiledMapDescriptors.terrainLayer.getCell(x,y);
 
 		TerrainType newTerrain = updatedDescription.terrainType;
-		switch(newTerrain){
-		case MEADOW: updateCell.setTile(tiledMapDescriptors.meadowTile); 
-		break; 
+		if (newTerrain != null){
 
-		case GRASS: updateCell.setTile(tiledMapDescriptors.grassTile);
-		break;
+			switch(newTerrain){
+			case MEADOW: updateCell.setTile(tiledMapDescriptors.meadowTile); 
+			break; 
 
-		case SEA: updateCell.setTile(tiledMapDescriptors.oceanTile);
-		break;
+			case GRASS: updateCell.setTile(tiledMapDescriptors.grassTile);
+			break;
 
-		case TREE: updateCell.setTile(tiledMapDescriptors.treeTile);
-		break;
+			case SEA: updateCell.setTile(tiledMapDescriptors.oceanTile);
+			break;
 
-
+			case TREE: updateCell.setTile(tiledMapDescriptors.treeTile);
+			break;
+			}
 		}
-
+		else updateCell.setTile(tiledMapDescriptors.nullTile); 
 
 	}
 
@@ -145,21 +158,47 @@ public class TiledMapStage extends Stage {
 
 		UnitType newUnit = updatedDescription.unitType;
 
-		switch(newUnit){
-		case PEASANT: updateCell.setTile(tiledMapDescriptors.peasantTile);
-		break;
+		if(newUnit != null){
+			switch(newUnit){
+			case PEASANT: updateCell.setTile(tiledMapDescriptors.peasantTile);
+			break;
 
-		case INFANTRY: updateCell.setTile(tiledMapDescriptors.infantryTile);
-		break;
+			case INFANTRY: updateCell.setTile(tiledMapDescriptors.infantryTile);
+			break;
 
-		case SOLDIER: updateCell.setTile(tiledMapDescriptors.soldierTile);
-		break;
+			case SOLDIER: updateCell.setTile(tiledMapDescriptors.soldierTile);
+			break;
 
-		case KNIGHT: updateCell.setTile(tiledMapDescriptors.knightTile);
-		break;
+			case KNIGHT: updateCell.setTile(tiledMapDescriptors.knightTile);
+			break;
+			}
 
 		}
+		else updateCell.setTile(tiledMapDescriptors.nullTile); 
+	}
+	
+	public void tiledMapVillageUpdate(UITileDescriptor updatedDescription){
+		int x = updatedDescription.x;
+		int y = updatedDescription.y;
+		Cell updateCell = tiledMapDescriptors.unitLayer.getCell(x,y);
+		VillageType newVillage = updatedDescription.villageType;
+		
+		if(newVillage != null){
+			switch(newVillage){
+			case HOVEL: updateCell.setTile(tiledMapDescriptors.hovelTile);
+			break;
 
+			case TOWN: updateCell.setTile(tiledMapDescriptors.nullTile);
+			break;
+
+			case FORT: updateCell.setTile(tiledMapDescriptors.nullTile);
+			break;
+
+			}
+
+		}
+		else updateCell.setTile(tiledMapDescriptors.nullTile); 
+		
 	}
 
 	public void tiledMapStructureUpdate(UITileDescriptor updatedDescription){
@@ -168,145 +207,20 @@ public class TiledMapStage extends Stage {
 		Cell updateCell = tiledMapDescriptors.structureLayer.getCell(x,y);
 
 		StructureType newStructure = updatedDescription.structureType;
+		if (newStructure != null){
+			switch(newStructure){
 
-		switch(newStructure){
+			case ROAD: updateCell.setTile(tiledMapDescriptors.roadTile);
+			break;
 
-		case ROAD: updateCell.setTile(tiledMapDescriptors.roadTile);
-		break;
+			case WATCHTOWER: updateCell.setTile(tiledMapDescriptors.towerTile);
+			break;
 
-		case WATCHTOWER: updateCell.setTile(tiledMapDescriptors.towerTile);
-		break;
-
-		case TOMBSTONE: updateCell.setTile(tiledMapDescriptors.tombstoneTile);
-		break;
-
-		}
-
-
-	}
-
-	public void createMap(Map map){
-		int height = map.getHeight();
-		int width = map.getWidth();
-
-		for(int i = 0; i < height; i ++){
-			for(int j = 0; j < width; j++){
-				Tile tile = map.getTile(i, j);
-				tiledMapStructureSet(tile);
+			case TOMBSTONE: updateCell.setTile(tiledMapDescriptors.tombstoneTile);
+			break;
 			}
 		}
-	}
-
-	public void tiledMapColourSet(Tile tile){
-		int x = tile.getX();
-		int y = tile.getY();
-		Cell updateCell = tiledMapDescriptors.colourLayer.getCell(x,y);
-		
-		ColourType initialColour = tile.getControllingPlayer().getColour();
-		
-		if (initialColour !=null){
-		switch(initialColour){
-		case BLUE: updateCell.setTile(tiledMapDescriptors.blueTile); 
-		break; 
-
-		case RED: updateCell.setTile(tiledMapDescriptors.redTile);
-		break;
-
-		case GREEN: updateCell.setTile(tiledMapDescriptors.greenTile);
-		break;
-
-		case PURPLE: updateCell.setTile(tiledMapDescriptors.purpleTile);
-		break;
-
-		case ORANGE: updateCell.setTile(tiledMapDescriptors.orangeTile);
-		break;
-
-		case BROWN: updateCell.setTile(tiledMapDescriptors.brownTile);
-		break;			
-
-		case PINK: updateCell.setTile(tiledMapDescriptors.pinkTile);
-		break;		
-
-		case YELLOW: updateCell.setTile(tiledMapDescriptors.yellowTile);
-		break;					
-
-		}
-		
-		}
-
-	}
-
-	public void tiledMapTerrainSet(Tile tile){
-		int x = tile.getX();
-		int y = tile.getY();
-		Cell updateCell = tiledMapDescriptors.terrainLayer.getCell(x,y);
-		
-		TerrainType initialTerrain = tile.getTerrainType();
-		if(initialTerrain !=null){
-		switch(initialTerrain){
-		case MEADOW: updateCell.setTile(tiledMapDescriptors.meadowTile); 
-		break; 
-
-		case GRASS: updateCell.setTile(tiledMapDescriptors.grassTile);
-		break;
-
-		case SEA: updateCell.setTile(tiledMapDescriptors.oceanTile);
-		break;
-
-		case TREE: updateCell.setTile(tiledMapDescriptors.treeTile);
-		break;
-
-
-		}
-		}
-		
-	}
-
-	public void tiledMapUnitSet(Tile tile){
-		int x = tile.getX();
-		int y = tile.getY();
-		Cell updateCell = tiledMapDescriptors.unitLayer.getCell(x,y);
-		
-		UnitType initialUnit = tile.getUnit().getUnitType();
-		
-		if(initialUnit != null){
-		switch(initialUnit){
-		case PEASANT: updateCell.setTile(tiledMapDescriptors.peasantTile);
-		break;
-
-		case INFANTRY: updateCell.setTile(tiledMapDescriptors.infantryTile);
-		break;
-
-		case SOLDIER: updateCell.setTile(tiledMapDescriptors.soldierTile);
-		break;
-
-		case KNIGHT: updateCell.setTile(tiledMapDescriptors.knightTile);
-		break;
-
-		}
-
-	}
-	}
-	public void tiledMapStructureSet(Tile tile){
-		int x = tile.getX();
-		int y = tile.getY();
-		Cell updateCell = tiledMapDescriptors.structureLayer.getCell(x,y);
-		
-		StructureType initialStructure = tile.getStructure();
-		if (initialStructure != null){
-		switch(initialStructure){
-
-		case ROAD: updateCell.setTile(tiledMapDescriptors.roadTile);
-		break;
-
-		case WATCHTOWER: updateCell.setTile(tiledMapDescriptors.towerTile);
-		break;
-
-		case TOMBSTONE: updateCell.setTile(tiledMapDescriptors.tombstoneTile);
-		break;
-
-		}
-	}
+		else updateCell.setTile(tiledMapDescriptors.nullTile); 
 	}
 
 	public boolean getMultiActionInput(){
@@ -316,16 +230,23 @@ public class TiledMapStage extends Stage {
 	public void setMultiActionInput(boolean bool){
 		this.multiActionInput = bool;
 	}
-	
+
 	public void setPreviousActor(TiledMapActor previousActor){
 		this.previousActor = previousActor;
-		
+
 	}
-	
+
 	public TiledMapActor getPreviousActor(){
 		return previousActor;
 	}
-}
+	
+	public TiledMapDescriptors getTiledMapDescritors(){
+		return tiledMapDescriptors;
+	}
 
+	public IModelCommunicator getModel(){
+		return model;
+	}
+}
 
 
