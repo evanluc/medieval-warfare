@@ -71,6 +71,11 @@
    <image width="55" height="48" source="structureTiles/towertile.png"/>
   </tile>
  </tileset>
+ <tileset firstgid="22" name="villagetiles" tilewidth="55" tileheight="48">
+  <tile id="0">
+   <image width="55" height="48" source="villagetiles/hovel.png"/>
+  </tile>
+ </tileset>
  <layer name="colour" width="28" height="18">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
@@ -87,6 +92,11 @@
   </data>
  </layer>
  <layer name="unit" width="28" height="18">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
+ <layer name="village" width="28" height="18">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
   </data>

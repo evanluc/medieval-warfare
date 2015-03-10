@@ -26,5 +26,4 @@ public class SingleClickListener extends ClickListener {
 		stage.setPreviousActor(actor);
 		window.setVisible(false);
 	}
-
 }

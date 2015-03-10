@@ -34,11 +34,17 @@ public class ClientController implements IController {
 	}
 
 	@Override
-	public void login(String username, String password) {
-		LoginCommand loginCommand = new LoginCommand(username, password);
-		adapter.send(loginCommand, commandExchange, routingKey);
-		session.setUsername(username);
-		consumer.startConsumingFromDirectExchange(notifyExchange, username);
+	public boolean login(String username, String password) {
+		if (username.equals("") || username == null) {
+			return false;
+		}
+		else {
+			LoginCommand loginCommand = new LoginCommand(username, password);
+			adapter.send(loginCommand, commandExchange, routingKey);
+			session.setUsername(username);
+			consumer.startConsumingFromDirectExchange(notifyExchange, username);
+			return true;
+		}
 	}
 
 	@Override
