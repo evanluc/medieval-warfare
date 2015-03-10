@@ -3,6 +3,7 @@ package newworldorder.common.network;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 
@@ -21,6 +22,16 @@ public class CommandConsumer {
 		DirectExchange exchange = new DirectExchange(exchangeName);
 		admin.declareExchange(exchange);
 		admin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(routingKey));
+		container.addQueues(queue);
+		
+		container.start();
+	}
+	
+	public void startConsumingFromFanoutExchange(String exchangeName) {
+		Queue queue = admin.declareQueue();
+		FanoutExchange exchange = new FanoutExchange(exchangeName);
+		admin.declareExchange(exchange);
+		admin.declareBinding(BindingBuilder.bind(queue).to(exchange));
 		container.addQueues(queue);
 		
 		container.start();

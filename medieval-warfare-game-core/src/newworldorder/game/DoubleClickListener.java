@@ -4,6 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import newworldorder.game.driver.IModelCommunicator;
+import newworldorder.game.driver.ModelManager;
 import newworldorder.game.driver.UIActionType;
 
 public class DoubleClickListener extends ClickListener {
@@ -11,6 +13,7 @@ public class DoubleClickListener extends ClickListener {
 	private Window window;
 	private TiledMapStage stage;
 	private UIActionType actionType;
+	private IModelCommunicator controller = ModelManager.getInstance();
 
 	public DoubleClickListener(TiledMapActor actor, Window window, TiledMapStage stage, UIActionType actionType) {
 		this.actor = actor;
@@ -23,6 +26,6 @@ public class DoubleClickListener extends ClickListener {
 	public void clicked(InputEvent event, float x, float y) {
 		window.setVisible(false);
 		System.out.println("sending action type : " + actionType);
-
+		controller.informOfUserAction(actionType, actor.getXCell(), actor.getYCell());
 	}
 }
