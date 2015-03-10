@@ -48,6 +48,13 @@ public class ClientController implements IController {
 	}
 
 	@Override
+	public void logout() {
+		session.setUsername("");
+		consumer.stop();
+		// TODO: send logout command to server to remove from queue.
+	}
+
+	@Override
 	public void requestGame(int numPlayers) {
 		String username = session.getUsername();
 		GameRequest curRequest = new GameRequest(username, numPlayers);
