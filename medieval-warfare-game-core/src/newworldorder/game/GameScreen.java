@@ -15,6 +15,7 @@ public class GameScreen implements Screen {
 	private TiledMapStage stage;
 	private MedievalWarfareGame game;
 	private HUD hud;
+	private ChatWindow chat;
 
 	public GameScreen(final MedievalWarfareGame game, TiledMapRenderer tiledMapRenderer, TiledMapStage stage, OrthographicCamera camera) {
 		this.tiledMapRenderer = tiledMapRenderer;
@@ -38,7 +39,10 @@ public class GameScreen implements Screen {
 		hud.setHeight(150);
 		hud.setPosition(35, height);
 
+		// chat = new ChatWindow("Chat Window", skin);
+
 		stage.addActor(hud);
+		// stage.addActor(chat);
 
 	}
 
@@ -72,7 +76,6 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 			camera.translate(0, -3);
 		}
-
 	}
 
 	@Override
