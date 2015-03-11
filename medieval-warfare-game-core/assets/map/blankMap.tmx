@@ -101,4 +101,9 @@
    H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
   </data>
  </layer>
+ <layer name="highlight" width="28" height="18" opacity="0.3">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
 </map>

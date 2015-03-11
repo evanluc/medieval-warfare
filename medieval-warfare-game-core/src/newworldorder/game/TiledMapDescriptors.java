@@ -12,6 +12,7 @@ public class TiledMapDescriptors {
 		this.unitLayer = (TiledMapTileLayer) tiledMap.getLayers().get("unit");
 		this.structureLayer = (TiledMapTileLayer) tiledMap.getLayers().get("structure");
 		this.villageLayer = (TiledMapTileLayer) tiledMap.getLayers().get("village");
+		this.highlightLayer = (TiledMapTileLayer) tiledMap.getLayers().get("highlight");
 		
 		
 		this.colourTileSet = tiledMap.getTileSets().getTileSet("colourtiles");
@@ -64,7 +65,8 @@ public class TiledMapDescriptors {
 	public final TiledMapTileLayer unitLayer;
 	public final TiledMapTileLayer structureLayer;
 	public final TiledMapTileLayer villageLayer;
-	
+	public final TiledMapTileLayer highlightLayer;
+
 //OUr tileset for easy access.
 	
 	public final TiledMapTileSet colourTileSet;

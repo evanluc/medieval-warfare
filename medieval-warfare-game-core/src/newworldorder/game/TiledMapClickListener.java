@@ -1,7 +1,8 @@
 package newworldorder.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,7 +16,6 @@ import newworldorder.game.driver.UIActionType;
 import newworldorder.game.driver.UIVillageDescriptor;
 
 public class TiledMapClickListener extends ClickListener {
-
 	private TiledMapActor actor;
 	private TiledMapStage stage;
 	private IModelCommunicator controller = ModelManager.getInstance();
@@ -24,7 +24,8 @@ public class TiledMapClickListener extends ClickListener {
 	public TiledMapClickListener(TiledMapActor actor, Skin skin) {
 		this.actor = actor;
 		stage = (TiledMapStage) actor.getStage();
-		this.skin = skin;;
+		this.skin = skin;
+		this.setButton(Input.Buttons.LEFT);
 	}
 
 	@Override
@@ -50,7 +51,7 @@ public class TiledMapClickListener extends ClickListener {
 		}
 		else{
 
-			if (vil != null) {
+		/*	if (vil != null) {
 				PopUpWindow popUp = new PopUpWindow("Village Info", skin, actor, stage, vil);
 				popUp.setWidth(250);
 				popUp.setHeight(150);
@@ -59,7 +60,7 @@ public class TiledMapClickListener extends ClickListener {
 
 				stage.addActor(popUp);
 
-			} else if (stage.getMultiActionInput() == false) {
+			}*/ if (stage.getMultiActionInput() == false) {
 				PopUpWindow popUp = new PopUpWindow("moves", skin, actor, stage);
 				popUp.setWidth(250);
 				popUp.setHeight(450);
@@ -68,7 +69,7 @@ public class TiledMapClickListener extends ClickListener {
 				stage.addActor(popUp);
 			}
 
-			else if (stage.getMultiActionInput() == true) {
+			 if (stage.getMultiActionInput() == true) {
 				TiledMapActor previousActor = stage.getPreviousActor();
 				System.out.println("moving tile from " + previousActor.getXCell() + " " + previousActor.getYCell() + " to "
 						+ actor.getXCell() + " " + actor.getYCell());
@@ -78,6 +79,17 @@ public class TiledMapClickListener extends ClickListener {
 				stage.setMultiActionInput(false);
 			}
 		}
+	}
+	@Override
+	public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
+		Cell highlightCell = stage.getTiledMapDescritors().highlightLayer.getCell(actor.getXCell(),actor.getYCell());
+		highlightCell.setTile(stage.getTiledMapDescritors().redTile);
+	}
+
+	@Override
+	public void exit(InputEvent event, float x, float y, int pointer, Actor toActor){
+		Cell highlightCell = stage.getTiledMapDescritors().highlightLayer.getCell(actor.getXCell(),actor.getYCell());
+		highlightCell.setTile(stage.getTiledMapDescritors().nullTile);
 	}
 
 }
