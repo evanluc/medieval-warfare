@@ -29,7 +29,7 @@ public class CommandConsumer {
 
 	public void startConsumingFromFanoutExchange(String exchangeName) {
 		Queue queue = admin.declareQueue();
-		FanoutExchange exchange = new FanoutExchange(exchangeName, false, false);
+		FanoutExchange exchange = new FanoutExchange(exchangeName, false, true);
 		admin.declareExchange(exchange);
 		admin.declareBinding(BindingBuilder.bind(queue).to(exchange));
 		container.setQueues(queue);
