@@ -16,9 +16,7 @@ public class GameScreen implements Screen {
 	private MedievalWarfareGame game;
 	private HUD hud;
 
-	public GameScreen(final MedievalWarfareGame game,
-			TiledMapRenderer tiledMapRenderer, TiledMapStage stage,
-			OrthographicCamera camera) {
+	public GameScreen(final MedievalWarfareGame game, TiledMapRenderer tiledMapRenderer, TiledMapStage stage, OrthographicCamera camera) {
 		this.tiledMapRenderer = tiledMapRenderer;
 		this.camera = camera;
 		this.stage = stage;
@@ -28,16 +26,14 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel()
-				.getUpdatedTiles());
+		stage.tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
 
 		// System.out.println(game.getModel().getUpdatedTiles());
 		stage.getViewport().setCamera(camera);
 
 		float height = stage.getHeight();
 		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-		hud = new HUD("HUD", skin, game.getModel().getCurrentPlayerTurn(), game
-				.getModel().getTurnNumber(), height);
+		hud = new HUD("HUD", skin, game.getModel().getCurrentPlayerTurn(), game.getModel().getTurnNumber(), height);
 		hud.setWidth(150);
 		hud.setHeight(150);
 		hud.setPosition(35, height);
@@ -53,11 +49,11 @@ public class GameScreen implements Screen {
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
-		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
-		/*if (game.getModel().getCurrentPlayerTurn() != null) {
+		stage.tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
+		if (game.getModel().getCurrentPlayerTurn() != null) {
 			hud.setCurrentUsername(game.getModel().getCurrentPlayerTurn());
 			hud.setCurrentTurn(game.getModel().getTurnNumber());
-		}*/
+		}
 		stage.draw();
 		move(delta);
 

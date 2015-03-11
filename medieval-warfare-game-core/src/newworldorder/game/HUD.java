@@ -1,33 +1,25 @@
 package newworldorder.game;
 
-import newworldorder.game.driver.IModelCommunicator;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
-public class HUD extends Window{
-	private String currentPlayerName;
-	private int turnNumber;
-	private Skin skin;
-	
-	
-	public HUD(String title, Skin skin, String userName, int turnNumber, float height){
-		super(title,skin);
-		this.skin = skin;
-	}
-	
-	public void setCurrentUsername(String currentUsername){
-		Label playerTurnText = new Label("current player :\n" + currentUsername,skin);
-		this.add(playerTurnText).row();
+public class HUD extends Window {
+	private Label playerTurnText, turnNumberText;
 
-	}
-	
-	public void setCurrentTurn(int currentTurn){
-		Label turnNumberText = new Label("turn number :\n" + currentTurn,skin);
+	public HUD(String title, Skin skin, String userName, int turnNumber, float height) {
+		super(title, skin);
+		playerTurnText = new Label("Current player: ", skin);
+		turnNumberText = new Label("turn number : 0", skin);
+		this.add(playerTurnText).row();
 		this.add(turnNumberText).row();
-	
 	}
-	
+
+	public void setCurrentUsername(String currentUsername) {
+		playerTurnText.setText("Current player: " + currentUsername);
+	}
+
+	public void setCurrentTurn(int currentTurn) {
+		turnNumberText.setText("Turn number: " + currentTurn);
+	}
 }
-	
