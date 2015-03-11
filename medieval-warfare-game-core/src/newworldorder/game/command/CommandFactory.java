@@ -2,7 +2,6 @@ package newworldorder.game.command;
 
 import newworldorder.game.driver.UIActionType;
 import newworldorder.game.model.GameEngine;
-import newworldorder.game.model.Region;
 import newworldorder.game.model.Tile;
 import newworldorder.game.model.Unit;
 import newworldorder.game.model.UnitType;
@@ -183,11 +182,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Region r = t.getRegion();
-			if (r == null) {
-				System.out.println("Region is null");
-			}
-			Village v = r.getVillage();
+			Village v = t.getRegion().getVillage();
 			if (v != null)
 				engine.buildUnit(v, t, UnitType.PEASANT);
 			else

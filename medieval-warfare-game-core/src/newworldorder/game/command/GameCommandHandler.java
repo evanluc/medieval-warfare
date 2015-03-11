@@ -11,10 +11,8 @@ public class GameCommandHandler {
 	}
 
 	public void handle(IGameCommand command) {
-		System.out.println("Game command received.");
+		System.out.println("Received command: " + command.getClass().getName());
 		command.setGameEngine(engine);
-		System.out.println("Game engine has been set in command.");
 		command.execute();
-		System.out.println("Command executed successfully.");
 	}
 }
