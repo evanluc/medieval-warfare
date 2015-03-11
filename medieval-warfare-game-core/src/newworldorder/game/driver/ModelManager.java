@@ -220,25 +220,25 @@ public class ModelManager implements IModelCommunicator, Observer {
 			e.printStackTrace();
 		}
 		if (presetMap != null) {
+			engine.newGame(players, presetMap);
 			if (this.isLocalPlayersTurn()) {
-				engine.newGame(players, presetMap);
 				System.out.println("First player");
 				IGameCommand command = new SetupGameCommand(engine.getGameState());
 				amqpAdapter.send(command, exchange, "");
 			}
 			else {
-				do {
-					try {
-						Thread.sleep(500);
-					}
-					catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} while (engine.getGameState() == null);
-				addObserverToTiles(engine.getGameState().getMap());
-				gameRunning = true;
+				// Wait for GameState to be updated. Should probably use
+				// blocking consumer.
+				try {
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			addObserverToTiles(engine.getGameState().getMap());
+			gameRunning = true;
 		}
 	}
 
