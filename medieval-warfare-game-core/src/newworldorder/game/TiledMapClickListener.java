@@ -35,7 +35,7 @@ public class TiledMapClickListener extends ClickListener {
 		if (vil != null) {
 			// begin temp
 			PopUpWindow popUp = new PopUpWindow("Village Info", skin, actor, stage, vil);
-			popUp.setPosition(stage.getCamera().viewportWidth / 2 - popUp.getWidth() / 2, stage.getCamera().viewportHeight / 2 - popUp.getHeight()
+			popUp.setPosition(stage.getCamera().position.x / 2 - popUp.getWidth() / 2, stage.getCamera().position.y / 2 - popUp.getHeight()
 					/ 2);
 			popUp.setWidth(250);
 			popUp.setHeight(150);
