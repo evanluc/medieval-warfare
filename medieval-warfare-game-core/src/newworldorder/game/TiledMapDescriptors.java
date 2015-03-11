@@ -56,7 +56,9 @@ public class TiledMapDescriptors {
 		//setting our village tiles for easy access
 		
 		this.hovelTile = villageTileSet.getTile(22);
-		
+		this.townTile = villageTileSet.getTile(23);
+		this.fortTile = villageTileSet.getTile(24);
+
 	}
 	
 //Our tiledMapLayers for easy access. 	
@@ -108,5 +110,7 @@ public class TiledMapDescriptors {
 //our village tiles for easy access
 	
 	public final TiledMapTile hovelTile;
-	
+	public final TiledMapTile townTile;
+	public final TiledMapTile fortTile;
+
 }

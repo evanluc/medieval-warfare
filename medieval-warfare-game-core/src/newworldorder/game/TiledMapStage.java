@@ -191,10 +191,10 @@ public class TiledMapStage extends Stage {
 			case HOVEL: updateCell.setTile(tiledMapDescriptors.hovelTile);
 			break;
 
-			case TOWN: updateCell.setTile(tiledMapDescriptors.nullTile);
+			case TOWN: updateCell.setTile(tiledMapDescriptors.townTile);
 			break;
 
-			case FORT: updateCell.setTile(tiledMapDescriptors.nullTile);
+			case FORT: updateCell.setTile(tiledMapDescriptors.fortTile);
 			break;
 
 			}

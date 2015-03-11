@@ -75,6 +75,12 @@
   <tile id="0">
    <image width="55" height="48" source="villagetiles/hovel.png"/>
   </tile>
+  <tile id="1">
+   <image width="55" height="48" source="villagetiles/town.png"/>
+  </tile>
+  <tile id="2">
+   <image width="55" height="48" source="villagetiles/fort.png"/>
+  </tile>
  </tileset>
  <layer name="colour" width="28" height="18">
   <data encoding="base64" compression="gzip">
