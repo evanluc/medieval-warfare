@@ -86,7 +86,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 
 		if (!gameRunning)
 			return;
-
+	
 		IGameCommand command = CommandFactory.createCommand(action, x, y);
 		amqpAdapter.send(command, exchange, "");
 	}
