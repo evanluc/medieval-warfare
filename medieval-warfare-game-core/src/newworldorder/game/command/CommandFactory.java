@@ -146,7 +146,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Village v = t.getVillage();
+			Village v = t.getRegion().getVillage();
 			if (v != null)
 				engine.buildUnit(v, t, UnitType.INFANTRY);
 		}
@@ -164,7 +164,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Village v = t.getVillage();
+			Village v = t.getRegion().getVillage();
 			if (v != null)
 				engine.buildUnit(v, t, UnitType.KNIGHT);
 		}
@@ -182,9 +182,11 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Village v = t.getVillage();
+			Village v = t.getRegion().getVillage();
 			if (v != null)
 				engine.buildUnit(v, t, UnitType.PEASANT);
+			else
+				System.out.println("null");
 		}
 	}
 
@@ -200,7 +202,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Village v = t.getVillage();
+			Village v = t.getRegion().getVillage();
 			if (v != null)
 				engine.buildUnit(v, t, UnitType.SOLDIER);
 		}
