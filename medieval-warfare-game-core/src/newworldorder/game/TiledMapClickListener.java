@@ -36,10 +36,10 @@ public class TiledMapClickListener extends ClickListener {
 
 		if(stage.getModel().isLocalPlayersTurn()== false){
 			Window notTurnWindow = new Window("Not your turn!", skin);
-			Label stopItText = new Label("Your opponent is still making moves.\n Please wait until his turn end",skin);
+			Label stopItText = new Label("Your opponent is still making moves.\n Please wait until their turn ends\n",skin);
 			TextButton dismiss = new TextButton("dismiss",skin);
 			dismissListener dismissListener = new dismissListener(notTurnWindow);
-			notTurnWindow.add(stopItText).row();			notTurnWindow.add(dismiss);
+			notTurnWindow.add(stopItText).row();			
 			notTurnWindow.add(dismiss).row();
 			notTurnWindow.addListener(dismissListener);
 			notTurnWindow.setWidth(450);

@@ -59,6 +59,10 @@ public class PopUpWindow extends Window{
 			this.add(newButton).row();
 
 		}
+		TextButton dismiss = new TextButton("dismiss",skin);
+		dismiss.addListener(new dismissListener(this));
+		this.add(dismiss).row();
+		
 	}
 
 }
