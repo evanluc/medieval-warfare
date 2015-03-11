@@ -1,23 +1,11 @@
 package newworldorder.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
-
 
 public class GameScreen implements Screen {
 	//private Stage stage = new Stage();
@@ -48,6 +36,7 @@ public class GameScreen implements Screen {
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
+		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
 		stage.draw();
 		move(delta);
 

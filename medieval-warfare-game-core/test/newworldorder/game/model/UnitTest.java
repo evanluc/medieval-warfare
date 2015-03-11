@@ -112,11 +112,4 @@ public class UnitTest
     public void testGetUpkeep(){
     	assertTrue(u.getUpkeep() == 2);
     }
-    @Test
-    public void testKill(){
-    	u.kill();
-    	assertFalse(aVillage.getSupportedUnits().contains(u));
-    	assertTrue(aMap.getTile(1, 1).getUnit() == null);
-    	assertTrue(aMap.getTile(1, 1).getStructure() == StructureType.TOMBSTONE);
-    }
 }

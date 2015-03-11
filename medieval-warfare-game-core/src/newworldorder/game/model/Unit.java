@@ -105,11 +105,4 @@ public class Unit implements Serializable {
     public int getUpkeep() {
         return upkeep;
     }
-    
-    public void kill() {
-        // This operation replaces the unit with a tombstone;
-        myVillage.removeUnit(this);
-        tile.setUnit(null);
-        tile.setStructure(StructureType.TOMBSTONE);
-    }
 }
