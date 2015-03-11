@@ -25,7 +25,6 @@ public class TiledMapClickListener extends ClickListener {
 
 	@Override
 	public void clicked(InputEvent event, float x, float y) {
-		// System.out.println(actor.cell + " has been clicked.");
 		UIVillageDescriptor vil = ((TiledMapStage) actor.getStage()).getModel().getVillage(actor.getXCell(),
 				actor.getYCell());
 
@@ -33,18 +32,16 @@ public class TiledMapClickListener extends ClickListener {
 		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
 		if (vil != null) {
-			// begin temp
 			PopUpWindow popUp = new PopUpWindow("Village Info", skin, actor, stage, vil);
-			popUp.setPosition(stage.getCamera().position.x / 2 - popUp.getWidth() / 2, stage.getCamera().position.y / 2 - popUp.getHeight()
+			popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
 					/ 2);
 			popUp.setWidth(250);
 			popUp.setHeight(150);
 			stage.addActor(popUp);
-			// }
-			// //end temp
+
 		} else if (stage.getMultiActionInput() == false) {
 			PopUpWindow popUp = new PopUpWindow("moves", skin, actor, stage);
-			popUp.setPosition(stage.getWidth() / 2 - popUp.getWidth() / 2, stage.getHeight() / 2 - popUp.getHeight()
+			popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
 					/ 2);
 			popUp.setWidth(250);
 			popUp.setHeight(450);
