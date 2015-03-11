@@ -54,6 +54,8 @@ public class GameScreen implements Screen {
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
+		hud.setName(game.getModel().getCurrentPlayerTurn());
+		hud.setCurrentTurn(game.getModel().getTurnNumber());
 		stage.act();
 		stage.draw();
 		move(delta);
