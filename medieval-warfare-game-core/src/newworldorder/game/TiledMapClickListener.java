@@ -1,7 +1,5 @@
 package newworldorder.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,51 +18,51 @@ public class TiledMapClickListener extends ClickListener {
 	private TiledMapStage stage;
 	private IModelCommunicator controller = ModelManager.getInstance();
 	private Skin skin;
-	
+
 	public TiledMapClickListener(TiledMapActor actor, Skin skin) {
 		this.actor = actor;
 		stage = (TiledMapStage) actor.getStage();
-		this.skin = skin;;
+		this.skin = skin;
+		;
 	}
 
 	@Override
 	public void clicked(InputEvent event, float x, float y) {
-		UIVillageDescriptor vil = ((TiledMapStage) actor.getStage()).getModel().getVillage(actor.getXCell(),
-				actor.getYCell());
+		UIVillageDescriptor vil = ((TiledMapStage) actor.getStage()).getModel().getVillage(actor.getXCell(), actor.getYCell());
 
 		final TiledMapStage stage = (TiledMapStage) actor.getStage();
 
-		if(stage.getModel().isLocalPlayersTurn()!= false){
+		if (stage.getModel().isLocalPlayersTurn() == false) {
 			Window notTurnWindow = new Window("Not your turn!", skin);
-			Label stopItText = new Label("Your opponent is still making moves. Please wait until his turn end",skin);
-			TextButton dismiss = new TextButton("dismiss",skin);
+			Label stopItText = new Label("Your opponent is still making moves. Please wait until his turn end", skin);
+			TextButton dismiss = new TextButton("dismiss", skin);
 			dismissListener dismissListener = new dismissListener(notTurnWindow);
-			notTurnWindow.add(stopItText).row();			notTurnWindow.add(dismiss);
+			notTurnWindow.add(stopItText).row();
+			notTurnWindow.add(dismiss);
 			notTurnWindow.add(dismiss).row();
 			notTurnWindow.addListener(dismissListener);
 			notTurnWindow.setWidth(450);
 			notTurnWindow.setHeight(100);
-			notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y - notTurnWindow.getHeight()
-					/ 2);
+			notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y
+					- notTurnWindow.getHeight() / 2);
 			stage.addActor(notTurnWindow);
 		}
-		else{
+		else {
 
 			if (vil != null) {
 				PopUpWindow popUp = new PopUpWindow("Village Info", skin, actor, stage, vil);
 				popUp.setWidth(250);
 				popUp.setHeight(150);
-				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
-						/ 2);
+				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight() / 2);
 
 				stage.addActor(popUp);
 
-			} else if (stage.getMultiActionInput() == false) {
+			}
+			else if (stage.getMultiActionInput() == false) {
 				PopUpWindow popUp = new PopUpWindow("moves", skin, actor, stage);
 				popUp.setWidth(250);
 				popUp.setHeight(450);
-				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
-						/ 2);
+				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight() / 2);
 				stage.addActor(popUp);
 			}
 
@@ -72,8 +70,8 @@ public class TiledMapClickListener extends ClickListener {
 				TiledMapActor previousActor = stage.getPreviousActor();
 				System.out.println("moving tile from " + previousActor.getXCell() + " " + previousActor.getYCell() + " to "
 						+ actor.getXCell() + " " + actor.getYCell());
-				controller.informOfUserAction(UIActionType.MOVEUNIT, previousActor.getXCell(), previousActor.getYCell(),
-						actor.getXCell(), actor.getYCell());
+				controller.informOfUserAction(UIActionType.MOVEUNIT, previousActor.getXCell(), previousActor.getYCell(), actor.getXCell(),
+						actor.getYCell());
 				stage.setPreviousActor(null);
 				stage.setMultiActionInput(false);
 			}
