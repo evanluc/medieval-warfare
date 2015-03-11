@@ -220,16 +220,24 @@ public class ModelManager implements IModelCommunicator, Observer {
 			e.printStackTrace();
 		}
 		if (presetMap != null) {
-			engine.newGame(players, presetMap);
-			addObserverToTiles(engine.getGameState().getMap());
-			gameRunning = true;
 			if (this.isLocalPlayersTurn()) {
+				engine.newGame(players, presetMap);
 				System.out.println("First player");
 				IGameCommand command = new SetupGameCommand(engine.getGameState());
 				amqpAdapter.send(command, exchange, "");
 			}
 			else {
-				System.out.println("Not first player");
+				do {
+					try {
+						Thread.sleep(500);
+					}
+					catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} while (engine.getGameState() == null);
+				addObserverToTiles(engine.getGameState().getMap());
+				gameRunning = true;
 			}
 		}
 	}

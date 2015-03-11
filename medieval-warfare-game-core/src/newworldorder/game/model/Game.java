@@ -25,7 +25,6 @@ public class Game implements Serializable {
 		this.players = new ArrayList<Player>(players);
 		this.chat = new ArrayList<Message>();
 		this.turnOf = this.players.get(0);
-		System.out.println("First player: " + this.players.get(0).getUsername());
 		this.map = map;
 	}
 

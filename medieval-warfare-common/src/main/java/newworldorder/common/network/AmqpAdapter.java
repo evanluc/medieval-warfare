@@ -7,7 +7,7 @@ import newworldorder.common.network.command.Command;
 
 public class AmqpAdapter {
 	private final AmqpTemplate template;
-	
+
 	@Autowired
 	public AmqpAdapter(AmqpTemplate template) {
 		super();
@@ -17,7 +17,7 @@ public class AmqpAdapter {
 	public void send(Command command, String routingKey) {
 		template.convertAndSend(routingKey, command);
 	}
-	
+
 	public void send(Command command, String exchange, String routingKey) {
 		template.convertAndSend(exchange, routingKey, command);
 	}
