@@ -206,10 +206,11 @@ public class ModelManager implements IModelCommunicator, Observer {
 	}
 
 	@Override
-	public void newGame(GameInfo gameInfo, String mapFilePath) {
+	public void newGame(String username, GameInfo gameInfo, String mapFilePath) {
 		newworldorder.game.model.Map presetMap = null;
 		List<Player> players = initPlayers(gameInfo.getPlayers());
 		exchange = gameInfo.getGameExchange();
+		localPlayerId = username.hashCode();
 		System.out.println("Exchange: " + exchange);
 		this.setupNetworking();
 		try {
@@ -223,8 +224,12 @@ public class ModelManager implements IModelCommunicator, Observer {
 			addObserverToTiles(engine.getGameState().getMap());
 			gameRunning = true;
 			if (this.isLocalPlayersTurn()) {
+				System.out.println("First player");
 				IGameCommand command = new SetupGameCommand(engine.getGameState());
 				amqpAdapter.send(command, exchange, "");
+			}
+			else {
+				System.out.println("Not first player");
 			}
 		}
 	}

@@ -18,6 +18,7 @@ public class SetupGameCommand implements IGameCommand {
 
 	@Override
 	public void execute() {
+		System.out.println("Received initial game state");
 		engine.setGameState(gameState);
 	}
 

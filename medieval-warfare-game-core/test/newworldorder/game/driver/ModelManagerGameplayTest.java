@@ -32,7 +32,7 @@ public class ModelManagerGameplayTest {
 		UITileDescriptor a, b;
 		int randx = 0, randy = 0;
 		GameInfo info = new GameInfo(playerIds, "dummy-exchange");
-		model.newGame(info, mappath);
+		model.newGame("username", info, mappath);
 
 		assertFalse(model.getUpdatedTiles().isEmpty());
 

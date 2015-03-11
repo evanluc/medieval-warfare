@@ -21,7 +21,7 @@ public class DesktopLauncher {
 
 		GameInfo info = new GameInfo(playerIds, "dummy-exchange");
 
-		model.newGame(info, "/maps/seaside-skirmish.mwm");
+		model.newGame("dummy username", info, "/maps/seaside-skirmish.mwm");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = false;
@@ -31,10 +31,10 @@ public class DesktopLauncher {
 		new LwjglApplication(game, config);
 	}
 
-	public DesktopLauncher(GameInfo info) {
+	public DesktopLauncher(String username, GameInfo info) {
 		IModelCommunicator model = ModelManager.getInstance();
 
-		model.newGame(info, "/maps/seaside-skirmish.mwm");
+		model.newGame(username, info, "/maps/seaside-skirmish.mwm");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = false;

@@ -17,15 +17,15 @@ public class SampleSavedGameGenerator {
 		playerIds.add("1234");
 		playerIds.add("666");
 		GameInfo info = new GameInfo(playerIds, "dummy-exchange");
-		
+
 		System.out.println("Attempt creating new game");
 
-		model.newGame(info, mappath);
-		
+		model.newGame("username", info, mappath);
+
 		System.out.println("Created new game");
 
 		model.saveGame(savepath);
-		
+
 		System.out.println("Saved game");
 	}
 
