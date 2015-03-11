@@ -28,7 +28,8 @@ public class TiledMapStage extends Stage {
 	private boolean multiActionInput;
 	private TiledMapActor previousActor;
 	private IModelCommunicator model;
-	
+	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+
 	public TiledMapStage(TiledMap tiledMap, IModelCommunicator model) {
 
 		this.multiActionInput = false;
@@ -59,7 +60,7 @@ public class TiledMapStage extends Stage {
 				actor.setBounds(setWidth, setHeight, tiledLayer.getTileWidth()*1/2,
 						tiledLayer.getTileHeight());
 				addActor(actor);
-				EventListener eventListener = new TiledMapClickListener(actor);
+				EventListener eventListener = new TiledMapClickListener(actor, skin);
 				actor.addListener(eventListener);
 
 			}
@@ -180,7 +181,7 @@ public class TiledMapStage extends Stage {
 	public void tiledMapVillageUpdate(UITileDescriptor updatedDescription){
 		int x = updatedDescription.x;
 		int y = updatedDescription.y;
-		Cell updateCell = tiledMapDescriptors.unitLayer.getCell(x,y);
+		Cell updateCell = tiledMapDescriptors.villageLayer.getCell(x,y);
 		VillageType newVillage = updatedDescription.villageType;
 		
 		if(newVillage != null){
@@ -221,14 +222,6 @@ public class TiledMapStage extends Stage {
 			}
 		}
 		else updateCell.setTile(tiledMapDescriptors.nullTile); 
-	}
-
-	public void hudRender(){
-		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-		float height = this.getHeight();
-		HUD hud = new HUD("HUD",skin,this.getModel(), height);
-		this.addActor(hud);
-
 	}
 	
 	public boolean getMultiActionInput(){

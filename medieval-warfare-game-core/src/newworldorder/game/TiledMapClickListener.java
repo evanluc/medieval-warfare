@@ -19,11 +19,12 @@ public class TiledMapClickListener extends ClickListener {
 	private TiledMapActor actor;
 	private TiledMapStage stage;
 	private IModelCommunicator controller = ModelManager.getInstance();
-
-	public TiledMapClickListener(TiledMapActor actor) {
+	private Skin skin;
+	
+	public TiledMapClickListener(TiledMapActor actor, Skin skin) {
 		this.actor = actor;
 		stage = (TiledMapStage) actor.getStage();
-
+		this.skin = skin;;
 	}
 
 	@Override
@@ -32,7 +33,6 @@ public class TiledMapClickListener extends ClickListener {
 				actor.getYCell());
 
 		final TiledMapStage stage = (TiledMapStage) actor.getStage();
-		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
 		if(stage.getModel().isLocalPlayersTurn()!= false){
 			Window notTurnWindow = new Window("Not your turn!", skin);

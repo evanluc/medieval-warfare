@@ -7,17 +7,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
 public class HUD extends Window{
-
-	public HUD(String title, Skin skin, IModelCommunicator iModelCommunicator, float height){
-		super(title,skin);
-		Label playerTurn = new Label("current player :\n" + iModelCommunicator.getCurrentPlayerTurn(),skin);
-		Label turnNumber = new Label("turn number :\n" + iModelCommunicator.getTurnNumber(),skin);
-		this.setWidth(150);
-		this.setHeight(150);
-		this.add(playerTurn).row();
-		this.add(turnNumber).row();
+	private String currentPlayerName;
+	private int turnNumber;
+	private Skin skin;
 	
-		this.setPosition(35,height);
+	
+	public HUD(String title, Skin skin, String userName, int turnNumber, float height){
+		super(title,skin);
+		this.skin = skin;
+	}
+	
+	public void setCurrentUsername(String currentUsername){
+		Label playerTurnText = new Label("current player :\n" + currentUsername,skin);
+		this.add(playerTurnText).row();
+
+	}
+	
+	public void setCurrentTurn(int currentTurn){
+		Label turnNumberText = new Label("turn number :\n" + currentTurn,skin);
+		this.add(turnNumberText).row();
+	
 	}
 	
 }
