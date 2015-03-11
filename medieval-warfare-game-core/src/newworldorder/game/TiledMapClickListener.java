@@ -44,6 +44,8 @@ public class TiledMapClickListener extends ClickListener {
 			notTurnWindow.addListener(dismissListener);
 			notTurnWindow.setWidth(250);
 			notTurnWindow.setHeight(100);
+			notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y - notTurnWindow.getHeight()
+					/ 2);
 			stage.addActor(notTurnWindow);
 		}
 		else{
