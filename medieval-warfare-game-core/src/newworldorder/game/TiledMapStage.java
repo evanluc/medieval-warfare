@@ -223,6 +223,13 @@ public class TiledMapStage extends Stage {
 		else updateCell.setTile(tiledMapDescriptors.nullTile); 
 	}
 
+	public void hudRender(){
+		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+
+		HUD hud = new HUD("HUD",skin,this.getModel());
+		this.addActor(hud);
+	}
+	
 	public boolean getMultiActionInput(){
 		return this.multiActionInput;
 	}
