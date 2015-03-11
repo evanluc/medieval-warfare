@@ -22,6 +22,7 @@ import newworldorder.common.network.CommandConsumer;
 import newworldorder.game.command.CommandFactory;
 import newworldorder.game.command.GameCommandHandler;
 import newworldorder.game.command.IGameCommand;
+import newworldorder.game.command.SetupGameCommand;
 import newworldorder.game.model.ColourType;
 import newworldorder.game.model.Game;
 import newworldorder.game.model.GameEngine;
@@ -86,7 +87,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 
 		if (!gameRunning)
 			return;
-	
+
 		IGameCommand command = CommandFactory.createCommand(action, x, y);
 		amqpAdapter.send(command, exchange, "");
 	}
@@ -221,6 +222,10 @@ public class ModelManager implements IModelCommunicator, Observer {
 			engine.newGame(players, presetMap);
 			addObserverToTiles(engine.getGameState().getMap());
 			gameRunning = true;
+			if (this.isLocalPlayersTurn()) {
+				IGameCommand command = new SetupGameCommand(engine.getGameState());
+				amqpAdapter.send(command, exchange, "");
+			}
 		}
 	}
 
