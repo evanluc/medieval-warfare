@@ -39,10 +39,10 @@ public class TiledMapClickListener extends ClickListener {
 			Label stopItText = new Label("Your opponent is still making moves. Please wait until his turn end",skin);
 			TextButton dismiss = new TextButton("dismiss",skin);
 			dismissListener dismissListener = new dismissListener(notTurnWindow);
-			notTurnWindow.add(dismiss);
-			notTurnWindow.add(stopItText);
+			notTurnWindow.add(stopItText).row();			notTurnWindow.add(dismiss);
+			notTurnWindow.add(dismiss).row();
 			notTurnWindow.addListener(dismissListener);
-			notTurnWindow.setWidth(250);
+			notTurnWindow.setWidth(450);
 			notTurnWindow.setHeight(100);
 			notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y - notTurnWindow.getHeight()
 					/ 2);
