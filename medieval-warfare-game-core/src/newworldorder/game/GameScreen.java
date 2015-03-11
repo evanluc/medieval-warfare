@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel()
+		stage.tiledMapRenderUpdate(game.getModel()
 				.getUpdatedTiles());
 
 		// System.out.println(game.getModel().getUpdatedTiles());
@@ -53,8 +53,8 @@ public class GameScreen implements Screen {
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
-		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
-		hud.setName(game.getModel().getCurrentPlayerTurn());
+		stage.tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
+		hud.setCurrentUsername(game.getModel().getCurrentPlayerTurn());
 		hud.setCurrentTurn(game.getModel().getTurnNumber());
 		stage.act();
 		stage.draw();
