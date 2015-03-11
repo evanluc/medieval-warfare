@@ -9,17 +9,17 @@ public class HUD extends Window {
 
 	public HUD(String title, Skin skin, String userName, int turnNumber, float height) {
 		super(title, skin);
-		playerTurnText = new Label("Current player: ", skin);
-		turnNumberText = new Label("turn number : 0", skin);
+		playerTurnText = new Label("Current player:\n", skin);
+		turnNumberText = new Label("Turn number\n: 0", skin);
 		this.add(playerTurnText).row();
 		this.add(turnNumberText).row();
 	}
 
 	public void setCurrentUsername(String currentUsername) {
-		playerTurnText.setText("Current player: " + currentUsername);
+		playerTurnText.setText("Current player:\n" + currentUsername);
 	}
 
 	public void setCurrentTurn(int currentTurn) {
-		turnNumberText.setText("Turn number: " + currentTurn);
+		turnNumberText.setText("Turn number:\n" + currentTurn);
 	}
 }
