@@ -7,6 +7,6 @@ import newworldorder.game.desktop.DesktopLauncher;
 public class GameLauncher implements IGameLauncher {
 	@Override
 	public void launchGame(GameInfo info) {
-		new DesktopLauncher();
+		new DesktopLauncher(info);
 	}
 }

@@ -209,6 +209,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 		newworldorder.game.model.Map presetMap = null;
 		List<Player> players = initPlayers(gameInfo.getPlayers());
 		exchange = gameInfo.getGameExchange();
+		System.out.println("Exchange: " + exchange);
 		this.setupNetworking();
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
@@ -226,9 +227,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 	private List<Player> initPlayers(List<String> playerIds) {
 		// TODO how to initialize players?
 		List<Player> ret = new ArrayList<Player>();
-
+		// Temporary (pending David's insight)...use hashcode of username
 		for (String s : playerIds) {
-			ret.add(new Player(Integer.parseInt(s), s, s, 0, 0, null));
+			ret.add(new Player(s.hashCode(), s, s, 0, 0, null));
 		}
 		return ret;
 	}
