@@ -1,6 +1,7 @@
 package newworldorder.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -34,7 +35,7 @@ public class TiledMapClickListener extends ClickListener {
 		if (vil != null) {
 			// begin temp
 			PopUpWindow popUp = new PopUpWindow("Village Info", skin, actor, stage, vil);
-			popUp.setPosition(stage.getWidth() / 2 - popUp.getWidth() / 2, stage.getHeight() / 2 - popUp.getHeight()
+			popUp.setPosition(stage.getCamera().viewportWidth / 2 - popUp.getWidth() / 2, stage.getCamera().viewportHeight / 2 - popUp.getHeight()
 					/ 2);
 			popUp.setWidth(250);
 			popUp.setHeight(150);

@@ -27,6 +27,7 @@ public class GameScreen implements Screen {
 		((TiledMapStage) stage).tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
 		System.out.println(game.getModel().getUpdatedTiles());
 		stage.getViewport().setCamera(camera);
+
 	}
 
 	@Override
