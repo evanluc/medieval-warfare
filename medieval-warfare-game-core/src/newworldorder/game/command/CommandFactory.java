@@ -20,6 +20,14 @@ public class CommandFactory {
 			return new BuildRoadCommand(x, y);
 		case BUILDTOWER:
 			return new BuildTowerCommand(x, y);
+		case BUILDUNITINFANTRY:
+			return new BuildUnitInfantryCommand(x, y);
+		case BUILDUNITKNIGHT:
+			return new BuildUnitKnightCommand(x, y);
+		case BUILDUNITPEASANT:
+			return new BuildUnitPeasantCommand(x, y);
+		case BUILDUNITSOLDIER:
+			return new BuildUnitSoldierCommand(x, y);
 		case CULTIVATEMEADOW:
 			return new CultivateMeadowCommand(x, y);
 		case UPGRADEUNITSOLDIER:
@@ -123,6 +131,78 @@ public class CommandFactory {
 		@Override
 		public void doExecute() {
 			engine.buildTower(t);
+		}
+	}
+
+	private static class BuildUnitInfantryCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -8361718221141554719L;
+
+		private BuildUnitInfantryCommand(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void doExecute() {
+			Village v = t.getVillage();
+			if (v != null)
+				engine.buildUnit(v, t, UnitType.INFANTRY);
+		}
+	}
+
+	private static class BuildUnitKnightCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5490048374673492457L;
+
+		private BuildUnitKnightCommand(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void doExecute() {
+			Village v = t.getVillage();
+			if (v != null)
+				engine.buildUnit(v, t, UnitType.KNIGHT);
+		}
+	}
+
+	private static class BuildUnitPeasantCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4507310855569037969L;
+
+		private BuildUnitPeasantCommand(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void doExecute() {
+			Village v = t.getVillage();
+			if (v != null)
+				engine.buildUnit(v, t, UnitType.PEASANT);
+		}
+	}
+
+	private static class BuildUnitSoldierCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 2101849611567641797L;
+
+		private BuildUnitSoldierCommand(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void doExecute() {
+			Village v = t.getVillage();
+			if (v != null)
+				engine.buildUnit(v, t, UnitType.SOLDIER);
 		}
 	}
 
