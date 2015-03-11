@@ -20,7 +20,7 @@ public class TiledMapClickListener extends ClickListener {
 	private TiledMapStage stage;
 	private IModelCommunicator controller = ModelManager.getInstance();
 	private Skin skin;
-	
+
 	public TiledMapClickListener(TiledMapActor actor, Skin skin) {
 		this.actor = actor;
 		stage = (TiledMapStage) actor.getStage();
@@ -36,7 +36,7 @@ public class TiledMapClickListener extends ClickListener {
 
 		if(stage.getModel().isLocalPlayersTurn()!= false){
 			Window notTurnWindow = new Window("Not your turn!", skin);
-			Label stopItText = new Label("Your opponent is still making moves. Please wait until his turn end",skin);
+			Label stopItText = new Label("Your opponent is still making moves.\n Please wait until his turn end",skin);
 			TextButton dismiss = new TextButton("dismiss",skin);
 			dismissListener dismissListener = new dismissListener(notTurnWindow);
 			notTurnWindow.add(stopItText).row();			notTurnWindow.add(dismiss);
