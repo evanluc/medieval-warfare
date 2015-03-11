@@ -8,13 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
 public class HUD extends Window{
 
-	public HUD(String title, Skin skin, IModelCommunicator iModelCommunicator){
+	public HUD(String title, Skin skin, IModelCommunicator iModelCommunicator, float height){
 		super(title,skin);
-		Label playerTurn = new Label("The current player is " + iModelCommunicator.getCurrentPlayerTurn(),skin);
-		Label turnNumber = new Label("The current turn number is " + iModelCommunicator.getTurnNumber(),skin);
+		Label playerTurn = new Label("current player :\n" + iModelCommunicator.getCurrentPlayerTurn(),skin);
+		Label turnNumber = new Label("turn number :\n" + iModelCommunicator.getTurnNumber(),skin);
+		this.setWidth(150);
+		this.setHeight(150);
 		this.add(playerTurn).row();
 		this.add(turnNumber).row();
-		this.setPosition(0, 0);
+	
+		this.setPosition(35,height);
 	}
 	
 }
