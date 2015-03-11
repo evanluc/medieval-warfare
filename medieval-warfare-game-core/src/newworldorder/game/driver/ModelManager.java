@@ -230,7 +230,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 				// Wait for GameState to be updated. Should probably use
 				// blocking consumer.
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(3000);
 				}
 				catch (InterruptedException e) {
 					// TODO Auto-generated catch block
