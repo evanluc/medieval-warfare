@@ -37,4 +37,8 @@ public interface IModelCommunicator {
 	public void setLocalPlayerId(int playerId);
 
 	public int getLocalPlayerId();
+
+	public String getCurrentPlayerTurn();
+
+	public int getTurnNumber();
 }

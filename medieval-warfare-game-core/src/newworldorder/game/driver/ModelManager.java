@@ -323,4 +323,14 @@ public class ModelManager implements IModelCommunicator, Observer {
 		consumer = new CommandConsumer(admin, container);
 		consumer.startConsumingFromFanoutExchange(exchange);
 	}
+
+	@Override
+	public String getCurrentPlayerTurn() {
+		return engine.getGameState().getCurrentTurnPlayer().getUsername();
+	}
+
+	@Override
+	public int getTurnNumber() {
+		return engine.getGameState().getRoundCount();
+	}
 }
