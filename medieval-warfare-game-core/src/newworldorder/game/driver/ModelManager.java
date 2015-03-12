@@ -220,8 +220,8 @@ public class ModelManager implements IModelCommunicator, Observer {
 			e.printStackTrace();
 		}
 		if (presetMap != null) {
-			engine.newGame(players, presetMap);
-			if (this.isLocalPlayersTurn()) {
+			if (localPlayerId == players.get(0).getPlayerId()) {
+				engine.newGame(players, presetMap);
 				System.out.println("First player");
 				IGameCommand command = new SetupGameCommand(engine.getGameState());
 				amqpAdapter.send(command, exchange, "");
