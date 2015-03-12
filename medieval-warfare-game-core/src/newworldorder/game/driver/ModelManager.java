@@ -300,6 +300,7 @@ public class ModelManager implements IModelCommunicator, Observer {
 	@Override
 	public boolean isLastPlayer() {
 		int numPlayers = engine.getGameState().getPlayers().size();
+		System.out.println(engine.getGameState().getPlayers().get(numPlayers - 1).getPlayerId() == localPlayerId);
 		return engine.getGameState().getPlayers().get(numPlayers - 1).getPlayerId() == localPlayerId;
 	}
 
@@ -330,7 +331,6 @@ public class ModelManager implements IModelCommunicator, Observer {
 
 	@Override
 	public String getCurrentPlayerTurn() {
-		System.out.println(engine.getGameState().getCurrentTurnPlayer().getUsername());
 		return engine.getGameState().getCurrentTurnPlayer().getUsername();
 	}
 

@@ -66,7 +66,7 @@ public class CommandFactory {
 		@Override
 		public void execute() {
 			IModelCommunicator modelController = ModelManager.getInstance();
-			if (modelController.isLastPlayer()) {
+			if (modelController.isLocalPlayersTurn() && modelController.isLastPlayer()) {
 				List<Integer> newTrees = engine.growNewTrees();
 				SyncTreesCommand command = new SyncTreesCommand(newTrees);
 				modelController.sendCommand(command);
