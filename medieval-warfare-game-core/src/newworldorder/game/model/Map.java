@@ -221,4 +221,13 @@ public class Map implements Serializable {
 		assert (hashCode < width * height && hashCode >= 0);
 		return tiles.get(hashCode);
 	}
+
+	public void placeTreesAt(List<Integer> l) {
+		for (int i : l) {
+			Tile t = tiles.get(i);
+			if (t != null) {
+				t.setTerrainType(TerrainType.TREE);
+			}
+		}
+	}
 }

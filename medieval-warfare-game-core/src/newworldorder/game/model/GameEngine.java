@@ -116,6 +116,10 @@ public class GameEngine {
 	public List<Integer> growNewTrees() {
 		return gameState.getMap().growNewTrees();
 	}
+	
+	public void placeTreesAt(List<Integer> l) {
+		gameState.getMap().placeTreesAt(l);
+	}
 
 	public void buildUnit(Village v, Tile t, UnitType type) {
 		log("Entering buildUnit");
