@@ -324,7 +324,6 @@ public class ModelManager implements IModelCommunicator, Observer {
 
 	@Override
 	public String getCurrentPlayerTurn() {
-		System.out.println(engine.getGameState().getCurrentTurnPlayer().getUsername());
 		return engine.getGameState().getCurrentTurnPlayer().getUsername();
 	}
 
