@@ -20,7 +20,7 @@
    <image width="55" height="48" source="colourtiles/crisper/purple.png"/>
   </tile>
   <tile id="6">
-   <image width="55" height="48" source="colourtiles/crisper/red.png"/>
+   <image width="55" height="48" source="colourtiles/crisper/darkerred.png"/>
   </tile>
   <tile id="7">
    <image width="55" height="48" source="colourtiles/crisper/yellow.png"/>
