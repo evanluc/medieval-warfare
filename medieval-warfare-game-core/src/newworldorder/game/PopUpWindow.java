@@ -52,8 +52,8 @@ public class PopUpWindow extends Window{
 	private void createButtons(){
 
 		for (UIActionType types : UIActionType.values()){
-
-			TextButton newButton = new TextButton(types.toString(), skin);
+			
+			TextButton newButton = new TextButton(uiActionTypeToString(types), skin);
 			if (types == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(actor,this,stage,types));
 			else newButton.addListener(new DoubleClickListener(actor,this,stage,types));
 			this.add(newButton).row();
@@ -63,6 +63,26 @@ public class PopUpWindow extends Window{
 		dismiss.addListener(new dismissListener(this));
 		this.add(dismiss).row();
 		
+	}
+	
+	public String uiActionTypeToString(UIActionType action){
+		switch(action){
+		case MOVEUNIT: return "Move unit";
+		case BUILDROAD: return "Build road";
+		case BUILDTOWER: return "Build tower";
+		case BUILDUNITINFANTRY: return "Build infantry";
+		case BUILDUNITKNIGHT:return "Build knight";
+		case BUILDUNITPEASANT:return "Build peasant";
+		case BUILDUNITSOLDIER:return"Build soldier";
+		case CULTIVATEMEADOW:return"Cultivate meadow";
+		case ENDTURN:return"End your turn";
+		case UPGRADEUNITINFANTRY:return"Upgrade to infantry";
+		case UPGRADEUNITKNIGHT:return"Upgrade to knight";
+		case UPGRADEUNITSOLDIER:return "Upgrade to soldier";
+		case UPGRADEVILLAGEFORT:return "Upgrade to fort";
+		case UPGRADEVILLAGETOWN:return "Upgrade to town";
+		}
+		return null;
 	}
 
 }
