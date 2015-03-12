@@ -113,8 +113,12 @@ public class GameEngine {
 		beginTurn(players.get(turnPosition));
 	}
 	
-	public void growNewTrees() {
-		gameState.getMap().growNewTrees();
+	public List<Integer> growNewTrees() {
+		return gameState.getMap().growNewTrees();
+	}
+	
+	public void placeTreesAt(List<Integer> l) {
+		gameState.getMap().placeTreesAt(l);
 	}
 
 	public void buildUnit(Village v, Tile t, UnitType type) {
@@ -403,7 +407,6 @@ public class GameEngine {
 			}
 			else if (dest.getControllingPlayer() != u.getControllingPlayer()) {
 				takeoverTile(dest);
-				combineRegions(dest);
 				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
 				u.setCurrentAction(ActionType.MOVED);
 			}
@@ -482,7 +485,6 @@ public class GameEngine {
 				}
 
 				oldV.getTile().setVillage(null);
-				oldV.getTile().setTerrainType(TerrainType.MEADOW);
 				oldV.getControlledBy().removeVillage(oldV);
 			}
 		}
@@ -536,16 +538,12 @@ public class GameEngine {
 			else {
 				Region newRegion;
 				Village newVillage;
+				newRegion = new Region(regCandidate, controllingPlayer);
 				if (regCandidate.contains(originalVillage.getTile())) {
 					newVillage = new Village(originalVillage.getTile(), controllingPlayer, regCandidate);
-					newVillage.transactGold(originalVillage.getGold());
-					newVillage.transactWood(originalVillage.getWood());
-					newVillage.setVillageType(originalVillage.getVillageType());
-					newRegion = newVillage.getRegion();
-					controllingPlayer.removeVillage(originalVillage);
+					newRegion.setVillage(newVillage);
 				}
 				else {
-					newRegion = new Region(regCandidate, controllingPlayer);
 					newRegion.createVillage();
 					newVillage = newRegion.getVillage();
 				}

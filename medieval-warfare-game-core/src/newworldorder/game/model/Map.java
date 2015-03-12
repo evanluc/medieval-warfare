@@ -16,7 +16,7 @@ public class Map implements Serializable {
 	private static final int INIT_VILLAGE_REGION_SIZE = 3;
 	private static final int INIT_VILLAGE_GOLD_AMT = 7;
 	private static final double INIT_VILLAGE_PERC_OF_AVAIL_TILE_FACTOR = 0.05;
-	private static final double TREE_GROWTH_PROB = 0.0; // was 0.05
+	private static final double TREE_GROWTH_PROB = 0.05;
 	private final int width;
 	private final int height;
 	private final int totalTiles;
@@ -190,7 +190,8 @@ public class Map implements Serializable {
 	 * For every tile that contains a tree, there is a 50% probability that a
 	 * new tree will be grown in an adjacent Grass or Meadow tile.
 	 */
-	public void growNewTrees() {
+	public List<Integer> growNewTrees() {
+		List<Integer> ret = new ArrayList<Integer>();
 		for (Tile t : getTilesWithTerrain(TerrainType.TREE)) {
 			double prob = Math.random();
 			if (prob < TREE_GROWTH_PROB) {
@@ -201,11 +202,13 @@ public class Map implements Serializable {
 							&& n.getStructure() == null
 							&& n.getVillage() == null){
 						n.setTerrainType(TerrainType.TREE);
+						ret.add(n.hashCode());
 						break;
 					}
 				}
 			}
 		}
+		return ret;
 	}
 
 	public Tile getTile(int x, int y) {
@@ -217,5 +220,14 @@ public class Map implements Serializable {
 	public Tile getTile(int hashCode) {
 		assert (hashCode < width * height && hashCode >= 0);
 		return tiles.get(hashCode);
+	}
+
+	public void placeTreesAt(List<Integer> l) {
+		for (int i : l) {
+			Tile t = tiles.get(i);
+			if (t != null) {
+				t.setTerrainType(TerrainType.TREE);
+			}
+		}
 	}
 }
