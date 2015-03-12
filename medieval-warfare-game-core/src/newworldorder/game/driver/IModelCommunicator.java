@@ -4,6 +4,7 @@ import java.util.List;
 
 import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.game.command.IGameCommand;
+import newworldorder.game.model.Map;
 
 public interface IModelCommunicator {
 
@@ -46,4 +47,6 @@ public interface IModelCommunicator {
 	public int getTurnNumber();
 	
 	public void sendCommand(IGameCommand command);
+	
+	public void addObserverToTiles(Map map);
 }

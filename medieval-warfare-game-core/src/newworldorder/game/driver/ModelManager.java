@@ -226,16 +226,6 @@ public class ModelManager implements IModelCommunicator, Observer {
 				IGameCommand command = new SetupGameCommand(engine.getGameState());
 				amqpAdapter.send(command, exchange, "");
 			}
-			// Wait for GameState to be updated. Should probably use
-			// blocking consumer.
-			try {
-				Thread.sleep(3000);
-			}
-			catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			addObserverToTiles(engine.getGameState().getMap());
 			gameRunning = true;
 		}
 	}
@@ -262,8 +252,9 @@ public class ModelManager implements IModelCommunicator, Observer {
 	public void update(Observable tile, Object ignoredParameter) {
 		updatedTiles.add((Tile) tile);
 	}
-
-	private void addObserverToTiles(newworldorder.game.model.Map map) {
+	
+	@Override
+	public void addObserverToTiles(newworldorder.game.model.Map map) {
 		for (Tile t : map.getTiles()) {
 			t.addObserver(this);
 			updatedTiles.add(t);

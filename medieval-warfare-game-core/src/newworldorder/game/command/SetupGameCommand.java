@@ -1,5 +1,7 @@
 package newworldorder.game.command;
 
+import newworldorder.game.driver.IModelCommunicator;
+import newworldorder.game.driver.ModelManager;
 import newworldorder.game.model.Game;
 import newworldorder.game.model.GameEngine;
 
@@ -18,8 +20,9 @@ public class SetupGameCommand implements IGameCommand {
 
 	@Override
 	public void execute() {
-		System.out.println("Received initial game state");
 		engine.setGameState(gameState);
+		IModelCommunicator modelController = ModelManager.getInstance();
+		modelController.addObserverToTiles(gameState.getMap());
 	}
 
 	@Override
