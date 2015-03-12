@@ -106,12 +106,15 @@ public class GameEngine {
 		if (turnPosition == players.size() - 1) {
 			gameState.incrementRoundCount();
 			turnPosition = 0;
-			gameState.getMap().growNewTrees();
 		}
 		else {
 			turnPosition++;
 		}
 		beginTurn(players.get(turnPosition));
+	}
+	
+	public void growNewTrees() {
+		gameState.getMap().growNewTrees();
 	}
 
 	public void buildUnit(Village v, Tile t, UnitType type) {
