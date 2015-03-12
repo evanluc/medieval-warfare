@@ -296,6 +296,12 @@ public class ModelManager implements IModelCommunicator, Observer {
 	public boolean isLocalPlayersTurn() {
 		return (engine.getGameState().getCurrentTurnPlayer().getPlayerId() == localPlayerId);
 	}
+	
+	@Override
+	public boolean isLastPlayer() {
+		int numPlayers = engine.getGameState().getPlayers().size();
+		return engine.getGameState().getPlayers().get(numPlayers - 1).getPlayerId() == localPlayerId;
+	}
 
 	@Override
 	public void setLocalPlayerId(int localPlayerId) {
@@ -331,5 +337,10 @@ public class ModelManager implements IModelCommunicator, Observer {
 	@Override
 	public int getTurnNumber() {
 		return engine.getGameState().getRoundCount();
+	}
+	
+	@Override
+	public void sendCommand(IGameCommand command) {
+		amqpAdapter.send(command, exchange, "");
 	}
 }

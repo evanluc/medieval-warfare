@@ -1,5 +1,9 @@
 package newworldorder.game.command;
 
+import java.util.List;
+
+import newworldorder.game.driver.IModelCommunicator;
+import newworldorder.game.driver.ModelManager;
 import newworldorder.game.driver.UIActionType;
 import newworldorder.game.model.GameEngine;
 import newworldorder.game.model.Region;
@@ -10,7 +14,7 @@ import newworldorder.game.model.Village;
 import newworldorder.game.model.VillageType;
 
 public class CommandFactory {
-
+	
 	public static IGameCommand createCommand(UIActionType action) {
 		return new EndTurnCommand();
 	}
@@ -61,6 +65,12 @@ public class CommandFactory {
 
 		@Override
 		public void execute() {
+			IModelCommunicator modelController = ModelManager.getInstance();
+			if (modelController.isLastPlayer()) {
+				List<Integer> newTrees = engine.growNewTrees();
+				SyncTreesCommand command = new SyncTreesCommand(newTrees);
+				modelController.sendCommand(command);
+			}
 			engine.endTurn();
 		}
 

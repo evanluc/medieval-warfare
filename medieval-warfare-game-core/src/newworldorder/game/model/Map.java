@@ -16,7 +16,7 @@ public class Map implements Serializable {
 	private static final int INIT_VILLAGE_REGION_SIZE = 3;
 	private static final int INIT_VILLAGE_GOLD_AMT = 7;
 	private static final double INIT_VILLAGE_PERC_OF_AVAIL_TILE_FACTOR = 0.05;
-	private static final double TREE_GROWTH_PROB = 0.0; // was 0.05
+	private static final double TREE_GROWTH_PROB = 0.05;
 	private final int width;
 	private final int height;
 	private final int totalTiles;

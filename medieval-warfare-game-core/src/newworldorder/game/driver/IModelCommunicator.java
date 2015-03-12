@@ -3,6 +3,7 @@ package newworldorder.game.driver;
 import java.util.List;
 
 import newworldorder.common.matchmaking.GameInfo;
+import newworldorder.game.command.IGameCommand;
 
 public interface IModelCommunicator {
 
@@ -37,8 +38,12 @@ public interface IModelCommunicator {
 	public void setLocalPlayerId(int playerId);
 
 	public int getLocalPlayerId();
+	
+	public boolean isLastPlayer();
 
 	public String getCurrentPlayerTurn();
 
 	public int getTurnNumber();
+	
+	public void sendCommand(IGameCommand command);
 }
