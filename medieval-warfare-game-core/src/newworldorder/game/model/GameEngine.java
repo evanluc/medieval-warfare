@@ -113,8 +113,8 @@ public class GameEngine {
 		beginTurn(players.get(turnPosition));
 	}
 	
-	public void growNewTrees() {
-		gameState.getMap().growNewTrees();
+	public List<Integer> growNewTrees() {
+		return gameState.getMap().growNewTrees();
 	}
 
 	public void buildUnit(Village v, Tile t, UnitType type) {

@@ -190,7 +190,8 @@ public class Map implements Serializable {
 	 * For every tile that contains a tree, there is a 50% probability that a
 	 * new tree will be grown in an adjacent Grass or Meadow tile.
 	 */
-	public void growNewTrees() {
+	public List<Integer> growNewTrees() {
+		List<Integer> ret = new ArrayList<Integer>();
 		for (Tile t : getTilesWithTerrain(TerrainType.TREE)) {
 			double prob = Math.random();
 			if (prob < TREE_GROWTH_PROB) {
@@ -201,11 +202,13 @@ public class Map implements Serializable {
 							&& n.getStructure() == null
 							&& n.getVillage() == null){
 						n.setTerrainType(TerrainType.TREE);
+						ret.add(n.hashCode());
 						break;
 					}
 				}
 			}
 		}
+		return ret;
 	}
 
 	public Tile getTile(int x, int y) {
