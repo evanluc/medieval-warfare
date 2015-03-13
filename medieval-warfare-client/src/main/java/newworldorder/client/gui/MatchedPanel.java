@@ -61,7 +61,7 @@ public class MatchedPanel extends BasePanel {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		leftPanel.add(new BackgroundPanel(img));
+		leftPanel.add(new BackgroundPanel(img, false));
 		JButton map = new JButton("Seaside Squirmish");
 		map.setAlignmentX(Component.CENTER_ALIGNMENT);
 		map.setBackground(new Color(59, 89, 182));

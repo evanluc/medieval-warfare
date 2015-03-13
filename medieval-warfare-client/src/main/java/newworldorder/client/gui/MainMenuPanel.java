@@ -4,10 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +26,7 @@ import javax.swing.JPanel;
 @org.springframework.stereotype.Component
 public class MainMenuPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	
 
 	/**
 	 * Constructor.
@@ -22,7 +34,6 @@ public class MainMenuPanel extends BasePanel {
 	public MainMenuPanel() {
 		super();
 		setLayout(new BorderLayout());
-
 		JButton play = new JButton("Play");
 		play.setAlignmentX(Component.CENTER_ALIGNMENT);
 		play.setBackground(new Color(59, 89, 182));

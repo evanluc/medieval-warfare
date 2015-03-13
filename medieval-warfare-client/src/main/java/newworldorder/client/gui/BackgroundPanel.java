@@ -9,7 +9,20 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,13 +51,74 @@ public class BackgroundPanel extends JPanel
 	private float alignmentX = 0.5f;
 	private float alignmentY = 0.5f;
 	private boolean isTransparentAdd = true;
+	private static Clip music;
+	private ImageIcon musicPlaying;
+	private ImageIcon musicOff;
+	private int count = 0;
 
 	/*
 	 *  Set image as the background with the SCALED style
+	 *  with a boolean option for having music or not.
 	 */
-	public BackgroundPanel(Image image)
+	public BackgroundPanel(Image image, boolean backgroundMusic)
 	{
 		this(image, SCALED);
+		if(backgroundMusic==true)
+		{
+			try{ 
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResourceAsStream("/titlescreen.wav"));
+				music = AudioSystem.getClip();
+				music.open(audioInputStream);
+				music.loop(Clip.LOOP_CONTINUOUSLY);
+				music.start();
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			BufferedImage img1=null;
+			try {
+				InputStream stream = getClass().getResourceAsStream("/speaker-volume.png");
+				img1 = ImageIO.read(stream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			musicPlaying =new ImageIcon(img1);
+			BufferedImage img2=null;
+			try {
+				InputStream stream = getClass().getResourceAsStream("/speaker-quiet.png");
+				img2 = ImageIO.read(stream);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			musicOff =new ImageIcon(img2);
+			JButton musicButton = new JButton(musicPlaying);
+			musicButton.setBorder(BorderFactory.createEmptyBorder());
+			musicButton.setContentAreaFilled(false);
+			musicButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					musicButton.setIcon(musicButton.getIcon()==musicPlaying? musicOff : musicPlaying);
+					if(musicButton.getIcon() == musicOff)
+					{
+						music.stop();
+					}
+					else{
+						music.loop(Clip.LOOP_CONTINUOUSLY);
+						music.start();
+					}
+					repaint();
+				}
+			});
+			JPanel eastPanel = new JPanel();
+			eastPanel.setOpaque(false);
+			eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
+			eastPanel.add(musicButton);
+			add(eastPanel, BorderLayout.EAST);
+		}	
 	}
 
 	/*
@@ -273,4 +347,5 @@ public class BackgroundPanel extends JPanel
 		float y = (height - image.getHeight(null)) * alignmentY;
 		g.drawImage(image, (int)x + insets.left, (int)y + insets.top, this);
 	}
+	
 }
