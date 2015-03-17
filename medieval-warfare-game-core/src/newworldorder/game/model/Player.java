@@ -6,7 +6,9 @@ import java.util.List;
 
 /**
  * Player class clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Player implements Serializable {
     
 	private static final long serialVersionUID = -3711737223282059721L;

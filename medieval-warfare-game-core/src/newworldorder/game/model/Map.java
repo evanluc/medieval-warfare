@@ -9,7 +9,9 @@ import java.util.Set;
 
 /**
  * Map class clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Map implements Serializable {
 
 	private static final long serialVersionUID = 3445594680733206161L;

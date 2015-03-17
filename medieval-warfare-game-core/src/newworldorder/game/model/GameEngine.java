@@ -8,7 +8,9 @@ import java.util.Set;
 
 /**
  * GameEngine class, clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class GameEngine {
 
 	private Game gameState;

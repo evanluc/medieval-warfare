@@ -8,7 +8,9 @@ import java.util.Set;
 
 /**
  * Region class is clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Region implements Serializable {
     
 	private static final long serialVersionUID = 5056315454979573917L;

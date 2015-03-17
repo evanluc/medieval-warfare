@@ -5,7 +5,9 @@ import java.util.Date;
 
 /**
  * Message class clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Message implements Serializable {
     
 	private static final long serialVersionUID = -4444110926298066700L;

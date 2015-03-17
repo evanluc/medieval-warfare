@@ -6,7 +6,9 @@ import java.util.List;
 
 /**
  * Game class clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Game implements Serializable {
 
 	private static final long serialVersionUID = 2079718066507692385L;

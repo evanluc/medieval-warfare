@@ -9,7 +9,9 @@ import java.util.Set;
 
 /**
  * Tile class is clean.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Tile extends Observable implements Serializable {
     
 	private static final long serialVersionUID = -1574156206965797597L;

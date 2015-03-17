@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 /**
  * Unit class clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Unit implements Serializable {
 
 	private static final long serialVersionUID = -2187574739448732604L;

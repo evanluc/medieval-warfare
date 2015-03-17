@@ -8,7 +8,9 @@ import java.util.Set;
 
 /**
  * Village class is clean and complete.
+ * This will be deleted soon, please start using corresponding definition in newworldorder.client.model or newworldorder.client.shared
  */
+@Deprecated
 public class Village implements Serializable {
     
 	private static final long serialVersionUID = -3748359571009668032L;
