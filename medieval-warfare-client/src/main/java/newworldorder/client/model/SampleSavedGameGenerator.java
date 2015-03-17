@@ -5,8 +5,8 @@ import java.util.List;
 
 public class SampleSavedGameGenerator {
 
-	private static final String mappath = "maps/seaside-skirmish.mwm";
-	private static final String savepath = "saves/sample-save-game.mwg";
+	private static final String mappath = "assets/maps/seaside-skirmish.mwm";
+	private static final String savepath = "assets/saves/sample-save-game.mwg";
 
 	public static void main(String[] args) {
 		ModelController model = ModelController.getInstance();
@@ -17,7 +17,7 @@ public class SampleSavedGameGenerator {
 
 		System.out.println("Attempt creating new game");
 
-		model.newGame("username", players, mappath);
+		model.newGame("Bob", players, mappath);
 
 		System.out.println("Created new game");
 

@@ -23,10 +23,11 @@ import newworldorder.client.shared.VillageType;
 class GameEngine implements Observer {
 
 	private Game gameState;
-	private List<Tile> updatedTiles;
+	private Set<Tile> updatedTiles;
 
 	GameEngine() {
 		this.gameState = null;
+		this.updatedTiles = new HashSet<Tile>();
 	}
 
 	GameEngine(Game pGameState) {
@@ -36,13 +37,24 @@ class GameEngine implements Observer {
 	void buildRoad(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
-		if (u != null)
-			buildRoad(u);
+		if (u != null) {
+			if (u.getUnitType() == UnitType.PEASANT && t.getStructure() != StructureType.ROAD) {
+				u.setCurrentAction(ActionType.BUILDINGROAD);
+				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
+				t.setStructure(StructureType.ROAD);
+			}
+		}
 	}
 	
 	void buildTower(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
-		buildTower(t);
+		Village village = t.getRegion().getVillage();
+		if (village != null) {
+			if (village.getWood() >= 5) {
+				t.setStructure(StructureType.WATCHTOWER);
+				village.transactWood(-5);
+			}
+		}
 	}
 	
 	void buildUnitPeasant(int x, int y) {
@@ -85,271 +97,6 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	void cultivateMeadow(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Unit u = t.getUnit();
-		if (u != null)
-			cultivateMeadow(u);
-	}
-	
-	void upgradeUnitInfantry(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Unit u = t.getUnit();
-		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
-			upgradeUnit(u, UnitType.INFANTRY);
-	}
-	
-	void upgradeUnitSoldier(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Unit u = t.getUnit();
-		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
-			upgradeUnit(u, UnitType.SOLDIER);
-	}
-	
-	void upgradeUnitKnight(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Unit u = t.getUnit();
-		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
-			upgradeUnit(u, UnitType.KNIGHT);
-	}
-	
-	void upgradeVillageTown(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Village v = t.getVillage();
-		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.TOWN))
-			upgradeVillage(v, VillageType.TOWN);
-	}
-	
-	void upgradeVillageFort(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Village v = t.getVillage();
-		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT))
-			upgradeVillage(v, VillageType.FORT);
-	}
-	
-	void moveUnit(int x1, int y1, int x2, int y2) {
-		Tile t1 = gameState.getMap().getTile(x1, y1);
-		Tile t2 = gameState.getMap().getTile(x2, y2);
-		Unit u = t1.getUnit();
-		if (u != null)
-			moveUnit(u, t2);
-	}
-	
-	int getMapHeight() {
-		return gameState.getMap().getHeight();
-	}
-	
-	int getMapWidth() {
-		return gameState.getMap().getWidth();
-	}
-	
-	UITileDescriptor getTile(int x, int y) {
-		Tile t =gameState.getMap().getTile(x, y);
-		TerrainType tt = t.getTerrainType();
-		UnitType ut = null;
-		StructureType st = t.getStructure();
-		VillageType vt = null;
-		ColourType ct = null;
-
-		if (t.getControllingPlayer() != null) {
-			ct = t.getControllingPlayer().getColour();
-			if (t.getUnit() != null)
-				ut = t.getUnit().getUnitType();
-			if (t.getVillage() != null)
-				vt = t.getVillage().getVillageType();
-		}
-
-		updatedTiles.remove(t);
-
-		return new UITileDescriptor(x, y, tt, st, ut, vt, ct);
-	}
-	
-	boolean hasUpdatedTiles() {
-		return !updatedTiles.isEmpty();
-	}
-	
-	List<UITileDescriptor> getUpdatedTiles() {
-		List<UITileDescriptor> ret = new ArrayList<UITileDescriptor>();
-		for (Tile t : updatedTiles) {
-			TerrainType tt = t.getTerrainType();
-			UnitType ut = null;
-			StructureType st = t.getStructure();
-			VillageType vt = null;
-			ColourType ct = null;
-
-			if (t.getControllingPlayer() != null) {
-				ct = t.getControllingPlayer().getColour();
-				if (t.getUnit() != null)
-					ut = t.getUnit().getUnitType();
-				if (t.getVillage() != null)
-					vt = t.getVillage().getVillageType();
-			}
-
-			ret.add(new UITileDescriptor(t.getX(), t.getY(), tt, st, ut, vt, ct));
-		}
-		updatedTiles.clear();
-		return ret;
-	}
-	
-	UIVillageDescriptor getVillage(int x, int y) {
-		Tile t = gameState.getMap().getTile(x, y);
-		Village v = t.getVillage();
-		if (v != null) {
-			java.util.Map<UnitType, Integer> unittypes = new HashMap<UnitType, Integer>(4);
-			List<Unit> units = v.getSupportedUnits();
-			for (Unit u : units) {
-				Integer count = unittypes.get(u.getUnitType());
-				if (count == null) {
-					unittypes.put(u.getUnitType(), 1);
-				}
-				else {
-					unittypes.put(u.getUnitType(), count + 1);
-				}
-			}
-			return new UIVillageDescriptor(x, y, v.getVillageType(), v.getGold(), v.getWood(), unittypes, v.getTotalIncome(),
-					v.getTotalUpkeep());
-		}
-		else {
-			return null;
-		}
-	}
-	
-	boolean isTurnOfPlayer(String name) {
-		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
-	}
-	
-	boolean isTurnOfLastPlayer() {
-		int size = gameState.getPlayers().size();
-		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(gameState.getPlayers().get(size - 1).getUsername()) == 1);
-	}
-	
-	String getCurrentTurnPlayerName() {
-		return gameState.getCurrentTurnPlayer().getUsername();
-	}
-	
-	int getCurrentRoundCount() {
-		return gameState.getRoundCount();
-	}
-	
-	void newGame(List<String> players, Map map) {
-		List<Player> temp = new ArrayList<Player>();
-		for (String s : players) {
-			temp.add(new Player(s));
-		}
-		Map.setUpMap(temp, map);
-		Game game = new Game(temp, map);
-		Player.setUpPlayers(temp);
-		setGameState(game);
-		beginTurn(gameState.getCurrentTurnPlayer());
-	}
-	
-	/**
-	 * Not sure if the list from gameState.getPlayers() keeps its order, it
-	 * should since the return is not making a copy.
-	 */
-	void endTurn() {
-		List<Player> players = gameState.getPlayers();
-		int turnPosition = players.indexOf(gameState.getCurrentTurnPlayer());
-		if (turnPosition == players.size() - 1) {
-			gameState.incrementRoundCount();
-			turnPosition = 0;
-		}
-		else {
-			turnPosition++;
-		}
-		beginTurn(players.get(turnPosition));
-	}
-
-	private void beginTurn(Player p) {
-		Map map = gameState.getMap();
-		gameState.setTurnOf(p);
-		phaseBuild(p);
-		phaseTombstone(p, map);
-		phaseIncome(p);
-		phasePayment(p);
-	}
-	
-	void leaveGame() {
-		updatedTiles.clear();
-		gameState = null;
-	}
-	
-	void addObserverToTiles(newworldorder.client.model.Map map) {
-		for (Tile t : map.getTiles()) {
-			t.addObserver(this);
-			updatedTiles.add(t);
-		}
-	}
-	
-	void buildRoad(Unit u) {
-		Tile tile = u.getTile();
-		if (u.getUnitType() == UnitType.PEASANT && tile.getStructure() != StructureType.ROAD) {
-			u.setCurrentAction(ActionType.BUILDINGROAD);
-			u.setImmobileUntilRound(gameState.getRoundCount() + 1);
-			tile.setStructure(StructureType.ROAD);
-		}
-	}
-
-	void cultivateMeadow(Unit u) {
-		Tile tile = u.getTile();
-		if (u.getUnitType() == UnitType.PEASANT && tile.getTerrainType() == TerrainType.GRASS) {
-			u.setCurrentAction(ActionType.STARTCULTIVATING);
-			u.setImmobileUntilRound(gameState.getRoundCount() + 2);
-			// The meadow terrain is built in phaseBuild of beginTurn because it
-			// should not
-			// appear until the second turn that the unit is cultivating the
-			// meadow.
-		}
-	}
-
-	private void takeoverTile(Tile dest) {
-		Unit unit = dest.getUnit();
-		Region destRegion = dest.getRegion();
-		Village destVillage = dest.getVillage();
-		Village unitsVillage = unit.getVillage();
-
-		if (destVillage != null) {
-			unitsVillage.transactGold(destVillage.getGold());
-			unitsVillage.transactWood(destVillage.getWood());
-			dest.setVillage(null);
-		}
-
-		destRegion.removeTile(dest);
-		unitsVillage.getRegion().addTile(dest);
-		reconcileRegions(destRegion);
-		checkWinConditions();
-	}
-
-	private void checkWinConditions() {
-		List<Player> players = new ArrayList<Player>(gameState.getPlayers());
-		Iterator<Player> iter = players.iterator();
-		while (iter.hasNext()) {
-			Player p = iter.next();
-			if (p.getVillages().size() <= 0) {
-				iter.remove();
-			}
-		}
-		if (players.size() <= 1) {
-			gameState.setHasWon(true);
-			//TODO: players.get(0).incrementWinCount();
-			for (Player p : gameState.getPlayers()) {
-				if (!p.equals(players.get(0))) {
-					//TODO: p.incrementLossCount();
-				}
-			}
-		}
-	}
-
-
-	
-	List<Integer> growNewTrees() {
-		return gameState.getMap().growNewTrees();
-	}
-	
-	void placeTreesAt(List<Integer> l) {
-		gameState.getMap().placeTreesAt(l);
-	}
-
 	void buildUnit(Village v, Tile t, UnitType type) {
 		log("Entering buildUnit");
 		Region r = v.getRegion();
@@ -374,6 +121,41 @@ class GameEngine implements Observer {
 			new Unit(type, v, t);
 		}
 	}
+	
+	void cultivateMeadow(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Unit u = t.getUnit();
+		if (u != null) {
+			if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS) {
+				u.setCurrentAction(ActionType.STARTCULTIVATING);
+				u.setImmobileUntilRound(gameState.getRoundCount() + 2);
+				// The meadow terrain is built in phaseBuild of beginTurn because it
+				// should not appear until the second turn that the unit is cultivating the
+				// meadow.
+			}
+		}
+	}
+	
+	void upgradeUnitInfantry(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Unit u = t.getUnit();
+		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
+			upgradeUnit(u, UnitType.INFANTRY);
+	}
+	
+	void upgradeUnitSoldier(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Unit u = t.getUnit();
+		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
+			upgradeUnit(u, UnitType.SOLDIER);
+	}
+	
+	void upgradeUnitKnight(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Unit u = t.getUnit();
+		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
+			upgradeUnit(u, UnitType.KNIGHT);
+	}
 
 	void upgradeUnit(Unit u, UnitType newLevel) {
 		Village v = u.getVillage();
@@ -393,7 +175,21 @@ class GameEngine implements Observer {
 			v.transactGold(-1 * cost);
 		}
 	}
-
+	
+	void upgradeVillageTown(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Village v = t.getVillage();
+		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.TOWN))
+			upgradeVillage(v, VillageType.TOWN);
+	}
+	
+	void upgradeVillageFort(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Village v = t.getVillage();
+		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT))
+			upgradeVillage(v, VillageType.FORT);
+	}
+	
 	void upgradeVillage(Village v, VillageType newLevel) {
 		int cost = Village.villageCost(newLevel) - Village.villageCost(v.getVillageType());
 		if (v.getWood() >= cost) {
@@ -401,25 +197,69 @@ class GameEngine implements Observer {
 			v.transactWood(-1 * cost);
 		}
 	}
+	
+	void moveUnit(int x1, int y1, int x2, int y2) {
+		Tile t1 = gameState.getMap().getTile(x1, y1);
+		Tile t2 = gameState.getMap().getTile(x2, y2);
+		Unit u = t1.getUnit();
+		if (u != null)
+			moveUnit(u, t2);
+	}
+	
+	void moveUnit(Unit u, Tile dest) {
+		MoveType moveType = getMoveType(u, dest);
 
-	void buildTower(Tile t) {
-		Village village = t.getRegion().getVillage();
-		if (village != null) {
-			if (village.getWood() >= 5) {
-				t.setStructure(StructureType.WATCHTOWER);
-				village.transactWood(-5);
+		if (moveType == MoveType.INVALIDMOVE) {
+			// Do nothing;
+		}
+		else if (moveType == MoveType.COMBINEUNITS) {
+			combineUnits(dest.getUnit(), u);
+		}
+		else {
+			// If there is an enemy unit, we kill it because we checked whether
+			// it was defeatable in getMoveType
+			if (dest.getControllingPlayer() != u.getControllingPlayer()) {
+				if (dest.getUnit() != null) {
+					killUnit(dest.getUnit());
+				}
+				if (dest.getStructure() == StructureType.WATCHTOWER) {
+					dest.setTerrainType(null);
+				}
+
+			}
+
+			// Move the unit
+			Tile origin = u.getTile();
+			origin.setUnit(null);
+			dest.setUnit(u);
+			u.setTile(dest);
+
+			// Non-combat type actions
+			if (moveType == MoveType.TRAMPLEMEADOW) {
+				trampleMeadow(u);
+			}
+			else if (moveType == MoveType.CLEARTOMB) {
+				clearTombstone(u);
+			}
+			else if (moveType == MoveType.GATHERWOOD) {
+				gatherWood(u);
+			}
+
+			// Exiting own territory type actions
+			if (dest.getControllingPlayer() == null) {
+				u.getVillage().getRegion().addTile(dest);
+				combineRegions(dest);
+				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
+				u.setCurrentAction(ActionType.MOVED);
+			}
+			else if (dest.getControllingPlayer() != u.getControllingPlayer()) {
+				takeoverTile(dest);
+				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
+				u.setCurrentAction(ActionType.MOVED);
 			}
 		}
 	}
-
-	Game getGameState() {
-		return gameState;
-	}
-
-	void setGameState(Game gameState) {
-		this.gameState = gameState;
-	}
-
+	
 	private MoveType getMoveType(Unit u, Tile dest) {
 		Tile origin = u.getTile();
 		List<Tile> adjacent = origin.getNeighbours();
@@ -521,127 +361,7 @@ class GameEngine implements Observer {
 			return MoveType.INVALIDMOVE;
 		}
 	}
-
-	private void gatherWood(Unit u) {
-		u.getTile().setTerrainType(TerrainType.GRASS);
-		u.setImmobileUntilRound(gameState.getRoundCount() + 1);
-		u.setCurrentAction(ActionType.CHOPPINGTREE);
-		u.getVillage().transactWood(1);
-	}
-
-	private void clearTombstone(Unit u) {
-		u.getTile().setStructure(null);
-		u.setImmobileUntilRound(gameState.getRoundCount() + 1);
-		u.setCurrentAction(ActionType.CLEARINGTOMBSTONE);
-	}
-
-	private void trampleMeadow(Unit u) {
-		Tile t = u.getTile();
-		// Only Soldier and Knight trample meadows
-		if (Unit.unitLevel(u.getUnitType()) >= Unit.unitLevel(UnitType.INFANTRY) && t.getTerrainType() == TerrainType.MEADOW
-				&& t.getStructure() != StructureType.ROAD) {
-			u.getTile().setTerrainType(TerrainType.GRASS);
-		}
-	}
-
-	private void phaseTombstone(Player p, Map m) {
-		m.replaceTombstonesWithTrees(p);
-	}
-
-	private void phaseBuild(Player p) {
-		List<Unit> units = p.getUnits();
-		ActionType currentAction;
-		for (Unit u : units) {
-			currentAction = u.getCurrentAction();
-			if (currentAction == ActionType.STARTCULTIVATING) {
-				u.setCurrentAction(ActionType.FINISHCULTIVATING);
-			}
-			else if (currentAction == ActionType.FINISHCULTIVATING) {
-				u.setCurrentAction(ActionType.READYFORORDERS);
-				u.getTile().setTerrainType(TerrainType.MEADOW);
-			}
-			else {
-				// The road structure was already placed as part of the build
-				// road operation
-				u.setCurrentAction(ActionType.READYFORORDERS);
-			}
-		}
-	}
-
-	private void phaseIncome(Player p) {
-		List<Village> villages = p.getVillages();
-		for (Village v : villages) {
-			v.transactGold(v.getTotalIncome());
-		}
-	}
-
-	private void phasePayment(Player p) {
-		List<Village> villages = p.getVillages();
-		for (Village v : villages) {
-			int totalUpkeep = v.getTotalUpkeep();
-			if (v.getGold() < totalUpkeep) {
-				killAllUnits(v);
-			}
-			else {
-				v.transactGold(-1 * totalUpkeep);
-			}
-		}
-	}
-
-	void moveUnit(Unit u, Tile dest) {
-		MoveType moveType = getMoveType(u, dest);
-
-		if (moveType == MoveType.INVALIDMOVE) {
-			// Do nothing;
-		}
-		else if (moveType == MoveType.COMBINEUNITS) {
-			combineUnits(dest.getUnit(), u);
-		}
-		else {
-			// If there is an enemy unit, we kill it because we checked whether
-			// it was defeatable in getMoveType
-			if (dest.getControllingPlayer() != u.getControllingPlayer()) {
-				if (dest.getUnit() != null) {
-					killUnit(dest.getUnit());
-				}
-				if (dest.getStructure() == StructureType.WATCHTOWER) {
-					dest.setTerrainType(null);
-				}
-
-			}
-
-			// Move the unit
-			Tile origin = u.getTile();
-			origin.setUnit(null);
-			dest.setUnit(u);
-			u.setTile(dest);
-
-			// Non-combat type actions
-			if (moveType == MoveType.TRAMPLEMEADOW) {
-				trampleMeadow(u);
-			}
-			else if (moveType == MoveType.CLEARTOMB) {
-				clearTombstone(u);
-			}
-			else if (moveType == MoveType.GATHERWOOD) {
-				gatherWood(u);
-			}
-
-			// Exiting own territory type actions
-			if (dest.getControllingPlayer() == null) {
-				u.getVillage().getRegion().addTile(dest);
-				combineRegions(dest);
-				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
-				u.setCurrentAction(ActionType.MOVED);
-			}
-			else if (dest.getControllingPlayer() != u.getControllingPlayer()) {
-				takeoverTile(dest);
-				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
-				u.setCurrentAction(ActionType.MOVED);
-			}
-		}
-	}
-
+	
 	private void combineUnits(Unit dest, Unit moved) {
 		UnitType newLevel = null;
 		int villageLevel = Village.villageLevel(dest.getVillage().getVillageType());
@@ -668,6 +388,29 @@ class GameEngine implements Observer {
 		moved.getVillage().removeUnit(moved);
 		moved.getTile().setUnit(null);
 	}
+	
+	private void trampleMeadow(Unit u) {
+		Tile t = u.getTile();
+		// Only Soldier and Knight trample meadows
+		if (Unit.unitLevel(u.getUnitType()) >= Unit.unitLevel(UnitType.INFANTRY) && t.getTerrainType() == TerrainType.MEADOW
+				&& t.getStructure() != StructureType.ROAD) {
+			u.getTile().setTerrainType(TerrainType.GRASS);
+		}
+	}
+	
+	private void clearTombstone(Unit u) {
+		u.getTile().setStructure(null);
+		u.setImmobileUntilRound(gameState.getRoundCount() + 1);
+		u.setCurrentAction(ActionType.CLEARINGTOMBSTONE);
+	}
+	
+	private void gatherWood(Unit u) {
+		u.getTile().setTerrainType(TerrainType.GRASS);
+		u.setImmobileUntilRound(gameState.getRoundCount() + 1);
+		u.setCurrentAction(ActionType.CHOPPINGTREE);
+		u.getVillage().transactWood(1);
+	}
+	
 
 	private void combineRegions(Tile t) {
 		List<Tile> adjacent = t.getNeighbours();
@@ -809,6 +552,254 @@ class GameEngine implements Observer {
 			}
 		}
 		return new HashSet<Tile>(reached);
+	}
+	
+	private void takeoverTile(Tile dest) {
+		Unit unit = dest.getUnit();
+		Region destRegion = dest.getRegion();
+		Village destVillage = dest.getVillage();
+		Village unitsVillage = unit.getVillage();
+
+		if (destVillage != null) {
+			unitsVillage.transactGold(destVillage.getGold());
+			unitsVillage.transactWood(destVillage.getWood());
+			dest.setVillage(null);
+		}
+
+		destRegion.removeTile(dest);
+		unitsVillage.getRegion().addTile(dest);
+		reconcileRegions(destRegion);
+		checkWinConditions();
+	}
+	
+	private void checkWinConditions() {
+		List<Player> players = new ArrayList<Player>(gameState.getPlayers());
+		Iterator<Player> iter = players.iterator();
+		while (iter.hasNext()) {
+			Player p = iter.next();
+			if (p.getVillages().size() <= 0) {
+				iter.remove();
+			}
+		}
+		if (players.size() <= 1) {
+			gameState.setHasWon(true);
+			//TODO: players.get(0).incrementWinCount();
+			for (Player p : gameState.getPlayers()) {
+				if (!p.equals(players.get(0))) {
+					//TODO: p.incrementLossCount();
+				}
+			}
+		}
+	}
+	
+	int getMapHeight() {
+		return gameState.getMap().getHeight();
+	}
+	
+	int getMapWidth() {
+		return gameState.getMap().getWidth();
+	}
+	
+	UITileDescriptor getTile(int x, int y) {
+		Tile t =gameState.getMap().getTile(x, y);
+		TerrainType tt = t.getTerrainType();
+		UnitType ut = null;
+		StructureType st = t.getStructure();
+		VillageType vt = null;
+		ColourType ct = null;
+
+		if (t.getControllingPlayer() != null) {
+			ct = t.getControllingPlayer().getColour();
+			if (t.getUnit() != null)
+				ut = t.getUnit().getUnitType();
+			if (t.getVillage() != null)
+				vt = t.getVillage().getVillageType();
+		}
+
+		updatedTiles.remove(t);
+
+		return new UITileDescriptor(x, y, tt, st, ut, vt, ct);
+	}
+	
+	boolean hasUpdatedTiles() {
+		return !updatedTiles.isEmpty();
+	}
+	
+	List<UITileDescriptor> getUpdatedTiles() {
+		List<UITileDescriptor> ret = new ArrayList<UITileDescriptor>();
+		for (Tile t : updatedTiles) {
+			TerrainType tt = t.getTerrainType();
+			UnitType ut = null;
+			StructureType st = t.getStructure();
+			VillageType vt = null;
+			ColourType ct = null;
+
+			if (t.getControllingPlayer() != null) {
+				ct = t.getControllingPlayer().getColour();
+				if (t.getUnit() != null)
+					ut = t.getUnit().getUnitType();
+				if (t.getVillage() != null)
+					vt = t.getVillage().getVillageType();
+			}
+
+			ret.add(new UITileDescriptor(t.getX(), t.getY(), tt, st, ut, vt, ct));
+		}
+		updatedTiles.clear();
+		return ret;
+	}
+	
+	UIVillageDescriptor getVillage(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Village v = t.getVillage();
+		if (v != null) {
+			java.util.Map<UnitType, Integer> unittypes = new HashMap<UnitType, Integer>(4);
+			List<Unit> units = v.getSupportedUnits();
+			for (Unit u : units) {
+				Integer count = unittypes.get(u.getUnitType());
+				if (count == null) {
+					unittypes.put(u.getUnitType(), 1);
+				}
+				else {
+					unittypes.put(u.getUnitType(), count + 1);
+				}
+			}
+			return new UIVillageDescriptor(x, y, v.getVillageType(), v.getGold(), v.getWood(), unittypes, v.getTotalIncome(),
+					v.getTotalUpkeep());
+		}
+		else {
+			return null;
+		}
+	}
+	
+	boolean isTurnOfPlayer(String name) {
+		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
+	}
+	
+	boolean isTurnOfLastPlayer() {
+		int size = gameState.getPlayers().size();
+		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(gameState.getPlayers().get(size - 1).getUsername()) == 1);
+	}
+	
+	String getCurrentTurnPlayerName() {
+		return gameState.getCurrentTurnPlayer().getUsername();
+	}
+	
+	int getCurrentRoundCount() {
+		return gameState.getRoundCount();
+	}
+	
+	void newGame(List<String> players, Map map) {
+		List<Player> temp = new ArrayList<Player>();
+		for (String s : players) {
+			temp.add(new Player(s));
+		}
+		Map.setUpMap(temp, map);
+		Game game = new Game(temp, map);
+		Player.setUpPlayers(temp);
+		setGameState(game);
+		beginTurn(gameState.getCurrentTurnPlayer());
+	}
+	
+	/**
+	 * Not sure if the list from gameState.getPlayers() keeps its order, it
+	 * should since the return is not making a copy.
+	 */
+	void endTurn() {
+		List<Player> players = gameState.getPlayers();
+		int turnPosition = players.indexOf(gameState.getCurrentTurnPlayer());
+		if (turnPosition == players.size() - 1) {
+			gameState.incrementRoundCount();
+			turnPosition = 0;
+		}
+		else {
+			turnPosition++;
+		}
+		beginTurn(players.get(turnPosition));
+	}
+	
+	private void beginTurn(Player p) {
+		Map map = gameState.getMap();
+		gameState.setTurnOf(p);
+		phaseBuild(p);
+		phaseTombstone(p, map);
+		phaseIncome(p);
+		phasePayment(p);
+	}
+	
+
+	private void phaseBuild(Player p) {
+		List<Unit> units = p.getUnits();
+		ActionType currentAction;
+		for (Unit u : units) {
+			currentAction = u.getCurrentAction();
+			if (currentAction == ActionType.STARTCULTIVATING) {
+				u.setCurrentAction(ActionType.FINISHCULTIVATING);
+			}
+			else if (currentAction == ActionType.FINISHCULTIVATING) {
+				u.setCurrentAction(ActionType.READYFORORDERS);
+				u.getTile().setTerrainType(TerrainType.MEADOW);
+			}
+			else {
+				// The road structure was already placed as part of the build
+				// road operation
+				u.setCurrentAction(ActionType.READYFORORDERS);
+			}
+		}
+	}
+	
+	private void phaseTombstone(Player p, Map m) {
+		m.replaceTombstonesWithTrees(p);
+	}
+
+	private void phaseIncome(Player p) {
+		List<Village> villages = p.getVillages();
+		for (Village v : villages) {
+			v.transactGold(v.getTotalIncome());
+		}
+	}
+
+	private void phasePayment(Player p) {
+		List<Village> villages = p.getVillages();
+		for (Village v : villages) {
+			int totalUpkeep = v.getTotalUpkeep();
+			if (v.getGold() < totalUpkeep) {
+				killAllUnits(v);
+			}
+			else {
+				v.transactGold(-1 * totalUpkeep);
+			}
+		}
+	}
+	
+	void leaveGame() {
+		updatedTiles.clear();
+		gameState = null;
+	}
+	
+	void addObserverToTiles() {
+		if (gameState == null)
+			return;
+		Map map = gameState.getMap();
+		for (Tile t : map.getTiles()) {
+			t.addObserver(this);
+			updatedTiles.add(t);
+		}
+	}
+	
+	List<Integer> growNewTrees() {
+		return gameState.getMap().growNewTrees();
+	}
+	
+	void placeTreesAt(List<Integer> l) {
+		gameState.getMap().placeTreesAt(l);
+	}
+
+	Game getGameState() {
+		return gameState;
+	}
+
+	void setGameState(Game gameState) {
+		this.gameState = gameState;
 	}
 
 	private void killAllUnits(Village v) {

@@ -135,7 +135,7 @@ public class ModelController {
 		}
 		if (gameState != null) {
 			engine.setGameState(gameState);
-			engine.addObserverToTiles(gameState.getMap());
+			engine.addObserverToTiles();
 			gameRunning = true;
 		}
 	}
@@ -163,6 +163,7 @@ public class ModelController {
 			if (players.get(0).compareTo(username) == 0) {
 				engine.newGame(players, presetMap);
 				System.out.println("First player");
+				engine.addObserverToTiles();
 				// TODO: IGameCommand command = new SetupGameCommand(engine.getGameState());
 				// amqpAdapter.send(command, exchange, "");
 			}

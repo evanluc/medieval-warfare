@@ -19,8 +19,8 @@ public class PlayerTest {
 	
 	@Before
 	public void setUp(){
-		p1 = new Player("WalterWhite MethKing50");
-		p2 = new Player("GobBot Kek");
+		p1 = new Player("WalterWhite");
+		p2 = new Player("GobBot");
 		p3 = new Player("LucilleBot vodka,neat");
 		players = new ArrayList<Player>();
 		players.add(p1);

@@ -15,14 +15,14 @@ public class ModelControllerGameplayTest {
 
 	private ModelController model;
 	private List<String> playerIds;
-	private static final String mappath = "/maps/seaside-skirmish.mwm";
-	private static final String savepath = "/saves/junit-saved-game.mwg";
+	private static final String mappath = "assets/maps/seaside-skirmish.mwm";
+	private static final String savepath = "assets/saves/junit-saved-game.mwg";
 
 	@Before
 	public void setUp() throws Exception {
 		model = ModelController.getInstance();
 		playerIds = new ArrayList<String>();
-		playerIds.add("1001");
+		playerIds.add("Bob");
 		playerIds.add("1234");
 		playerIds.add("666");
 	}
@@ -31,7 +31,7 @@ public class ModelControllerGameplayTest {
 	public void testGameplay() {
 		UITileDescriptor a, b;
 		int randx = 0, randy = 0;
-		model.newGame("username", playerIds, mappath);
+		model.newGame("Bob", playerIds, mappath);
 
 		assertFalse(model.getUpdatedTiles().isEmpty());
 

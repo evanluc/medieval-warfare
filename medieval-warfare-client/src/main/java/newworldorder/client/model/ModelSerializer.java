@@ -1,6 +1,7 @@
 package newworldorder.client.model;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -85,7 +86,7 @@ public class ModelSerializer {
 		// - stackoverflow.com
 		ObjectOutputStream oos = null;
 		try {
-			oos = new ObjectOutputStream(new FileOutputStream(new File(ModelSerializer.class.getResource(path).getPath())));
+			oos = new ObjectOutputStream(new FileOutputStream(new File(path)));
 			oos.writeObject(o);
 		}
 		catch (Exception ex) {
@@ -103,8 +104,7 @@ public class ModelSerializer {
 		ObjectInputStream ois = null;
 		Object o;
 		try {
-			InputStream istream = ModelSerializer.class.getResourceAsStream(path);
-			ois = new ObjectInputStream(istream);
+			ois = new ObjectInputStream(new FileInputStream(new File(path)));
 			o = ois.readObject();
 		}
 		catch (Exception ex) {

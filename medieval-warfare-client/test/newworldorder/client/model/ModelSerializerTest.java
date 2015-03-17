@@ -59,7 +59,7 @@ public class ModelSerializerTest {
 	public void testLoadMap() {
 		Map loadMap = null;
 		try {
-			loadMap = ModelSerializer.loadMap("/testfiles/junit-test-map-load.mwm");
+			loadMap = ModelSerializer.loadMap("assets/testfiles/junit-test-map-load.mwm");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -74,7 +74,7 @@ public class ModelSerializerTest {
 	@Test
 	public void testSaveMap() {
 		try {
-			ModelSerializer.saveMap(testMap, "/testfiles/junit-test-map-save.mwm");
+			ModelSerializer.saveMap(testMap, "assets/testfiles/junit-test-map-save.mwm");
 		}
 		catch (Exception e) {
 			fail("Unable to save, test failed");
@@ -85,7 +85,7 @@ public class ModelSerializerTest {
 	public void testLoadGameState() {
 		Game loadGame = null;
 		try {
-			loadGame = ModelSerializer.loadGameState("/testfiles/junit-test-game-load.mwm");
+			loadGame = ModelSerializer.loadGameState("assets/testfiles/junit-test-game-load.mwm");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -123,7 +123,7 @@ public class ModelSerializerTest {
 	@Test
 	public void testSaveGameState() {
 		try {
-			ModelSerializer.saveGameState(testGame, "/testfiles/junit-test-game-save.mwm");
+			ModelSerializer.saveGameState(testGame, "assets/testfiles/junit-test-game-save.mwm");
 		}
 		catch (Exception e) {
 			fail("Unable to save, test failed");

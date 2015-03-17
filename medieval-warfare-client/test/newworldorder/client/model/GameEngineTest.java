@@ -65,14 +65,14 @@ public class GameEngineTest {
 
 	@Test
 	public void testBuildRoad() {
-		Unit aUnit = new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
+		new Unit(UnitType.PEASANT, village1, aMap.getTile(1, 0));
 		assertFalse(aMap.getTile(1, 0).getStructure() == StructureType.ROAD);
-		gameEngine.buildRoad(aUnit);
+		gameEngine.buildRoad(1, 0);
 		assertTrue(aMap.getTile(1, 0).getStructure() == StructureType.ROAD);
 
-		Unit aUnit2 = new Unit(UnitType.KNIGHT, village1, aMap.getTile(0, 1));
+		new Unit(UnitType.KNIGHT, village1, aMap.getTile(0, 1));
 		assertFalse(aMap.getTile(0, 1).getStructure() == StructureType.ROAD);
-		gameEngine.buildRoad(aUnit2);
+		gameEngine.buildRoad(0, 1);
 		assertFalse(aMap.getTile(0, 1).getStructure() == StructureType.ROAD);
 	}
 
@@ -117,11 +117,11 @@ public class GameEngineTest {
 	public void testBuildTower() {
 		// not enough wood
 		Tile buildOn = aMap.getTile(0, 1);
-		gameEngine.buildTower(buildOn);
+		gameEngine.buildTower(0 ,1);
 		assertEquals(buildOn.getStructure(), null);
 		// proper build
 		village1.transactWood(5);
-		gameEngine.buildTower(buildOn);
+		gameEngine.buildTower(0, 1);
 		assertEquals(buildOn.getStructure(), StructureType.WATCHTOWER);
 		assertEquals(village1.getWood(), 0);
 	}
@@ -172,7 +172,7 @@ public class GameEngineTest {
 	@Test
 	public void testMoveUnit_FreeMove() {
 		Unit ally = new Unit(UnitType.KNIGHT, village1, aMap.getTile(1, 0));
-		Unit enemy = new Unit(UnitType.SOLDIER, village2, aMap.getTile(1, 1));
+		new Unit(UnitType.SOLDIER, village2, aMap.getTile(1, 1));
 		// Kill enemy unit
 		gameEngine.moveUnit(ally, aMap.getTile(1, 1));
 		assertEquals(aMap.getTile(1, 1).getUnit(), ally);
@@ -209,7 +209,7 @@ public class GameEngineTest {
 	@Test
 	public void testMoveUnit_CombineUnits() {
 		Unit u1 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 1));
-		Unit u2 = new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
+		new Unit(UnitType.INFANTRY, village1, aMap.getTile(1, 0));
 		village1.setVillageType(VillageType.FORT);
 		gameEngine.moveUnit(u1, aMap.getTile(1, 0));
 		assertEquals(aMap.getTile(1, 1).getUnit(), null);
@@ -253,11 +253,11 @@ public class GameEngineTest {
 		Tile t1 = aMap.getTile(0, 1);
 		Unit u1 = new Unit(UnitType.KNIGHT, village1, t1);
 		t1.setTerrainType(TerrainType.GRASS);
-		gameEngine.cultivateMeadow(u1);
+		gameEngine.cultivateMeadow(0, 1);
 		assertEquals(t1.getTerrainType(), TerrainType.GRASS);
 		// Peasant can
 		u1.setUnitType(UnitType.PEASANT);
-		gameEngine.cultivateMeadow(u1);
+		gameEngine.cultivateMeadow(0, 1);
 		assertEquals(u1.getCurrentAction(), ActionType.STARTCULTIVATING);
 		gameEngine.endTurn();
 		gameEngine.endTurn();
