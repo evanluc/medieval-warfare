@@ -6,13 +6,16 @@ import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.UIVillageDescriptor;
 
+/**
+ * This is the only public facing class in the model package. All communication with the model should go through
+ * this class. In particular, classes outside of the model package should not have any knowledge of any class or enum
+ * inside the model other than this class.
+ */
 public class ModelController {
 	private static ModelController instance = null;
 	private GameEngine engine = null;
 	private boolean gameRunning;
 	private String localPlayerName;
-	private String exchange;
-	
 	
 	private ModelController() {
 		super();
@@ -34,7 +37,7 @@ public class ModelController {
 			return;
 
 		if (isLocalPlayersTurn() && isLastPlayer()) {
-			// List<Integer> newTrees = engine.growNewTrees();
+			List<Integer> newTrees = engine.growNewTrees();
 			// TODO: SyncTreesCommand command = new SyncTreesCommand(newTrees);
 			// sendCommand(command);
 		}
@@ -101,6 +104,14 @@ public class ModelController {
 
 		engine.moveUnit(x1, y1, x2, y2);
 	}
+	
+	public List<Integer> growNewTrees() {
+		return engine.growNewTrees();
+	}
+	
+	public void placeTreesAt(List<Integer> l) {
+		engine.placeTreesAt(l);
+	}
 
 	public UITileDescriptor getTile(int x, int y) {
 		return engine.getTile(x, y);
@@ -142,7 +153,6 @@ public class ModelController {
 	public void newGame(String username, List<String> players, String mapFilePath) {
 		this.localPlayerName = username;
 		Map presetMap = null;
-		System.out.println("Exchange: " + exchange);
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
 		}

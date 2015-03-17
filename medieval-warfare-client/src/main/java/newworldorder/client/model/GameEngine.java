@@ -25,27 +25,27 @@ class GameEngine implements Observer {
 	private Game gameState;
 	private List<Tile> updatedTiles;
 
-	public GameEngine() {
+	GameEngine() {
 		this.gameState = null;
 	}
 
-	public GameEngine(Game pGameState) {
+	GameEngine(Game pGameState) {
 		this.gameState = pGameState;
 	}
 	
-	public void buildRoad(int x, int y) {
+	void buildRoad(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null)
 			buildRoad(u);
 	}
 	
-	public void buildTower(int x, int y) {
+	void buildTower(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		buildTower(t);
 	}
 	
-	public void buildUnitPeasant(int x, int y) {
+	void buildUnitPeasant(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Region r = t.getRegion();
 		if (r != null) {
@@ -55,7 +55,7 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	public void buildUnitInfantry(int x, int y) {
+	void buildUnitInfantry(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Region r = t.getRegion();
 		if (r != null) {
@@ -65,7 +65,7 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	public void buildUnitSoldier(int x, int y) {
+	void buildUnitSoldier(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Region r = t.getRegion();
 		if (r != null) {
@@ -75,7 +75,7 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	public void buildUnitKnight(int x, int y) {
+	void buildUnitKnight(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Region r = t.getRegion();
 		if (r != null) {
@@ -85,49 +85,49 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	public void cultivateMeadow(int x, int y) {
+	void cultivateMeadow(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null)
 			cultivateMeadow(u);
 	}
 	
-	public void upgradeUnitInfantry(int x, int y) {
+	void upgradeUnitInfantry(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
 			upgradeUnit(u, UnitType.INFANTRY);
 	}
 	
-	public void upgradeUnitSoldier(int x, int y) {
+	void upgradeUnitSoldier(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
 			upgradeUnit(u, UnitType.SOLDIER);
 	}
 	
-	public void upgradeUnitKnight(int x, int y) {
+	void upgradeUnitKnight(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
 			upgradeUnit(u, UnitType.KNIGHT);
 	}
 	
-	public void upgradeVillageTown(int x, int y) {
+	void upgradeVillageTown(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Village v = t.getVillage();
 		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.TOWN))
 			upgradeVillage(v, VillageType.TOWN);
 	}
 	
-	public void upgradeVillageFort(int x, int y) {
+	void upgradeVillageFort(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Village v = t.getVillage();
 		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT))
 			upgradeVillage(v, VillageType.FORT);
 	}
 	
-	public void moveUnit(int x1, int y1, int x2, int y2) {
+	void moveUnit(int x1, int y1, int x2, int y2) {
 		Tile t1 = gameState.getMap().getTile(x1, y1);
 		Tile t2 = gameState.getMap().getTile(x2, y2);
 		Unit u = t1.getUnit();
@@ -135,15 +135,15 @@ class GameEngine implements Observer {
 			moveUnit(u, t2);
 	}
 	
-	public int getMapHeight() {
+	int getMapHeight() {
 		return gameState.getMap().getHeight();
 	}
 	
-	public int getMapWidth() {
+	int getMapWidth() {
 		return gameState.getMap().getWidth();
 	}
 	
-	public UITileDescriptor getTile(int x, int y) {
+	UITileDescriptor getTile(int x, int y) {
 		Tile t =gameState.getMap().getTile(x, y);
 		TerrainType tt = t.getTerrainType();
 		UnitType ut = null;
@@ -164,11 +164,11 @@ class GameEngine implements Observer {
 		return new UITileDescriptor(x, y, tt, st, ut, vt, ct);
 	}
 	
-	public boolean hasUpdatedTiles() {
+	boolean hasUpdatedTiles() {
 		return !updatedTiles.isEmpty();
 	}
 	
-	public List<UITileDescriptor> getUpdatedTiles() {
+	List<UITileDescriptor> getUpdatedTiles() {
 		List<UITileDescriptor> ret = new ArrayList<UITileDescriptor>();
 		for (Tile t : updatedTiles) {
 			TerrainType tt = t.getTerrainType();
@@ -191,7 +191,7 @@ class GameEngine implements Observer {
 		return ret;
 	}
 	
-	public UIVillageDescriptor getVillage(int x, int y) {
+	UIVillageDescriptor getVillage(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Village v = t.getVillage();
 		if (v != null) {
@@ -214,24 +214,24 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	public boolean isTurnOfPlayer(String name) {
+	boolean isTurnOfPlayer(String name) {
 		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
 	}
 	
-	public boolean isTurnOfLastPlayer() {
+	boolean isTurnOfLastPlayer() {
 		int size = gameState.getPlayers().size();
 		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(gameState.getPlayers().get(size - 1).getUsername()) == 1);
 	}
 	
-	public String getCurrentTurnPlayerName() {
+	String getCurrentTurnPlayerName() {
 		return gameState.getCurrentTurnPlayer().getUsername();
 	}
 	
-	public int getCurrentRoundCount() {
+	int getCurrentRoundCount() {
 		return gameState.getRoundCount();
 	}
 	
-	public void newGame(List<String> players, Map map) {
+	void newGame(List<String> players, Map map) {
 		List<Player> temp = new ArrayList<Player>();
 		for (String s : players) {
 			temp.add(new Player(s));
@@ -247,7 +247,7 @@ class GameEngine implements Observer {
 	 * Not sure if the list from gameState.getPlayers() keeps its order, it
 	 * should since the return is not making a copy.
 	 */
-	public void endTurn() {
+	void endTurn() {
 		List<Player> players = gameState.getPlayers();
 		int turnPosition = players.indexOf(gameState.getCurrentTurnPlayer());
 		if (turnPosition == players.size() - 1) {
@@ -269,12 +269,12 @@ class GameEngine implements Observer {
 		phasePayment(p);
 	}
 	
-	public void leaveGame() {
+	void leaveGame() {
 		updatedTiles.clear();
 		gameState = null;
 	}
 	
-	public void addObserverToTiles(newworldorder.client.model.Map map) {
+	void addObserverToTiles(newworldorder.client.model.Map map) {
 		for (Tile t : map.getTiles()) {
 			t.addObserver(this);
 			updatedTiles.add(t);
@@ -342,11 +342,11 @@ class GameEngine implements Observer {
 
 
 	
-	public List<Integer> growNewTrees() {
+	List<Integer> growNewTrees() {
 		return gameState.getMap().growNewTrees();
 	}
 	
-	public void placeTreesAt(List<Integer> l) {
+	void placeTreesAt(List<Integer> l) {
 		gameState.getMap().placeTreesAt(l);
 	}
 
@@ -375,7 +375,7 @@ class GameEngine implements Observer {
 		}
 	}
 
-	public void upgradeUnit(Unit u, UnitType newLevel) {
+	void upgradeUnit(Unit u, UnitType newLevel) {
 		Village v = u.getVillage();
 		if (v.getVillageType() == VillageType.HOVEL) {
 			if (newLevel == UnitType.SOLDIER || newLevel == UnitType.KNIGHT) {
@@ -394,7 +394,7 @@ class GameEngine implements Observer {
 		}
 	}
 
-	public void upgradeVillage(Village v, VillageType newLevel) {
+	void upgradeVillage(Village v, VillageType newLevel) {
 		int cost = Village.villageCost(newLevel) - Village.villageCost(v.getVillageType());
 		if (v.getWood() >= cost) {
 			v.setVillageType(newLevel);
@@ -412,11 +412,11 @@ class GameEngine implements Observer {
 		}
 	}
 
-	public Game getGameState() {
+	Game getGameState() {
 		return gameState;
 	}
 
-	public void setGameState(Game gameState) {
+	void setGameState(Game gameState) {
 		this.gameState = gameState;
 	}
 
@@ -588,7 +588,7 @@ class GameEngine implements Observer {
 		}
 	}
 
-	public void moveUnit(Unit u, Tile dest) {
+	void moveUnit(Unit u, Tile dest) {
 		MoveType moveType = getMoveType(u, dest);
 
 		if (moveType == MoveType.INVALIDMOVE) {
