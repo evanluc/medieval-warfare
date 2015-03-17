@@ -159,6 +159,16 @@ public class ModelController {
 			gameRunning = true;
 		}
 	}
+	
+	public void setGameState(Object gameState) {
+		if (gameState instanceof Game) {
+			engine.setGameState((Game) gameState);
+		}
+	}
+	
+	public Object getGameState() {
+		return engine.getGameState();
+	}
 
 	public void leaveGame() {
 		engine.leaveGame();
