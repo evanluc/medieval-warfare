@@ -281,7 +281,7 @@ class GameEngine implements Observer {
 		}
 	}
 	
-	private void buildRoad(Unit u) {
+	void buildRoad(Unit u) {
 		Tile tile = u.getTile();
 		if (u.getUnitType() == UnitType.PEASANT && tile.getStructure() != StructureType.ROAD) {
 			u.setCurrentAction(ActionType.BUILDINGROAD);
@@ -290,7 +290,7 @@ class GameEngine implements Observer {
 		}
 	}
 
-	private void cultivateMeadow(Unit u) {
+	void cultivateMeadow(Unit u) {
 		Tile tile = u.getTile();
 		if (u.getUnitType() == UnitType.PEASANT && tile.getTerrainType() == TerrainType.GRASS) {
 			u.setCurrentAction(ActionType.STARTCULTIVATING);
@@ -350,7 +350,7 @@ class GameEngine implements Observer {
 		gameState.getMap().placeTreesAt(l);
 	}
 
-	private void buildUnit(Village v, Tile t, UnitType type) {
+	void buildUnit(Village v, Tile t, UnitType type) {
 		log("Entering buildUnit");
 		Region r = v.getRegion();
 		// Check pre-requisites for building a unit
@@ -402,7 +402,7 @@ class GameEngine implements Observer {
 		}
 	}
 
-	private void buildTower(Tile t) {
+	void buildTower(Tile t) {
 		Village village = t.getRegion().getVillage();
 		if (village != null) {
 			if (village.getWood() >= 5) {

@@ -80,4 +80,8 @@ class Player implements Serializable {
         }
         return units;
     }
+
+	public int getPlayerId() {
+		return username.hashCode();
+	}
 }

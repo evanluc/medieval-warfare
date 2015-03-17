@@ -139,7 +139,7 @@ public class ModelController {
 		}
 	}
 
-	public void newGame(List<String> players, String username, String mapFilePath) {
+	public void newGame(String username, List<String> players, String mapFilePath) {
 		this.localPlayerName = username;
 		Map presetMap = null;
 		System.out.println("Exchange: " + exchange);
