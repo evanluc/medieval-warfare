@@ -94,4 +94,12 @@ class Region implements Serializable {
             controllingVillage = village;
         }
     }
+    
+    public void createVillage(Tile t) {
+    	if (controllingVillage == null) {
+    		Village village = new Village(t, controllingPlayer, this);
+    		t.setVillage(village);
+    		t.setTerrainType(TerrainType.GRASS);
+    	}
+    }
 }

@@ -41,6 +41,13 @@ class Village implements Serializable {
         gold = 0;
         wood = 0;
         controlledBy.addVillage(this);
+        
+		for (Tile t : tiles) {
+			if (t.getUnit() != null) {
+				this.addUnit(t.getUnit());
+				t.getUnit().setVillage(this);
+			}
+		}
     }
     
     public Village(Tile pTile, Player pPlayer, Region r) {
@@ -54,6 +61,13 @@ class Village implements Serializable {
         gold = 0;
         wood = 0;
         controlledBy.addVillage(this);
+        
+		for (Tile t : r.getTiles()) {
+			if (t.getUnit() != null) {
+				this.addUnit(t.getUnit());
+				t.getUnit().setVillage(this);
+			}
+		}
     }
     
     public static int villageLevel(VillageType pVillageType) {

@@ -112,6 +112,10 @@ public class ModelController {
 	public void placeTreesAt(List<Integer> l) {
 		engine.placeTreesAt(l);
 	}
+	
+	public void placeVillageAt(int hashcode) {
+		// TODO Send command
+	}
 
 	public UITileDescriptor getTile(int x, int y) {
 		return engine.getTile(x, y);
