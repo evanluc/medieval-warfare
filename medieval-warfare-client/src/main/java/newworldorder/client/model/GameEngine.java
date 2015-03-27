@@ -259,8 +259,7 @@ class GameEngine implements Observer {
 			}
 		}
 	}
-	
-	private MoveType getMoveType(Unit u, Tile dest) {
+		private MoveType getMoveType(Unit u, Tile dest) {
 		Tile origin = u.getTile();
 		List<Tile> adjacent = origin.getNeighbours();
 
@@ -343,6 +342,107 @@ class GameEngine implements Observer {
 			}
 			if (landOnDest == TerrainType.MEADOW) {
 				if (u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER) {
+					return MoveType.TRAMPLEMEADOW;
+				}
+				else {
+					return MoveType.FREEMOVE;
+				}
+			}
+			if (landOnDest == TerrainType.SEA) {
+				return MoveType.INVALIDMOVE;
+			}
+			if (landOnDest == TerrainType.GRASS) {
+				return MoveType.FREEMOVE;
+			}
+			return MoveType.INVALIDMOVE;
+		}
+		else {
+			return MoveType.INVALIDMOVE;
+		}
+	}
+
+	private MoveType getMoveType(Tile origin, Tile dest, UnitType uType, int immobileUntilRound, Player controllingPlayer) {
+		List<Tile> adjacent = origin.getNeighbours();
+
+		if (immobileUntilRound <= gameState.getRoundCount() && adjacent.contains(dest)
+				&& controllingPlayer == gameState.getCurrentTurnPlayer() && uType != null) {
+			TerrainType landOnDest = dest.getTerrainType();
+			StructureType structureOnDest = dest.getStructure();
+			Unit unitOnDest = dest.getUnit();
+			Village villageOnDest = dest.getVillage();
+			Region regionOnDest = dest.getRegion();
+
+			if (regionOnDest != null) {
+				if (regionOnDest.getControllingPlayer() != controllingPlayer && uType == UnitType.PEASANT) {
+					return MoveType.INVALIDMOVE;
+				}
+			}
+
+			if (unitOnDest != null) {
+				if (unitOnDest.getControllingPlayer() == controllingPlayer) {
+					// Combine units
+					return MoveType.COMBINEUNITS;
+				}
+				else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(uType)) {
+					// Enemy unit is stronger
+					return MoveType.INVALIDMOVE;
+				}
+				else if (villageOnDest == null) {
+					// Enemy unit is weaker
+					if (structureOnDest == StructureType.WATCHTOWER && Unit.unitLevel(uType) <= Unit.unitLevel(UnitType.INFANTRY)) {
+						// but tile contains a watchtower and the attacking unit
+						// is weaker than the tower
+						return MoveType.INVALIDMOVE;
+					}
+					return MoveType.FREEMOVE;
+				}
+			}
+
+			if (structureOnDest == StructureType.WATCHTOWER) {
+				// dest contains a watchtower
+				if (dest.getControllingPlayer() != controllingPlayer) {
+					if (Unit.unitLevel(uType) <= Unit.unitLevel(UnitType.INFANTRY)) {
+						return MoveType.INVALIDMOVE;
+					}
+				}
+			}
+
+			if (villageOnDest != null) {
+				// Unit invades enemy village
+				if ((uType == UnitType.KNIGHT || uType == UnitType.SOLDIER)
+						&& villageOnDest.getControlledBy() != controllingPlayer) {
+					if (dest.getUnit() == null || Unit.unitLevel(uType) > Unit.unitLevel(dest.getUnit().getUnitType())) {
+						return MoveType.FREEMOVE;
+					}
+					else {
+						return MoveType.INVALIDMOVE;
+					}
+				}
+				else if (villageOnDest.getControlledBy() == controllingPlayer) {
+					return MoveType.FREEMOVE;
+				}
+				else {
+					return MoveType.INVALIDMOVE;
+				}
+			}
+			if (landOnDest == TerrainType.TREE) {
+				if (uType == UnitType.KNIGHT) {
+					return MoveType.INVALIDMOVE;
+				}
+				else {
+					return MoveType.GATHERWOOD;
+				}
+			}
+			if (structureOnDest == StructureType.TOMBSTONE) {
+				if (uType == UnitType.KNIGHT) {
+					return MoveType.INVALIDMOVE;
+				}
+				else {
+					return MoveType.CLEARTOMB;
+				}
+			}
+			if (landOnDest == TerrainType.MEADOW) {
+				if (uType == UnitType.KNIGHT || uType == UnitType.SOLDIER) {
 					return MoveType.TRAMPLEMEADOW;
 				}
 				else {
@@ -800,6 +900,63 @@ class GameEngine implements Observer {
 
 	void setGameState(Game gameState) {
 		this.gameState = gameState;
+	}
+	
+	/**
+	 * Gets all tiles reachable in one turn by a unit starting at tile x,y 
+	 * @param x x position of starting tile
+	 * @param y y position of starting tile
+	 * @return set of tiles reachable in one turn
+	 */
+	List<UITileDescriptor> getReachableTiles(int x, int y){
+		List<Tile> reachableTiles = new ArrayList<Tile>();
+		Tile startTile = this.gameState.getMap().getTile(x, y);
+		Unit unitOnStart = startTile.getUnit();
+		UnitType onStartType = null; 
+		int immobileUntil = Integer.MAX_VALUE;
+		Player controllingPlayer = null;
+		if(unitOnStart != null){
+			onStartType = unitOnStart.getUnitType();
+			immobileUntil = unitOnStart.getImmobileUntilRound();
+			controllingPlayer = unitOnStart.getControllingPlayer();
+		}else{
+			//No unit at tile, no reachable tiles
+			return new ArrayList<UITileDescriptor>();
+		}
+		reachableTiles.add(startTile);
+		List<Tile> adjacentToStart = startTile.getNeighbours();
+		for(Tile t : adjacentToStart){
+			MoveType move = getMoveType(startTile, t, onStartType, immobileUntil, controllingPlayer );
+			if(move == MoveType.FREEMOVE || move == MoveType.TRAMPLEMEADOW){
+				reachableTiles.add(t);
+				if (t.getControllingPlayer() == controllingPlayer) {
+					getReachableHelper(t, onStartType, immobileUntil, controllingPlayer, reachableTiles);
+				}
+			}
+		}
+		return tileListToUITileDescriptorList(reachableTiles);
+	}
+	private void getReachableHelper(Tile aTile, UnitType uType, int immobileUntil, Player controllingPlayer, List<Tile> reachableTiles){
+		for(Tile t : aTile.getNeighbours()){
+			MoveType move = getMoveType(aTile, t, uType, immobileUntil, controllingPlayer );
+			if(move == MoveType.FREEMOVE || move == MoveType.TRAMPLEMEADOW){
+				if(!reachableTiles.contains(t)){
+					reachableTiles.add(t);
+					if (t.getControllingPlayer() == controllingPlayer) {
+						getReachableHelper(t, uType, immobileUntil, controllingPlayer, reachableTiles);
+					}
+				}
+			}
+		}
+	}
+
+	private List<UITileDescriptor> tileListToUITileDescriptorList(List<Tile> tileList){
+		List<UITileDescriptor> toReturn = new ArrayList<UITileDescriptor>();
+		for(Tile t : tileList){
+			UITileDescriptor aDescriptor = new UITileDescriptor(t.getX(), t.getY(), null, null, null, null, null);
+			toReturn.add(aDescriptor);
+		}
+		return toReturn;
 	}
 
 	private void killAllUnits(Village v) {
