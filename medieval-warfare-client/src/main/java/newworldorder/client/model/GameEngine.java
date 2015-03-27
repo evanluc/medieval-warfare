@@ -20,18 +20,16 @@ import newworldorder.client.shared.VillageType;
 /**
  * GameEngine class, clean and complete.
  */
-class GameEngine implements Observer {
+public class GameEngine implements Observer {
 
+	private ModelController controller;
 	private Game gameState;
 	private Set<Tile> updatedTiles;
+	private String localPlayerName;
 
 	GameEngine() {
 		this.gameState = null;
 		this.updatedTiles = new HashSet<Tile>();
-	}
-
-	GameEngine(Game pGameState) {
-		this.gameState = pGameState;
 	}
 	
 	void buildRoad(int x, int y) {
@@ -139,14 +137,14 @@ class GameEngine implements Observer {
 	void upgradeUnitInfantry(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
-		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
+		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.INFANTRY))
 			upgradeUnit(u, UnitType.INFANTRY);
 	}
 	
 	void upgradeUnitSoldier(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
-		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
+		if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.SOLDIER))
 			upgradeUnit(u, UnitType.SOLDIER);
 	}
 	
@@ -516,17 +514,16 @@ class GameEngine implements Observer {
 					newRegion.setVillage(newVillage);
 				}
 				else {
-					newRegion.createVillage();
-					newVillage = newRegion.getVillage();
+					if (isTurnOfPlayer(localPlayerName)) {
+						newRegion.createVillage();
+						newVillage = newRegion.getVillage();
+						controller.placeVillageAt(newVillage.getTile().hashCode());
+					}
 				}
 
 				for (Tile t : regCandidate) {
 					newRegion.addTile(t);
 					t.setRegion(newRegion);
-					if (t.getUnit() != null) {
-						newVillage.addUnit(t.getUnit());
-						t.getUnit().setVillage(newVillage);
-					}
 				}
 			}
 		}
@@ -793,6 +790,16 @@ class GameEngine implements Observer {
 	void placeTreesAt(List<Integer> l) {
 		gameState.getMap().placeTreesAt(l);
 	}
+	
+	void placeVillageAt(int hashcode) {
+		Tile t = gameState.getMap().getTile(hashcode);
+		Region r = t.getRegion();
+		r.createVillage(t);
+	}
+
+	void setLocalPlayerName(String localPlayerName) {
+		this.localPlayerName = localPlayerName;
+	}
 
 	Game getGameState() {
 		return gameState;
@@ -822,7 +829,6 @@ class GameEngine implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
+		updatedTiles.add((Tile) o);
 	}
 }
