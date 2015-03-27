@@ -232,6 +232,9 @@ public class ModelController {
 		return engine.getCurrentRoundCount();
 	}
 	
+	public List<UITileDescriptor> getReachableTiles(int x, int y){
+		return engine.getReachableTiles(x, y);
+	}
 //	public void sendCommand(IGameCommand command) {
 //		amqpAdapter.send(command, exchange, "");
 //	}
