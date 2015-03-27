@@ -1,5 +1,7 @@
 package newworldorder.client.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +28,7 @@ class Tile extends Observable implements Serializable {
     private Village villageOnTile;
     private StructureType occupyingStructure;
     private final Map map;
-    private final Set<Tile> neighbours;
+    transient private Set<Tile> neighbours;
     
     public Tile(int px, int py, Map myMap) {
         x = px;
@@ -153,5 +155,14 @@ class Tile extends Observable implements Serializable {
     @Override
 	public boolean equals(Object o) {
         return this.hashCode() == o.hashCode();
+    }
+    
+    private void readObject(ObjectInputStream inputStream)
+            throws IOException, ClassNotFoundException
+    {
+        inputStream.defaultReadObject();
+        if (this.neighbours == null) {
+        	neighbours = new HashSet<Tile>();
+        }
     }
 }

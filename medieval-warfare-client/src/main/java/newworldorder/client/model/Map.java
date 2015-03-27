@@ -1,5 +1,7 @@
 package newworldorder.client.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -233,4 +235,13 @@ class Map implements Serializable {
 			}
 		}
 	}
+	
+    private void readObject(ObjectInputStream inputStream)
+            throws IOException, ClassNotFoundException
+    {
+        inputStream.defaultReadObject();
+        for (int i = 0; i < totalTiles; i++) {
+        	tiles.get(i).cacheNeighbours();
+        }
+    }
 }

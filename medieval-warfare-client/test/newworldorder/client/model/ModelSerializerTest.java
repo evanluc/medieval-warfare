@@ -85,7 +85,7 @@ public class ModelSerializerTest {
 	public void testLoadGameState() {
 		Game loadGame = null;
 		try {
-			loadGame = ModelSerializer.loadGameState("assets/testfiles/junit-test-game-load.mwm");
+			loadGame = ModelSerializer.loadGameState("assets/testfiles/junit-test-game-load.mwg");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -123,7 +123,7 @@ public class ModelSerializerTest {
 	@Test
 	public void testSaveGameState() {
 		try {
-			ModelSerializer.saveGameState(testGame, "assets/testfiles/junit-test-game-save.mwm");
+			ModelSerializer.saveGameState(testGame, "assets/testfiles/junit-test-game-save.mwg");
 		}
 		catch (Exception e) {
 			fail("Unable to save, test failed");

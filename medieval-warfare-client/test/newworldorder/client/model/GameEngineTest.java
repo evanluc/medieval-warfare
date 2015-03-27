@@ -32,7 +32,8 @@ public class GameEngineTest {
 		playerList.add(p2);
 		aMap = new Map(10, 10);
 		Game aGame = new Game(playerList, aMap);
-		gameEngine = new GameEngine(aGame);
+		gameEngine = new GameEngine();
+		gameEngine.setGameState(aGame);
 		aGame.setTurnOf(p1);
 		Set<Tile> reg1 = new HashSet<Tile>();
 		reg1.add(aMap.getTile(0, 0));
