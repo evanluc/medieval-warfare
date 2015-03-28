@@ -2,11 +2,19 @@ package newworldorder.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Tree;
+import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GameScreen implements Screen {
 	// private Stage stage = new Stage();
@@ -15,6 +23,8 @@ public class GameScreen implements Screen {
 	private TiledMapStage stage;
 	private MedievalWarfareGame game;
 	private HUD hud;
+	private Stage UIstage;
+	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
 	public GameScreen(final MedievalWarfareGame game,
 			TiledMapRenderer tiledMapRenderer, TiledMapStage stage,
@@ -23,11 +33,17 @@ public class GameScreen implements Screen {
 		this.camera = camera;
 		this.stage = stage;
 		this.game = game;
+		this.UIstage = new UIStage(skin);
+
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		
+		
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
 		stage.tiledMapRenderUpdate(game.getModel()
 				.getUpdatedTiles());
 
@@ -35,15 +51,19 @@ public class GameScreen implements Screen {
 		stage.getViewport().setCamera(camera);
 
 		float height = stage.getHeight();
-		final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 		hud = new HUD("HUD", skin, game.getModel().getCurrentPlayerTurn(), game
 				.getModel().getTurnNumber(), height);
 		hud.setWidth(150);
 		hud.setHeight(150);
 		hud.setPosition(35, height);
 
-		stage.addActor(hud);
+		UIstage.addActor(hud);
 
+		
+inputMultiplexer.addProcessor(UIstage);
+Gdx.input.setInputProcessor(inputMultiplexer);
+
+		
 	}
 
 	@Override
@@ -59,6 +79,7 @@ public class GameScreen implements Screen {
 		stage.act();
 		stage.draw();
 		move(delta);
+		UIstage.draw();
 
 	}
 

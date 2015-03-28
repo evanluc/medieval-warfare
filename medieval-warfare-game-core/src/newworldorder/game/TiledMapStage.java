@@ -5,9 +5,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Tree;
+import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.List;
 
@@ -28,7 +34,7 @@ public class TiledMapStage extends Stage {
 	private boolean multiActionInput;
 	private TiledMapActor previousActor;
 	private IModelCommunicator model;
-	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
 	public TiledMapStage(TiledMap tiledMap, IModelCommunicator model) {
 
@@ -40,7 +46,7 @@ public class TiledMapStage extends Stage {
 		this.tiledMap = tiledMap;
 		System.out.println("Get stage height = " + this.getHeight());
 		System.out.println("Get stage width = " + this.getWidth());
-
+		
 		TiledMapTileLayer tiledLayer = (TiledMapTileLayer) tiledMap.getLayers().get("colour");
 		createActorsForLayer(tiledLayer);
 
