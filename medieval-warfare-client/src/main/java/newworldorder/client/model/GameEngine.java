@@ -12,6 +12,7 @@ import java.util.Set;
 import newworldorder.client.shared.ColourType;
 import newworldorder.client.shared.StructureType;
 import newworldorder.client.shared.TerrainType;
+import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.UIVillageDescriptor;
 import newworldorder.client.shared.UnitType;
@@ -167,7 +168,7 @@ public class GameEngine implements Observer {
 				return;
 			}
 		}
-		int cost = Unit.unitLevel(newLevel) - Unit.unitLevel(u.getUnitType());
+		int cost = Unit.unitCost(newLevel) - Unit.unitCost(u.getUnitType());
 		if (v.getGold() >= cost) {
 			u.setUnitType(newLevel);
 			v.transactGold(-1 * cost);
@@ -909,6 +910,120 @@ public class GameEngine implements Observer {
 		this.gameState = gameState;
 	}
 	
+	List<UIActionType> getLegalMoves(int x, int y){
+		List<UIActionType> legalMoves = new ArrayList<UIActionType>();
+		Tile t = gameState.getMap().getTile(x, y);
+		Unit u = t.getUnit();
+		Region r = t.getRegion();
+		Village v = null;
+		Player p = null;
+		if( r != null){
+			v  = r.getVillage();
+			p = r.getControllingPlayer(); 
+		}else{
+			return legalMoves;
+		}
+		if( p != gameState.getCurrentTurnPlayer()){
+			return legalMoves;
+		}
+		for(UIActionType action : UIActionType.values()){
+			switch (action) {
+			case BUILDROAD:
+				t = gameState.getMap().getTile(x, y);
+				if (u != null) {
+					if (u.getUnitType() == UnitType.PEASANT && t.getStructure() != StructureType.ROAD) {
+						legalMoves.add(UIActionType.BUILDROAD);
+					}
+				}
+				break;
+			case BUILDTOWER:
+				t = gameState.getMap().getTile(x, y);
+				v = t.getRegion().getVillage();
+				if (v.getWood() >= 5) {
+					legalMoves.add(UIActionType.BUILDTOWER);
+				}
+				break;
+			case BUILDUNITINFANTRY:
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.INFANTRY)){
+					legalMoves.add(UIActionType.BUILDUNITINFANTRY);
+				}
+				break;
+			case BUILDUNITKNIGHT:
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.KNIGHT)){
+					legalMoves.add(UIActionType.BUILDUNITKNIGHT);
+				}
+				break;
+			case BUILDUNITPEASANT:
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.PEASANT)){
+					legalMoves.add(UIActionType.BUILDUNITPEASANT);
+				}
+				break;
+			case BUILDUNITSOLDIER:
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.SOLDIER)){
+					legalMoves.add(UIActionType.BUILDUNITSOLDIER);
+				}
+				break;
+			case CULTIVATEMEADOW:
+				if (u != null) {
+					if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS) {
+						legalMoves.add(UIActionType.CULTIVATEMEADOW);
+					}
+				}
+				break;
+			case UPGRADEUNITSOLDIER:
+				if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.SOLDIER)){
+					if (v.getVillageType() == VillageType.HOVEL) {
+						break;
+					}
+					int cost = Unit.unitCost(UnitType.SOLDIER) - Unit.unitCost(u.getUnitType());
+					if (v.getGold() >= cost) {
+						legalMoves.add(UIActionType.UPGRADEUNITSOLDIER);
+					}
+				}
+				break;
+			case UPGRADEUNITINFANTRY:
+				if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.INFANTRY)){
+					int cost = Unit.unitCost(UnitType.INFANTRY) - Unit.unitCost(u.getUnitType());
+					if (v.getGold() >= cost) {
+						legalMoves.add(UIActionType.UPGRADEUNITINFANTRY);
+					}
+				}
+				break;
+			case UPGRADEUNITKNIGHT:
+				if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.SOLDIER)){
+					if (v.getVillageType() == VillageType.HOVEL || v.getVillageType() == VillageType.TOWN) {
+						break;
+					}
+					int cost = Unit.unitCost(UnitType.KNIGHT) - Unit.unitCost(u.getUnitType());
+					if (v.getGold() >= cost) {
+						legalMoves.add(UIActionType.UPGRADEUNITKNIGHT);
+					}
+				}
+				break;
+			case UPGRADEVILLAGETOWN:
+				if (Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT)){
+					int cost = Village.villageCost(VillageType.TOWN) - Village.villageCost(v.getVillageType());
+					if (v.getWood() >= cost) {
+						legalMoves.add(UIActionType.UPGRADEVILLAGETOWN);
+					}
+				}
+				break;
+			case UPGRADEVILLAGEFORT:
+				if (Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT)){
+					int cost = Village.villageCost(VillageType.TOWN) - Village.villageCost(v.getVillageType());
+					if (v.getWood() >= cost) {
+						legalMoves.add(UIActionType.UPGRADEVILLAGETOWN);
+					}
+				}
+				break;
+			case ENDTURN:
+				legalMoves.add(UIActionType.ENDTURN);
+			default:
+				// TODO throw exception instead
+			}
+		}
+		return legalMoves; 
+	}
 	/**
 	 * Gets all tiles reachable in one turn by a unit starting at tile x,y 
 	 * @param x x position of starting tile

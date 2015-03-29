@@ -64,30 +64,43 @@ public class ModelController {
 		switch (action) {
 		case BUILDROAD:
 			engine.buildRoad(x, y);
+			break;
 		case BUILDTOWER:
 			engine.buildTower(x, y);
+			break;
 		case BUILDUNITINFANTRY:
 			engine.buildUnitInfantry(x, y);
+			break;
 		case BUILDUNITKNIGHT:
 			engine.buildUnitKnight(x, y);
+			break;
 		case BUILDUNITPEASANT:
 			engine.buildUnitPeasant(x, y);
+			break;
 		case BUILDUNITSOLDIER:
 			engine.buildUnitSoldier(x, y);
+			break;
 		case CULTIVATEMEADOW:
 			engine.cultivateMeadow(x, y);
+			break;
 		case UPGRADEUNITSOLDIER:
 			engine.upgradeUnitSoldier(x, y);
+			break;
 		case UPGRADEUNITINFANTRY:
 			engine.upgradeUnitInfantry(x, y);
+			break;
 		case UPGRADEUNITKNIGHT:
 			engine.upgradeUnitKnight(x, y);
+			break;
 		case UPGRADEVILLAGETOWN:
 			engine.upgradeVillageTown(x, y);
+			break;
 		case UPGRADEVILLAGEFORT:
 			engine.upgradeVillageFort(x, y);
+			break;
 		case ENDTURN:
 			engine.endTurn();
+			break;
 		default:
 			// TODO throw exception instead
 		}
@@ -234,6 +247,9 @@ public class ModelController {
 	
 	public List<UITileDescriptor> getReachableTiles(int x, int y){
 		return engine.getReachableTiles(x, y);
+	}
+	public List<UIActionType> getLegalMoves(int x, int y){
+		return engine.getLegalMoves(x, y);
 	}
 //	public void sendCommand(IGameCommand command) {
 //		amqpAdapter.send(command, exchange, "");
