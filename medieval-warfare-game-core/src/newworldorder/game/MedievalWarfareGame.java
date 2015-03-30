@@ -44,7 +44,7 @@ public class MedievalWarfareGame extends Game {
 
 		TiledMapStage stage = new TiledMapStage(tiledMap,model);
 		gameScreen = new GameScreen(this, tiledMapRenderer, stage, camera);
-		this.setScreen(new LoginScreen(gameScreen, this));
+		this.setScreen(new LoginScreen(gameScreen, this, camera));
 
 	}
 

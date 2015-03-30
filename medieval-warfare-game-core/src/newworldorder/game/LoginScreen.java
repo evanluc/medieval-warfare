@@ -2,8 +2,10 @@ package newworldorder.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,26 +31,28 @@ public class LoginScreen implements Screen{
 	private String validPassword = "valid";
 	//temporary userame
 	private String validUsername = "valid";
-
+	
+	Camera camera;
 	Stage stage;
 	SpriteBatch batch;
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-	private TextField textField;
 	GameScreen gameScreen;
 	MedievalWarfareGame thisGame;
 
 	Sprite sprite;
 
-	public LoginScreen(GameScreen gameScreen, MedievalWarfareGame thisGame){
-		textField = new TextField("Enter username", skin);
+	public LoginScreen(GameScreen gameScreen, MedievalWarfareGame thisGame, Camera camera){
 		this.gameScreen = gameScreen;
 		this.thisGame = thisGame;
+		this.camera = camera;
+
 	}
 
 
 	@Override
 	public void show() {
 		stage = new Stage();
+		stage.getViewport().setCamera(camera);
 
 		batch = new SpriteBatch();
 		Texture texture = new Texture(Gdx.files.internal("./images/background.jpg"));
@@ -82,10 +86,11 @@ public class LoginScreen implements Screen{
 		tree.add(usernameNode);
 		tree.add(passwordNode);
 		tree.add(login);
-		table.add(tree).fill().expand();	
-
+		table.add(tree).fill().expand();		
+		table.center();
+		
 //		table.setPosition(stage.getCamera().position.x - table.getWidth()/2, stage.getCamera().position.y - table.getHeight()/2);	
-		//table.setPosition(stage.getWidth() - table.getWidth() / 2, stage.getHeight() - table.getHeight()/2);
+		//table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()/2);
 		stage.addActor(table);
 
 		
@@ -103,6 +108,7 @@ public class LoginScreen implements Screen{
 				} //end of no password case
 
 				else{ 
+					//call networking stuff
 					thisGame.setScreen(gameScreen);
 				}
 			}//end of click listener
