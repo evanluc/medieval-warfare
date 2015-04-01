@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
 		stage.getViewport().setCamera(camera);
 
 		float height = stage.getHeight();
-		hud = new HUD("HUD", skin, game.getModel().getCurrentPlayerTurn(), game
+		hud = new HUD("HUD", skin, game.getModel().getCurrentTurnPlayer(), game
 				.getModel().getTurnNumber(), height);
 		hud.setWidth(150);
 		hud.setHeight(150);
@@ -76,7 +76,7 @@ public class GameScreen implements Screen {
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 		stage.tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
-		hud.setCurrentUsername(game.getModel().getCurrentPlayerTurn());
+		hud.setCurrentUsername(game.getModel().getCurrentTurnPlayer());
 		hud.setCurrentTurn(game.getModel().getTurnNumber());
 		stage.act();
 		stage.draw();

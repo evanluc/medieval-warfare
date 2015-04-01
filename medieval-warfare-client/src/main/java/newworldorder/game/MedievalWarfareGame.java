@@ -18,8 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import newworldorder.game.driver.IModelCommunicator;
-import newworldorder.game.driver.ModelManager;
+import newworldorder.client.model.ModelController;
 
 public class MedievalWarfareGame extends Game {
 	public TiledMap tiledMap;
@@ -29,7 +28,7 @@ public class MedievalWarfareGame extends Game {
 	Texture texture;
 	OrthographicCamera camera;
 	GameScreen gameScreen;
-	private IModelCommunicator model = ModelManager.getInstance();
+	private ModelController model = ModelController.getInstance();
 
 	@Override
 	public void create () {
@@ -54,7 +53,7 @@ public class MedievalWarfareGame extends Game {
 		super.render();
 	}
 	
-	public IModelCommunicator getModel(){
+	public ModelController getModel(){
 		return model;
 	}
 }

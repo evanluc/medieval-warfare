@@ -2,7 +2,7 @@ package newworldorder.game.command;
 
 import java.util.List;
 
-import newworldorder.game.model.GameEngine;
+import newworldorder.client.model.GameEngine;
 
 public class SyncTreesCommand implements IGameCommand {
 	/**

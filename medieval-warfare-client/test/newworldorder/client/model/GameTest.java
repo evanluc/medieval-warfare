@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import newworldorder.game.model.Game;
-import newworldorder.game.model.Map;
-import newworldorder.game.model.Player;
-import newworldorder.game.model.Tile;
+import newworldorder.client.model.Game;
+import newworldorder.client.model.Map;
+import newworldorder.client.model.Player;
+import newworldorder.client.model.Tile;
 
 public class GameTest {
 	private Map map;
@@ -24,15 +24,13 @@ public class GameTest {
 
 	@Before
 	public void setUp() throws Exception {
-		p1 = new Player("Yung", "Lean", 0, 0, null);
-		p2 = new Player("2", "Chainz", 0, 0, null);
+		p1 = new Player("YungLean");
+		p2 = new Player("2Chainz");
 		playerList = new ArrayList<Player>();
 		playerList.add(p1);
 		playerList.add(p2);
 		map = new Map(10, 10);
 		game = new Game(playerList, map);
-		p1.setCurrentGame(game);
-		p2.setCurrentGame(game);
 		tileList = new ArrayList<Tile>();
 		tileList.add(map.getTile(0, 0));
 		tileList.add(map.getTile(1, 0));

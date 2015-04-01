@@ -2,21 +2,21 @@ package newworldorder.game.command;
 
 import java.util.List;
 
-import newworldorder.game.driver.IModelCommunicator;
-import newworldorder.game.driver.ModelManager;
-import newworldorder.game.driver.UIActionType;
-import newworldorder.game.model.GameEngine;
-import newworldorder.game.model.Region;
-import newworldorder.game.model.Tile;
-import newworldorder.game.model.Unit;
-import newworldorder.game.model.UnitType;
-import newworldorder.game.model.Village;
-import newworldorder.game.model.VillageType;
+import newworldorder.client.shared.UIActionType;
+import newworldorder.client.model.GameEngine;
 
 public class CommandFactory {
 	
-	public static IGameCommand createCommand(UIActionType action) {
+	public static IGameCommand createEndTurnCommand() {
 		return new EndTurnCommand();
+	}
+	
+	public static IGameCommand createSyncTreesCommand(List<Integer> newTrees) {
+		return new SyncTreesCommand(newTrees);
+	}
+	
+	public static IGameCommand createPlaceVillageCommand(int hashcode) {
+		return new PlaceVillageCommand(hashcode);
 	}
 
 	public static IGameCommand createCommand(UIActionType action, int x, int y) {
@@ -55,7 +55,7 @@ public class CommandFactory {
 	public static IGameCommand createCommand(UIActionType action, int x1, int y1, int x2, int y2) {
 		return new MoveUnitCommand(x1, y1, x2, y2);
 	}
-
+	
 	private static class EndTurnCommand implements IGameCommand {
 		/**
 		 * 
@@ -65,13 +65,53 @@ public class CommandFactory {
 
 		@Override
 		public void execute() {
-			IModelCommunicator modelController = ModelManager.getInstance();
-			if (modelController.isLocalPlayersTurn() && modelController.isLastPlayer()) {
-				List<Integer> newTrees = engine.growNewTrees();
-				SyncTreesCommand command = new SyncTreesCommand(newTrees);
-				modelController.sendCommand(command);
-			}
 			engine.endTurn();
+		}
+
+		@Override
+		public void setGameEngine(GameEngine engine) {
+			this.engine = engine;
+		}
+	}
+	
+	private static class SyncTreesCommand implements IGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6605499829717076737L;
+		private GameEngine engine;
+		private final List<Integer> newTrees;
+		
+		public SyncTreesCommand(List<Integer> newTrees) {
+			this.newTrees = newTrees;
+		}
+		
+		@Override
+		public void execute() {
+			engine.placeTreesAt(newTrees);
+		}
+
+		@Override
+		public void setGameEngine(GameEngine engine) {
+			this.engine = engine;
+		}
+	}
+
+	private static class PlaceVillageCommand implements IGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2715015379925412885L;
+		private GameEngine engine;
+		int hashcode;
+		
+		public PlaceVillageCommand(int hashcode) {
+			this.hashcode = hashcode;
+		}
+
+		@Override
+		public void execute() {
+			engine.placeVillageAt(hashcode);
 		}
 
 		@Override
@@ -97,11 +137,7 @@ public class CommandFactory {
 
 		@Override
 		public void execute() {
-			Tile t1 = engine.getGameState().getMap().getTile(x1, y1);
-			Tile t2 = engine.getGameState().getMap().getTile(x2, y2);
-			Unit u = t1.getUnit();
-			if (u != null)
-				engine.moveUnit(u, t2);
+			engine.moveUnit(x1, y1, x2, y2);
 		}
 
 		@Override
@@ -123,9 +159,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Unit u = t.getUnit();
-			if (u != null)
-				engine.buildRoad(u);
+			engine.buildRoad(x, y);
 		}
 	}
 
@@ -141,7 +175,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			engine.buildTower(t);
+			engine.buildTower(x, y);
 		}
 	}
 
@@ -157,12 +191,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Region r = t.getRegion();
-			if (r != null) {
-				Village v = r.getVillage();
-				if (v != null)
-					engine.buildUnit(v, t, UnitType.INFANTRY);
-			}
+			engine.buildUnitInfantry(x, y);
 		}
 	}
 
@@ -178,12 +207,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Region r = t.getRegion();
-			if (r != null) {
-				Village v = r.getVillage();
-				if (v != null)
-					engine.buildUnit(v, t, UnitType.KNIGHT);
-			}
+			engine.buildUnitKnight(x, y);
 		}
 	}
 
@@ -199,12 +223,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Region r = t.getRegion();
-			if (r != null) {
-				Village v = r.getVillage();
-				if (v != null)
-					engine.buildUnit(v, t, UnitType.PEASANT);
-			}
+			engine.buildUnitPeasant(x, y);
 		}
 	}
 
@@ -220,12 +239,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Region r = t.getRegion();
-			if (r != null) {
-				Village v = r.getVillage();
-				if (v != null)
-					engine.buildUnit(v, t, UnitType.SOLDIER);
-			}
+			engine.buildUnitSoldier(x, y);
 		}
 	}
 
@@ -241,9 +255,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Unit u = t.getUnit();
-			if (u != null)
-				engine.cultivateMeadow(u);
+			engine.cultivateMeadow(x, y);
 		}
 	}
 
@@ -259,9 +271,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Unit u = t.getUnit();
-			if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.SOLDIER))
-				engine.upgradeUnit(u, UnitType.SOLDIER);
+			engine.upgradeUnitSoldier(x, y);
 		}
 	}
 
@@ -277,9 +287,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Unit u = t.getUnit();
-			if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.INFANTRY))
-				engine.upgradeUnit(u, UnitType.INFANTRY);
+			engine.upgradeUnitInfantry(x, y);
 		}
 	}
 
@@ -295,9 +303,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Unit u = t.getUnit();
-			if (u != null && Unit.unitLevel(u.getUnitType()) < Unit.unitLevel(UnitType.KNIGHT))
-				engine.upgradeUnit(u, UnitType.KNIGHT);
+			engine.upgradeUnitKnight(x, y);
 		}
 	}
 
@@ -313,9 +319,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Village v = t.getVillage();
-			if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.TOWN))
-				engine.upgradeVillage(v, VillageType.TOWN);
+			engine.upgradeVillageTown(x, y);
 		}
 	}
 
@@ -331,9 +335,7 @@ public class CommandFactory {
 
 		@Override
 		public void doExecute() {
-			Village v = t.getVillage();
-			if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT))
-				engine.upgradeVillage(v, VillageType.FORT);
+			engine.upgradeVillageFort(x, y);
 		}
 	}
 
@@ -343,8 +345,8 @@ public class CommandFactory {
 		 */
 		private static final long serialVersionUID = 6257373390683253415L;
 		protected GameEngine engine;
-		protected Tile t;
-		private int x, y;
+		protected int x;
+		protected int y;
 
 		private SingleTileGameCommand(int x, int y) {
 			this.x = x;
@@ -358,7 +360,6 @@ public class CommandFactory {
 
 		@Override
 		public final void execute() {
-			t = engine.getGameState().getMap().getTile(x, y);
 			doExecute();
 		}
 

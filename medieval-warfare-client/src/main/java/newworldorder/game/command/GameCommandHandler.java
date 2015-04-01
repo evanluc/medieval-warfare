@@ -1,6 +1,6 @@
 package newworldorder.game.command;
 
-import newworldorder.game.model.GameEngine;
+import newworldorder.client.model.GameEngine;
 
 public class GameCommandHandler {
 	private final GameEngine engine;

@@ -20,7 +20,7 @@ public class ModelSerializer {
 			map = (Map) readSerializedObject(savedMapPath);
 		}
 		catch (ClassNotFoundException e) {
-			throw new Exception("File is either corrupt or out of date when loading map");
+			throw new Exception("File " + savedMapPath + " is either corrupt or out of date when loading map");
 		}
 		catch (FileNotFoundException e) {
 			throw new Exception("Invalid path when loading map");
