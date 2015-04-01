@@ -1,19 +1,18 @@
 package newworldorder.game.command;
 
-import newworldorder.game.driver.IModelCommunicator;
-import newworldorder.game.driver.ModelManager;
-import newworldorder.game.model.Game;
-import newworldorder.game.model.GameEngine;
+import newworldorder.client.model.ModelController;
+//import newworldorder.game.model.Game;
+import newworldorder.client.model.GameEngine;
 
 public class SetupGameCommand implements IGameCommand {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6384201347176706444L;
-	private final Game gameState;
+	private final Object gameState;
 	private GameEngine engine;
 
-	public SetupGameCommand(Game gameState) {
+	public SetupGameCommand(Object gameState) {
 		super();
 		this.gameState = gameState;
 	}
@@ -21,8 +20,6 @@ public class SetupGameCommand implements IGameCommand {
 	@Override
 	public void execute() {
 		engine.setGameState(gameState);
-		IModelCommunicator modelController = ModelManager.getInstance();
-		modelController.addObserverToTiles(gameState.getMap());
 	}
 
 	@Override

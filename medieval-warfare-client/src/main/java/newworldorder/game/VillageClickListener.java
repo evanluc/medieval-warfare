@@ -1,8 +1,7 @@
 package newworldorder.game;
 
-import newworldorder.game.driver.IModelCommunicator;
-import newworldorder.game.driver.ModelManager;
-import newworldorder.game.driver.UIVillageDescriptor;
+import newworldorder.client.model.ModelController;
+import newworldorder.client.shared.UIVillageDescriptor;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;

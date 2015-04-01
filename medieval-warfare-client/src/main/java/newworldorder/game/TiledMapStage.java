@@ -17,26 +17,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.List;
 
-import newworldorder.game.driver.IModelCommunicator;
-import newworldorder.game.driver.UIActionType;
-import newworldorder.game.driver.UITileDescriptor;
-import newworldorder.game.model.ColourType;
-import newworldorder.game.model.Map;
-import newworldorder.game.model.StructureType;
-import newworldorder.game.model.TerrainType;
-import newworldorder.game.model.Tile;
-import newworldorder.game.model.UnitType;
-import newworldorder.game.model.VillageType;
+import newworldorder.client.model.ModelController;
+import newworldorder.client.shared.UIActionType;
+import newworldorder.client.shared.UITileDescriptor;
+import newworldorder.client.shared.ColourType;
+//import newworldorder.game.model.Map;
+import newworldorder.client.shared.StructureType;
+import newworldorder.client.shared.TerrainType;
+//import newworldorder.game.model.Tile;
+import newworldorder.client.shared.UnitType;
+import newworldorder.client.shared.VillageType;
 public class TiledMapStage extends Stage {
 	
 	private TiledMap tiledMap;
 	private final TiledMapDescriptors tiledMapDescriptors; 
 	private boolean multiActionInput;
 	private TiledMapActor previousActor;
-	private IModelCommunicator model;
+	private ModelController model;
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
-	public TiledMapStage(TiledMap tiledMap, IModelCommunicator model) {
+	public TiledMapStage(TiledMap tiledMap, ModelController model) {
 
 		this.multiActionInput = false;
 		this.model = model;
@@ -253,7 +253,7 @@ public class TiledMapStage extends Stage {
 		return tiledMapDescriptors;
 	}
 
-	public IModelCommunicator getModel(){
+	public ModelController getModel(){
 		return model;
 	}
 }

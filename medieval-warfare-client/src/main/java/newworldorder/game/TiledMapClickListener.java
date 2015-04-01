@@ -10,15 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import newworldorder.game.driver.IModelCommunicator;
-import newworldorder.game.driver.ModelManager;
-import newworldorder.game.driver.UIActionType;
-import newworldorder.game.driver.UIVillageDescriptor;
+import newworldorder.client.model.ModelController;
+import newworldorder.client.shared.UIActionType;
+import newworldorder.client.shared.UIVillageDescriptor;
 
 public class TiledMapClickListener extends ClickListener {
 	private TiledMapActor actor;
 	private TiledMapStage stage;
-	private IModelCommunicator controller = ModelManager.getInstance();
+	private ModelController controller = ModelController.getInstance();
 	private Skin skin;
 
 	public TiledMapClickListener(TiledMapActor actor, Skin skin) {

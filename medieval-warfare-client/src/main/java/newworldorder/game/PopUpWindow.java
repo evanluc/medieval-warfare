@@ -1,8 +1,8 @@
 package newworldorder.game;
 
 
-import newworldorder.game.driver.UIActionType;
-import newworldorder.game.driver.UIVillageDescriptor;
+import newworldorder.client.shared.UIActionType;
+import newworldorder.client.shared.UIVillageDescriptor;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
