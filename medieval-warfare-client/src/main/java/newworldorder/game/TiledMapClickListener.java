@@ -60,6 +60,12 @@ public class TiledMapClickListener extends ClickListener {
 				stage.addActor(popUp);
 
 			}*/ if (stage.getMultiActionInput() == false) {
+				
+				Cell outlineCell = stage.getTiledMapDescritors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
+				outlineCell.setTile(stage.getTiledMapDescritors().outlineTile);
+				
+				//creating popup window with moves
+				
 				PopUpWindow popUp = new PopUpWindow("moves", skin, actor, stage);
 				popUp.setWidth(250);
 				popUp.setHeight(450);
