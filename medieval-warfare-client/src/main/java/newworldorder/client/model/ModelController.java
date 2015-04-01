@@ -17,7 +17,7 @@ import newworldorder.common.network.CommandConsumer;
 import newworldorder.game.command.CommandFactory;
 import newworldorder.game.command.GameCommandHandler;
 import newworldorder.game.command.IGameCommand;
-import newworldorder.game.command.SetupGameCommand;
+//import newworldorder.game.command.SetupGameCommand;
 //import newworldorder.game.command.SyncTreesCommand;
 
 /**
@@ -178,7 +178,8 @@ public class ModelController {
 			if (players.get(0).compareTo(username) == 0) {
 				engine.newGame(players, presetMap);
 				System.out.println("First player");
-				IGameCommand command = new SetupGameCommand(engine.getGameState());
+//				IGameCommand command = new SetupGameCommand(engine.getGameState());
+				IGameCommand command = CommandFactory.createSetupGameCommand(engine.getGameState());
 				amqpAdapter.send(command, exchange, "");
 			}
 			gameRunning = true;

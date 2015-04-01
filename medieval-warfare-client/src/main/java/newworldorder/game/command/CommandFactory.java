@@ -7,6 +7,10 @@ import newworldorder.client.model.GameEngine;
 
 public class CommandFactory {
 	
+	public static IGameCommand createSetupGameCommand(Object gameState) {
+		return new SetupGameCommand(gameState);
+	}
+	
 	public static IGameCommand createEndTurnCommand() {
 		return new EndTurnCommand();
 	}
@@ -56,30 +60,55 @@ public class CommandFactory {
 		return new MoveUnitCommand(x1, y1, x2, y2);
 	}
 	
-	private static class EndTurnCommand implements IGameCommand {
+	private static abstract class AbstractGameCommand implements IGameCommand {
+		private static final long serialVersionUID = -4265280207834818270L;
+
+		protected transient GameEngine engine;
+		
+		public final void execute (GameEngine engine) {
+			this.engine = engine;
+			this.execute();
+		}
+		
+		public abstract void execute();
+	}
+	
+	private static class EndTurnCommand extends AbstractGameCommand {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -2144057378224658285L;
-		private GameEngine engine;
 
 		@Override
 		public void execute() {
 			engine.endTurn();
 		}
-
-		@Override
-		public void setGameEngine(GameEngine engine) {
-			this.engine = engine;
-		}
 	}
 	
-	private static class SyncTreesCommand implements IGameCommand {
+	private static class SetupGameCommand extends AbstractGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6384201347176706444L;
+		private final Object gameState;
+
+		public SetupGameCommand(Object gameState) {
+			super();
+			this.gameState = gameState;
+		}
+
+		@Override
+		public void execute() {
+			engine.setGameState(gameState);
+		}
+
+	}
+	
+	private static class SyncTreesCommand extends AbstractGameCommand {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -6605499829717076737L;
-		private GameEngine engine;
 		private final List<Integer> newTrees;
 		
 		public SyncTreesCommand(List<Integer> newTrees) {
@@ -90,19 +119,13 @@ public class CommandFactory {
 		public void execute() {
 			engine.placeTreesAt(newTrees);
 		}
-
-		@Override
-		public void setGameEngine(GameEngine engine) {
-			this.engine = engine;
-		}
 	}
 
-	private static class PlaceVillageCommand implements IGameCommand {
+	private static class PlaceVillageCommand extends AbstractGameCommand {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -2715015379925412885L;
-		private GameEngine engine;
 		int hashcode;
 		
 		public PlaceVillageCommand(int hashcode) {
@@ -113,19 +136,13 @@ public class CommandFactory {
 		public void execute() {
 			engine.placeVillageAt(hashcode);
 		}
-
-		@Override
-		public void setGameEngine(GameEngine engine) {
-			this.engine = engine;
-		}
 	}
 
-	private static class MoveUnitCommand implements IGameCommand {
+	private static class MoveUnitCommand extends AbstractGameCommand {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -4408577083911356294L;
-		private GameEngine engine;
 		private int x1, x2, y1, y2;
 
 		private MoveUnitCommand(int x1, int y1, int x2, int y2) {
@@ -138,11 +155,6 @@ public class CommandFactory {
 		@Override
 		public void execute() {
 			engine.moveUnit(x1, y1, x2, y2);
-		}
-
-		@Override
-		public void setGameEngine(GameEngine engine) {
-			this.engine = engine;
 		}
 
 	}
@@ -339,23 +351,17 @@ public class CommandFactory {
 		}
 	}
 
-	private static abstract class SingleTileGameCommand implements IGameCommand {
+	private static abstract class SingleTileGameCommand extends AbstractGameCommand {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 6257373390683253415L;
-		protected GameEngine engine;
 		protected int x;
 		protected int y;
 
 		private SingleTileGameCommand(int x, int y) {
 			this.x = x;
 			this.y = y;
-		}
-
-		@Override
-		public void setGameEngine(GameEngine engine) {
-			this.engine = engine;
 		}
 
 		@Override
