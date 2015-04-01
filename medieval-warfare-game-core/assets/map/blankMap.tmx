@@ -26,7 +26,7 @@
    <image width="55" height="48" source="colourtiles/crisper/yellow.png"/>
   </tile>
   <tile id="8">
-   <image width="55" height="48" source="colourtiles/crisper/ neutral.png"/>
+   <image width="55" height="48" source="colourtiles/crisper/neutral.png"/>
   </tile>
  </tileset>
  <tileset firstgid="10" name="terraintiles" tilewidth="56" tileheight="48">

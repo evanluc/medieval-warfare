@@ -9,12 +9,12 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import newworldorder.game.model.Map;
-import newworldorder.game.model.Player;
-import newworldorder.game.model.StructureType;
-import newworldorder.game.model.TerrainType;
-import newworldorder.game.model.Tile;
-import newworldorder.game.model.Village;
+import newworldorder.client.model.Map;
+import newworldorder.client.model.Player;
+import newworldorder.client.shared.StructureType;
+import newworldorder.client.shared.TerrainType;
+import newworldorder.client.model.Tile;
+import newworldorder.client.model.Village;
 
 public class MapTest {
 	private Map aMap;
@@ -34,7 +34,7 @@ public class MapTest {
 		Set<Tile> aList = new HashSet<Tile>();
 		aList.add(aMap.getTile(1, 2));
 		aList.add(aMap.getTile(2, 1));
-		p1 = new Player("Yung", "Lean", 0, 0, null);
+		p1 = new Player("YungLean");
 		aVillage = new Village(aMap.getTile(1, 2), p1, aList);
 	}
 
