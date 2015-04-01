@@ -75,7 +75,6 @@ public class LoginScreen implements Screen{
 
 		/*creating login and button tables */
 		Table table = new Table();
-		table.setFillParent(true);
 
 		final Tree tree = new Tree(skin);
 
@@ -88,11 +87,11 @@ public class LoginScreen implements Screen{
 		tree.add(usernameNode);
 		tree.add(passwordNode);
 		tree.add(login);
-		table.add(tree).fill().expand();		
-		table.center();
-		
+		table.add(tree).fill().expand();						
 		stage.addActor(table);
-
+		table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()
+				/ 2);
+		
 		
 		loginButton.addListener(new ClickListener(){
 			@Override

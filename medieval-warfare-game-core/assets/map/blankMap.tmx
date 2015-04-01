@@ -82,6 +82,11 @@
    <image width="55" height="48" source="villagetiles/fort.png"/>
   </tile>
  </tileset>
+ <tileset firstgid="25" name="outlinetiles" tilewidth="55" tileheight="48">
+  <tile id="0">
+   <image width="55" height="48" source="outlineTiles.png"/>
+  </tile>
+ </tileset>
  <layer name="colour" width="28" height="18">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
@@ -108,6 +113,11 @@
   </data>
  </layer>
  <layer name="highlight" width="28" height="18" opacity="0.3">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
+  </data>
+ </layer>
+ <layer name="outline" width="28" height="18">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA+NlYGDgHcWjeBSP4lE8ikfxsMIA13tnJeAHAAA=
   </data>

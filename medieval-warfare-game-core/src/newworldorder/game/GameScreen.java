@@ -45,11 +45,9 @@ public class GameScreen implements Screen {
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
-		//Gdx.input.setInputProcessor(stage);
 		stage.tiledMapRenderUpdate(game.getModel()
 				.getUpdatedTiles());
 
-		// System.out.println(game.getModel().getUpdatedTiles());
 		stage.getViewport().setCamera(camera);
 
 		float height = stage.getHeight();

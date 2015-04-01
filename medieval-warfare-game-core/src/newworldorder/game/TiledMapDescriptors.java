@@ -13,7 +13,8 @@ public class TiledMapDescriptors {
 		this.structureLayer = (TiledMapTileLayer) tiledMap.getLayers().get("structure");
 		this.villageLayer = (TiledMapTileLayer) tiledMap.getLayers().get("village");
 		this.highlightLayer = (TiledMapTileLayer) tiledMap.getLayers().get("highlight");
-		
+		this.outlineLayer = (TiledMapTileLayer) tiledMap.getLayers().get("outline");
+
 		
 		this.colourTileSet = tiledMap.getTileSets().getTileSet("colourtiles");
 		this.terrainTileSet = tiledMap.getTileSets().getTileSet("terraintiles");
@@ -31,7 +32,8 @@ public class TiledMapDescriptors {
 		this.redTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(7);
 		this.yellowTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(8);
 		this.neutralTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(9);
-
+		this.outlineTile = tiledMap.getTileSets().getTileSet("outlinetiles").getTile(22);
+		
 		//setting our tile terrains for easy acess
 		
 		this.oceanTile = tiledMap.getTileSets().getTileSet("terraintiles").getTile(10);
@@ -68,6 +70,7 @@ public class TiledMapDescriptors {
 	public final TiledMapTileLayer structureLayer;
 	public final TiledMapTileLayer villageLayer;
 	public final TiledMapTileLayer highlightLayer;
+	public final TiledMapTileLayer outlineLayer;
 
 //OUr tileset for easy access.
 	
@@ -88,6 +91,8 @@ public class TiledMapDescriptors {
 	public final TiledMapTile brownTile;
 	public final TiledMapTile pinkTile;
 	public final TiledMapTile neutralTile;
+	public final TiledMapTile outlineTile; //used when tile is clicked to indicate selection
+	
 //our terrain tiles for easy access	
 	public final TiledMapTile meadowTile;
 	public final TiledMapTile treeTile;
