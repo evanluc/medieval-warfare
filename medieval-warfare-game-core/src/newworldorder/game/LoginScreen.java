@@ -32,7 +32,7 @@ public class LoginScreen implements Screen{
 	//temporary userame
 	private String validUsername = "valid";
 	
-	Camera camera;
+	OrthographicCamera camera;
 	Stage stage;
 	SpriteBatch batch;
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -41,27 +41,29 @@ public class LoginScreen implements Screen{
 
 	Sprite sprite;
 
-	public LoginScreen(GameScreen gameScreen, MedievalWarfareGame thisGame, Camera camera){
+	public LoginScreen(GameScreen gameScreen, MedievalWarfareGame thisGame){
 		this.gameScreen = gameScreen;
 		this.thisGame = thisGame;
-		this.camera = camera;
 
 	}
 
 
 	@Override
 	public void show() {
-		stage = new Stage();
-		stage.getViewport().setCamera(camera);
+		Gdx.graphics.setDisplayMode(512, 512, false);
 
 		batch = new SpriteBatch();
 		Texture texture = new Texture(Gdx.files.internal("./images/background.jpg"));
 		TextureRegion region = new TextureRegion(texture);
 		sprite = new Sprite(region);
-		sprite.setSize(1f,
-				1f * sprite.getHeight() / sprite.getWidth() );
+		sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());	
+		
+		stage = new Stage();
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());		
+		stage.getViewport().setCamera(camera);
+	
 		Gdx.input.setInputProcessor(stage);
-
 
 		//password field
 		TextField usernameField = new TextField("Enter Username", skin);
@@ -89,8 +91,6 @@ public class LoginScreen implements Screen{
 		table.add(tree).fill().expand();		
 		table.center();
 		
-//		table.setPosition(stage.getCamera().position.x - table.getWidth()/2, stage.getCamera().position.y - table.getHeight()/2);	
-		//table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()/2);
 		stage.addActor(table);
 
 		
@@ -114,16 +114,6 @@ public class LoginScreen implements Screen{
 			}//end of click listener
 		});
 
-
-
-		
-	//	;
-
-		//just to compare
-		/*
-		notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y - notTurnWindow.getHeight()
-				/ 2);
-		*/
 	}
 
 

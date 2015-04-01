@@ -19,18 +19,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class GameScreen implements Screen {
 	// private Stage stage = new Stage();
 	private TiledMapRenderer tiledMapRenderer;
-	private OrthographicCamera camera;
 	private TiledMapStage stage;
 	private MedievalWarfareGame game;
 	private HUD hud;
 	private Stage UIstage;
 	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+	private OrthographicCamera camera;
 
 	public GameScreen(final MedievalWarfareGame game,
-			TiledMapRenderer tiledMapRenderer, TiledMapStage stage,
-			OrthographicCamera camera) {
+			TiledMapRenderer tiledMapRenderer, TiledMapStage stage, OrthographicCamera camera2) {
 		this.tiledMapRenderer = tiledMapRenderer;
-		this.camera = camera;
 		this.stage = stage;
 		this.game = game;
 		this.UIstage = new UIStage(skin);
@@ -39,7 +37,11 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		
+		Gdx.graphics.setDisplayMode(1064, 850, false);
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();	
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, w, h);		
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
@@ -60,8 +62,8 @@ public class GameScreen implements Screen {
 		UIstage.addActor(hud);
 
 		
-inputMultiplexer.addProcessor(UIstage);
-Gdx.input.setInputProcessor(inputMultiplexer);
+		inputMultiplexer.addProcessor(UIstage);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		
 	}
