@@ -20,7 +20,7 @@ public class ModelController {
 	
 	private ModelController() {
 		super();
-		engine = new GameEngine();
+		engine = new GameEngine(this);
 	}
 	
 	public static ModelController getInstance() {

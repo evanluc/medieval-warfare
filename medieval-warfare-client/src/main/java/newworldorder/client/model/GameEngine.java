@@ -28,9 +28,10 @@ public class GameEngine implements Observer {
 	private Set<Tile> updatedTiles;
 	private String localPlayerName;
 
-	GameEngine() {
+	GameEngine(ModelController controller) {
 		this.gameState = null;
 		this.updatedTiles = new HashSet<Tile>();
+		this.controller = controller;
 	}
 	
 	public void buildRoad(int x, int y) {
@@ -354,7 +355,7 @@ public class GameEngine implements Observer {
 						commandedBy = UnitType.INFANTRY;
 					}
 				}
-				if(t.getVillage().getVillageType() == VillageType.CASTLE){
+				if(t.getVillage() != null && t.getVillage().getVillageType() == VillageType.CASTLE){
 					if(Unit.unitCost(commandedBy) < Unit.unitLevel(UnitType.KNIGHT)){
 						commandedBy = UnitType.KNIGHT;
 					}
