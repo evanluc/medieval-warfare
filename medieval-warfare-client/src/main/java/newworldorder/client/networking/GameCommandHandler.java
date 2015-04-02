@@ -1,4 +1,4 @@
-package newworldorder.game.command;
+package newworldorder.client.networking;
 
 import newworldorder.client.model.GameEngine;
 

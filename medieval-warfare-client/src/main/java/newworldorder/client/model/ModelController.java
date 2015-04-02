@@ -2,10 +2,10 @@ package newworldorder.client.model;
 
 import java.util.List;
 
+import newworldorder.client.networking.CommandFactory;
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.UIVillageDescriptor;
-import newworldorder.game.command.CommandFactory;
 
 /**
  * This is the only public facing class in the model package. All communication with the model should go through
