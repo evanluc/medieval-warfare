@@ -18,7 +18,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import newworldorder.client.controller.IController;
 import newworldorder.client.controller.ISession;
-import newworldorder.client.service.GameLauncher;
+import newworldorder.client.service.GdxAppController;
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CommandHandler;
@@ -57,7 +57,7 @@ public class ClientConfiguration {
 	ISession session;
 	
 	@Bean IGameLauncher gameLauncher() {
-		return new GameLauncher();
+		return new GdxAppController();
 	}
 	
 	@Bean
