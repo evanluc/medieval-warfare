@@ -258,116 +258,38 @@ public class GameEngine implements Observer {
 			}
 		}
 	}
-		private MoveType getMoveType(Unit u, Tile dest) {
-		Tile origin = u.getTile();
-		List<Tile> adjacent = origin.getNeighbours();
-
-		if (u.getImmobileUntilRound() <= gameState.getRoundCount() && adjacent.contains(dest)
-				&& u.getControllingPlayer() == gameState.getCurrentTurnPlayer()) {
-			TerrainType landOnDest = dest.getTerrainType();
-			StructureType structureOnDest = dest.getStructure();
-			Unit unitOnDest = dest.getUnit();
-			Village villageOnDest = dest.getVillage();
-			Region regionOnDest = dest.getRegion();
-
-			if (regionOnDest != null) {
-				if (regionOnDest.getControllingPlayer() != u.getControllingPlayer() && u.getUnitType() == UnitType.PEASANT) {
-					return MoveType.INVALIDMOVE;
-				}
-			}
-
-			if (unitOnDest != null) {
-				if (unitOnDest.getControllingPlayer() == u.getControllingPlayer()) {
-					// Combine units
-					return MoveType.COMBINEUNITS;
-				}
-				else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(u.getUnitType())) {
-					// Enemy unit is stronger
-					return MoveType.INVALIDMOVE;
-				}
-				else if (villageOnDest == null) {
-					// Enemy unit is weaker
-					if (structureOnDest == StructureType.WATCHTOWER && Unit.unitLevel(u.getUnitType()) <= Unit.unitLevel(UnitType.INFANTRY)) {
-						// but tile contains a watchtower and the attacking unit
-						// is weaker than the tower
-						return MoveType.INVALIDMOVE;
-					}
-					return MoveType.FREEMOVE;
-				}
-			}
-
-			if (structureOnDest == StructureType.WATCHTOWER) {
-				// dest contains a watchtower
-				if (dest.getControllingPlayer() != u.getControllingPlayer()) {
-					if (Unit.unitLevel(u.getUnitType()) <= Unit.unitLevel(UnitType.INFANTRY)) {
-						return MoveType.INVALIDMOVE;
+    public UnitType getCommandedBy(Tile aTile) {
+    	UnitType commandedBy = null; 
+    	for(Tile t : aTile.getNeighbours()){
+    		if(aTile.getControllingPlayer() == t.getControllingPlayer()){
+    			if(t.getUnit() != null){
+    				if(Unit.unitLevel(commandedBy) < Unit.unitLevel(t.getUnit().getUnitType())){
+    					commandedBy = t.getUnit().getUnitType();
+    				}
+    			}
+				if(t.getStructure() == StructureType.WATCHTOWER){
+					if(Unit.unitCost(commandedBy) < Unit.unitLevel(UnitType.INFANTRY)){
+						commandedBy = UnitType.INFANTRY;
 					}
 				}
-			}
-
-			if (villageOnDest != null) {
-				// Unit invades enemy village
-				if ((u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER)
-						&& villageOnDest.getControlledBy() != u.getVillage().getControlledBy()) {
-					if (dest.getUnit() == null || Unit.unitLevel(u.getUnitType()) > Unit.unitLevel(dest.getUnit().getUnitType())) {
-						return MoveType.FREEMOVE;
-					}
-					else {
-						return MoveType.INVALIDMOVE;
-					}
-				}
-				else if (villageOnDest.getControlledBy() == u.getVillage().getControlledBy()) {
-					return MoveType.FREEMOVE;
-				}
-				else {
-					return MoveType.INVALIDMOVE;
-				}
-			}
-			if (landOnDest == TerrainType.TREE) {
-				if (u.getUnitType() == UnitType.KNIGHT) {
-					return MoveType.INVALIDMOVE;
-				}
-				else {
-					return MoveType.GATHERWOOD;
-				}
-			}
-			if (structureOnDest == StructureType.TOMBSTONE) {
-				if (u.getUnitType() == UnitType.KNIGHT) {
-					return MoveType.INVALIDMOVE;
-				}
-				else {
-					return MoveType.CLEARTOMB;
-				}
-			}
-			if (landOnDest == TerrainType.MEADOW) {
-				if (u.getUnitType() == UnitType.KNIGHT || u.getUnitType() == UnitType.SOLDIER) {
-					return MoveType.TRAMPLEMEADOW;
-				}
-				else {
-					return MoveType.FREEMOVE;
-				}
-			}
-			if (landOnDest == TerrainType.SEA) {
-				return MoveType.INVALIDMOVE;
-			}
-			if (landOnDest == TerrainType.GRASS) {
-				return MoveType.FREEMOVE;
-			}
-			return MoveType.INVALIDMOVE;
-		}
-		else {
-			return MoveType.INVALIDMOVE;
-		}
+				//TODO: case when there is a castle
+    		}
+    	}
+        return commandedBy;
+    }
+	private MoveType getMoveType(Unit u, Tile dest) {
+		return getMoveType(u.getTile(), dest, u.getUnitType(), u.getImmobileUntilRound(), u.getControllingPlayer());
 	}
 
 	private MoveType getMoveType(Tile origin, Tile dest, UnitType uType, int immobileUntilRound, Player controllingPlayer) {
 		List<Tile> adjacent = origin.getNeighbours();
 
 		if (immobileUntilRound <= gameState.getRoundCount() && adjacent.contains(dest)
-				&& controllingPlayer == gameState.getCurrentTurnPlayer() && uType != null) {
+				&& controllingPlayer == gameState.getCurrentTurnPlayer()) {
 			TerrainType landOnDest = dest.getTerrainType();
 			StructureType structureOnDest = dest.getStructure();
 			Unit unitOnDest = dest.getUnit();
+			UnitType tileCommandedBy = getCommandedBy(dest);
 			Village villageOnDest = dest.getVillage();
 			Region regionOnDest = dest.getRegion();
 
@@ -396,7 +318,21 @@ public class GameEngine implements Observer {
 					return MoveType.FREEMOVE;
 				}
 			}
-
+			if (tileCommandedBy != null && dest.getControllingPlayer() != controllingPlayer) {
+				if (Unit.unitLevel(tileCommandedBy) >= Unit.unitLevel(uType)) {
+					// Enemy unit is stronger
+					return MoveType.INVALIDMOVE;
+				}
+				else if (villageOnDest == null) {
+					// Enemy unit is weaker
+					if (structureOnDest == StructureType.WATCHTOWER && Unit.unitLevel(uType) <= Unit.unitLevel(UnitType.INFANTRY)) {
+						// but tile contains a watchtower and the attacking unit
+						// is weaker than the tower
+						return MoveType.INVALIDMOVE;
+					}
+					return MoveType.FREEMOVE;
+				}
+			}
 			if (structureOnDest == StructureType.WATCHTOWER) {
 				// dest contains a watchtower
 				if (dest.getControllingPlayer() != controllingPlayer) {
@@ -410,7 +346,11 @@ public class GameEngine implements Observer {
 				// Unit invades enemy village
 				if ((uType == UnitType.KNIGHT || uType == UnitType.SOLDIER)
 						&& villageOnDest.getControlledBy() != controllingPlayer) {
-					if (dest.getUnit() == null || Unit.unitLevel(uType) > Unit.unitLevel(dest.getUnit().getUnitType())) {
+					if ((dest.getUnit() == null || 
+							Unit.unitLevel(uType) > Unit.unitLevel(dest.getUnit().getUnitType()))
+							&&
+							(getCommandedBy(dest) == null || 
+							Unit.unitLevel(uType) > Unit.unitLevel(getCommandedBy(dest)))){
 						return MoveType.FREEMOVE;
 					}
 					else {
