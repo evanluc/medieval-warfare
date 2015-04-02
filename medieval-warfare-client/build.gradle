@@ -1,6 +1,9 @@
 buildscript {
-    sourceSets.main.resources.srcDir "../medieval-warfare-game-core/assets"
-    sourceSets.test.resources.srcDir "../medieval-warfare-game-core/assets"
+    sourceSets.main.resources.srcDir "assets"
+    sourceSets.test.resources.srcDir "assets"
+}
+eclipse.project {
+    name = "medieval-warfare-client"
 }
 
 apply plugin:'application'
@@ -11,7 +14,6 @@ dependencies {
     compile 'org.springframework:spring-context'
     compile 'org.springframework.amqp:spring-rabbit'
     compile project(':medieval-warfare-common')
-    compile project(':medieval-warfare-game-core')
 }
 
 run {

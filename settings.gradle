@@ -1,4 +1,3 @@
-include ":medieval-warfare-common", ":medieval-warfare-client", ":medieval-warfare-server", 
-    ":medieval-warfare-game-core"
+include ":medieval-warfare-common", ":medieval-warfare-client", ":medieval-warfare-server"
 
 rootProject.name = 'medieval-warfare'
