@@ -227,6 +227,9 @@ public class ModelController {
 	public List<UITileDescriptor> getReachableTiles(int x, int y){
 		return engine.getReachableTiles(x, y);
 	}
+	public List<UITileDescriptor> getBombardableTiles(int x, int y){
+		return engine.getBombardableTiles(x, y);
+	}
 	public List<UIActionType> getLegalMoves(int x, int y){
 		return engine.getLegalMoves(x, y);
 	}

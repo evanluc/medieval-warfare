@@ -996,6 +996,11 @@ public class GameEngine implements Observer {
 					legalMoves.add(UIActionType.BUILDUNITSOLDIER);
 				}
 				break;
+			case BUILDUNITCANNON:
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.CANNON)){
+					legalMoves.add(UIActionType.BUILDUNITCANNON);
+				}
+				break;
 			case CULTIVATEMEADOW:
 				if (u != null) {
 					if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS) {
@@ -1049,6 +1054,16 @@ public class GameEngine implements Observer {
 					}
 				}
 				break;
+			case MOVEUNIT:
+				if(u != null && u.getImmobileUntilRound() <= gameState.getRoundCount()){
+					legalMoves.add(UIActionType.MOVEUNIT);
+				}
+				break;
+			case BOMBARDTILE:
+				if(u != null && u.getUnitType() == UnitType.CANNON && u.getImmobileUntilRound() <= gameState.getRoundCount()){
+					legalMoves.add(UIActionType.MOVEUNIT);
+				}
+				break;
 			case ENDTURN:
 				legalMoves.add(UIActionType.ENDTURN);
 			default:
@@ -1056,6 +1071,28 @@ public class GameEngine implements Observer {
 			}
 		}
 		return legalMoves; 
+	}
+	List<UITileDescriptor> getBombardableTiles(int x, int y){
+		Tile aTile = this.gameState.getMap().getTile(x, y); 
+		if(aTile.getUnit() == null || aTile.getUnit().getUnitType() != UnitType.CANNON){
+			return new ArrayList<UITileDescriptor>();
+		}
+		HashSet<Tile> tilesInRange = new HashSet<Tile>();
+		HashSet<Tile> tempSet = new HashSet<Tile>();
+		tilesInRange.addAll(aTile.getNeighbours());
+		for(Tile t : tilesInRange){
+			tempSet.addAll(t.getNeighbours());
+		}
+		tilesInRange.addAll(tempSet);
+		tempSet.clear();
+		tempSet.addAll(tilesInRange);
+		for(Tile t : tempSet){
+			if( t.getControllingPlayer() == null || t.getControllingPlayer() == aTile.getControllingPlayer() ){
+				tilesInRange.remove(t);
+			}
+		}
+		List<Tile> tilesInRangeLIST = new ArrayList<Tile>(tilesInRange);
+		return tileListToUITileDescriptorList(tilesInRangeLIST);
 	}
 	/**
 	 * Gets all tiles reachable in one turn by a unit starting at tile x,y 
