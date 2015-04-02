@@ -2,23 +2,10 @@ package newworldorder.client.model;
 
 import java.util.List;
 
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.UIVillageDescriptor;
-import newworldorder.common.network.AmqpAdapter;
-import newworldorder.common.network.CommandConsumer;
 import newworldorder.game.command.CommandFactory;
-import newworldorder.game.command.GameCommandHandler;
-import newworldorder.game.command.IGameCommand;
-//import newworldorder.game.command.SetupGameCommand;
-//import newworldorder.game.command.SyncTreesCommand;
 
 /**
  * This is the only public facing class in the model package. All communication with the model should go through
@@ -30,8 +17,6 @@ public class ModelController {
 	private GameEngine engine = null;
 	private boolean gameRunning;
 	private String localPlayerName;
-	private AmqpAdapter amqpAdapter;
-	private String exchange;
 	
 	private ModelController() {
 		super();
@@ -41,6 +26,7 @@ public class ModelController {
 	public static ModelController getInstance() {
 		if (instance == null) {
 			instance = new ModelController();
+			CommandFactory.getInstance(); // initialize the command factory
 		}
 		return instance;
 	}
@@ -54,11 +40,9 @@ public class ModelController {
 
 		if (isLocalPlayersTurn() && isLastPlayer()) {
 			List<Integer> newTrees = engine.growNewTrees();
-			IGameCommand command = CommandFactory.createSyncTreesCommand(newTrees);
-			sendCommand(command);
+			CommandFactory.createSyncTreesCommand(newTrees);
 		}
-		IGameCommand endTurnCommand = CommandFactory.createEndTurnCommand();
-		sendCommand(endTurnCommand);
+		CommandFactory.createEndTurnCommand();
 	}
 
 	/**
@@ -78,8 +62,7 @@ public class ModelController {
 		if (!gameRunning)
 			return;
 
-		IGameCommand command = CommandFactory.createCommand(action, x, y);
-		sendCommand(command);
+		CommandFactory.createCommand(action, x, y);
 	}
 
 	/**
@@ -91,8 +74,7 @@ public class ModelController {
 		if (!gameRunning)
 			return;
 
-		IGameCommand command = CommandFactory.createCommand(action, x1, y1, x2, y2);
-		sendCommand(command);
+		CommandFactory.createCommand(action, x1, y1, x2, y2);
 	}
 	
 	public List<Integer> growNewTrees() {
@@ -104,8 +86,7 @@ public class ModelController {
 	}
 	
 	public void placeVillageAtForPeers(int hashcode) {
-		IGameCommand command = CommandFactory.createPlaceVillageCommand(hashcode);
-		sendCommand(command);
+		CommandFactory.createPlaceVillageCommand(hashcode);
 	}
 
 	public UITileDescriptor getTile(int x, int y) {
@@ -164,9 +145,7 @@ public class ModelController {
 	public void newGame(String username, List<String> players, String exchange, String mapFilePath) {
 		this.localPlayerName = username;
 		engine.setLocalPlayerName(username);
-		this.exchange = exchange;
-		System.out.println("Exchange: " + exchange);
-		this.setupNetworking();
+		CommandFactory.setupNetworking(exchange);
 		Map presetMap = null;
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
@@ -178,9 +157,7 @@ public class ModelController {
 			if (players.get(0).compareTo(username) == 0) {
 				engine.newGame(players, presetMap);
 				System.out.println("First player");
-//				IGameCommand command = new SetupGameCommand(engine.getGameState());
-				IGameCommand command = CommandFactory.createSetupGameCommand(engine.getGameState());
-				amqpAdapter.send(command, exchange, "");
+				CommandFactory.createSetupGameCommand(engine.getGameState());
 			}
 			gameRunning = true;
 		}
@@ -194,6 +171,10 @@ public class ModelController {
 	
 	public Object getGameState() {
 		return engine.getGameState();
+	}
+	
+	public GameEngine getEngine() {
+		return engine;
 	}
 
 	public void leaveGame() {
@@ -249,24 +230,4 @@ public class ModelController {
 	public List<UIActionType> getLegalMoves(int x, int y){
 		return engine.getLegalMoves(x, y);
 	}
-	
-	public void sendCommand(IGameCommand command) {
-		amqpAdapter.send(command, exchange, "");
-	}
-	
-	private void setupNetworking() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("104.236.30.10", 5672);
-		connectionFactory.setUsername("newworldorder");
-		connectionFactory.setPassword("warfare");
-		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
-		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-		container.setAutoStartup(false);
-		container.setConnectionFactory(connectionFactory);
-		GameCommandHandler handler = new GameCommandHandler(engine);
-		container.setMessageListener(new MessageListenerAdapter(handler, "handle"));
-		AmqpAdmin admin = new RabbitAdmin(connectionFactory);
-		CommandConsumer consumer = new CommandConsumer(admin, container);
-		consumer.startConsumingFromFanoutExchange(exchange);
-	}
-
 }

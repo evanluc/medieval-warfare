@@ -2,62 +2,130 @@ package newworldorder.game.command;
 
 import java.util.List;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.model.GameEngine;
+import newworldorder.client.model.ModelController;
+import newworldorder.common.network.AmqpAdapter;
+import newworldorder.common.network.CommandConsumer;
 
 public class CommandFactory {
 	
-	public static IGameCommand createSetupGameCommand(Object gameState) {
-		return new SetupGameCommand(gameState);
+	private static CommandFactory instance;
+	private static AmqpAdapter amqpAdapter;
+	private static ModelController model;
+	private static String exchange;
+	
+	private CommandFactory() {
+		super();
 	}
 	
-	public static IGameCommand createEndTurnCommand() {
-		return new EndTurnCommand();
+	public static CommandFactory getInstance() {
+		if (instance == null) {
+			instance = new CommandFactory();
+			CommandFactory.model = ModelController.getInstance();
+		}
+		return instance;
 	}
 	
-	public static IGameCommand createSyncTreesCommand(List<Integer> newTrees) {
-		return new SyncTreesCommand(newTrees);
+	private static void sendCommand(IGameCommand command) {
+		amqpAdapter.send(command, exchange, "");
 	}
 	
-	public static IGameCommand createPlaceVillageCommand(int hashcode) {
-		return new PlaceVillageCommand(hashcode);
+	private static void setupNetworking() {
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("104.236.30.10", 5672);
+		connectionFactory.setUsername("newworldorder");
+		connectionFactory.setPassword("warfare");
+		amqpAdapter = new AmqpAdapter(new RabbitTemplate(connectionFactory));
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setAutoStartup(false);
+		container.setConnectionFactory(connectionFactory);
+		GameCommandHandler handler = new GameCommandHandler(model.getEngine());
+		container.setMessageListener(new MessageListenerAdapter(handler, "handle"));
+		AmqpAdmin admin = new RabbitAdmin(connectionFactory);
+		CommandConsumer consumer = new CommandConsumer(admin, container);
+		consumer.startConsumingFromFanoutExchange(exchange);
+	}	
+
+	public static void setupNetworking(String exchange) {
+		// TODO this will need to be fixed if setupNetworking can only be called once.
+		CommandFactory.exchange = exchange; 
+		setupNetworking();
+	}
+	
+	public static void createSetupGameCommand(Object gameState) {
+		CommandFactory.sendCommand(new SetupGameCommand(gameState));
+	}
+	
+	public static void createEndTurnCommand() {
+		CommandFactory.sendCommand(new EndTurnCommand());
+	}
+	
+	public static void createSyncTreesCommand(List<Integer> newTrees) {
+		CommandFactory.sendCommand( new SyncTreesCommand(newTrees));
+	}
+	
+	public static void createPlaceVillageCommand(int hashcode) {
+		CommandFactory.sendCommand( new PlaceVillageCommand(hashcode));
 	}
 
-	public static IGameCommand createCommand(UIActionType action, int x, int y) {
+	public static void createCommand(UIActionType action, int x, int y) {
+		IGameCommand command = null;
 		switch (action) {
 		case BUILDROAD:
-			return new BuildRoadCommand(x, y);
+			command = new BuildRoadCommand(x, y);
+			break;
 		case BUILDTOWER:
-			return new BuildTowerCommand(x, y);
+			command =  new BuildTowerCommand(x, y);
+			break;
 		case BUILDUNITINFANTRY:
-			return new BuildUnitInfantryCommand(x, y);
+			command =  new BuildUnitInfantryCommand(x, y);
+			break;
 		case BUILDUNITKNIGHT:
-			return new BuildUnitKnightCommand(x, y);
+			command =  new BuildUnitKnightCommand(x, y);
+			break;
 		case BUILDUNITPEASANT:
-			return new BuildUnitPeasantCommand(x, y);
+			command =  new BuildUnitPeasantCommand(x, y);
+			break;
 		case BUILDUNITSOLDIER:
-			return new BuildUnitSoldierCommand(x, y);
+			command =  new BuildUnitSoldierCommand(x, y);
+			break;
 		case CULTIVATEMEADOW:
-			return new CultivateMeadowCommand(x, y);
+			command =  new CultivateMeadowCommand(x, y);
+			break;
 		case UPGRADEUNITSOLDIER:
-			return new UpgradeUnitSoldierCommand(x, y);
+			command =  new UpgradeUnitSoldierCommand(x, y);
+			break;
 		case UPGRADEUNITINFANTRY:
-			return new UpgradeUnitInfantryCommand(x, y);
+			command =  new UpgradeUnitInfantryCommand(x, y);
+			break;
 		case UPGRADEUNITKNIGHT:
-			return new UpgradeUnitKnightCommand(x, y);
+			command =  new UpgradeUnitKnightCommand(x, y);
+			break;
 		case UPGRADEVILLAGETOWN:
-			return new UpgradeVillageTownCommand(x, y);
+			command =  new UpgradeVillageTownCommand(x, y);
+			break;
 		case UPGRADEVILLAGEFORT:
-			return new UpgradeVillageFortCommand(x, y);
+			command =  new UpgradeVillageFortCommand(x, y);
+			break;
 		case ENDTURN:
-			return new EndTurnCommand();
+			command =  new EndTurnCommand();
+			break;
 		default:
-			return null; // TODO throw exception instead
+			command =  null; // TODO throw exception instead
+			break;
 		}
+		CommandFactory.sendCommand(command);
 	}
 
-	public static IGameCommand createCommand(UIActionType action, int x1, int y1, int x2, int y2) {
-		return new MoveUnitCommand(x1, y1, x2, y2);
+	public static void createCommand(UIActionType action, int x1, int y1, int x2, int y2) {
+		CommandFactory.sendCommand( new MoveUnitCommand(x1, y1, x2, y2));
 	}
 	
 	private static abstract class AbstractGameCommand implements IGameCommand {
@@ -74,10 +142,11 @@ public class CommandFactory {
 	}
 	
 	private static class EndTurnCommand extends AbstractGameCommand {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = -2144057378224658285L;
+		
+		public EndTurnCommand() {
+			super();
+		}
 
 		@Override
 		public void execute() {
@@ -86,10 +155,7 @@ public class CommandFactory {
 	}
 	
 	private static class SetupGameCommand extends AbstractGameCommand {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -6384201347176706444L;
+		private static final long serialVersionUID = 2376599495011006579L;
 		private final Object gameState;
 
 		public SetupGameCommand(Object gameState) {
@@ -105,9 +171,6 @@ public class CommandFactory {
 	}
 	
 	private static class SyncTreesCommand extends AbstractGameCommand {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = -6605499829717076737L;
 		private final List<Integer> newTrees;
 		
