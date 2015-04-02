@@ -8,5 +8,6 @@ public enum UnitType {
     PEASANT,
     INFANTRY,
     SOLDIER,
-    KNIGHT
+    KNIGHT,
+    CANNON
 }

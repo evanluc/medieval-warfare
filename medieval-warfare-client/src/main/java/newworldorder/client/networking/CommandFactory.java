@@ -96,6 +96,9 @@ public class CommandFactory {
 		case BUILDUNITSOLDIER:
 			command =  new BuildUnitSoldierCommand(x, y);
 			break;
+		case BUILDUNITCANNON:
+			command = new BuildUnitCannonCommand(x, y);
+			break;
 		case CULTIVATEMEADOW:
 			command =  new CultivateMeadowCommand(x, y);
 			break;
@@ -125,7 +128,19 @@ public class CommandFactory {
 	}
 
 	public static void createCommand(UIActionType action, int x1, int y1, int x2, int y2) {
-		CommandFactory.sendCommand( new MoveUnitCommand(x1, y1, x2, y2));
+		IGameCommand command = null;
+		switch(action){
+		case MOVEUNIT:
+			command = new MoveUnitCommand(x1, y1, x2, y2);
+			break;
+		case BOMBARDTILE:
+			command = new BombardTileCommand(x1, y1, x2, y2);
+			break;
+		default:
+			command = null; //TODO: throw exception instead
+		}
+		
+		CommandFactory.sendCommand( command );
 	}
 	
 	private static abstract class AbstractGameCommand implements IGameCommand {
@@ -221,7 +236,26 @@ public class CommandFactory {
 		}
 
 	}
+	private static class BombardTileCommand extends AbstractGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 2633305860510484967L;
+		private int x1, x2, y1, y2;
 
+		private BombardTileCommand(int x1, int y1, int x2, int y2) {
+			this.x1 = x1;
+			this.x2 = x2;
+			this.y1 = y1;
+			this.y2 = y2;
+		}
+
+		@Override
+		public void execute() {
+			engine.bombardTile(x1, y1, x2, y2);
+		}
+
+	}
 	private static class BuildRoadCommand extends SingleTileGameCommand {
 		/**
 		 * 
@@ -317,7 +351,22 @@ public class CommandFactory {
 			engine.buildUnitSoldier(x, y);
 		}
 	}
+	private static class BuildUnitCannonCommand extends SingleTileGameCommand {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -3424346655797191162L;
 
+
+		private BuildUnitCannonCommand(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void doExecute() {
+			engine.buildUnitCannon(x, y);
+		}
+	}
 	private static class CultivateMeadowCommand extends SingleTileGameCommand {
 		/**
 		 * 

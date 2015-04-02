@@ -95,6 +95,15 @@ public class GameEngine implements Observer {
 				buildUnit(v, t, UnitType.KNIGHT);
 		}
 	}
+	public void buildUnitCannon(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Region r = t.getRegion();
+		if (r != null) {
+			Village v = r.getVillage();
+			if (v != null)
+				buildUnit(v, t, UnitType.CANNON);
+		}
+	}
 	
 	void buildUnit(Village v, Tile t, UnitType type) {
 		log("Entering buildUnit");
@@ -102,22 +111,27 @@ public class GameEngine implements Observer {
 		// Check pre-requisites for building a unit
 		if (t.getUnit() == null && v.getGold() >= Unit.unitCost(type) && r.getTiles().contains(t)
 				&& r.getControllingPlayer() == gameState.getCurrentTurnPlayer()) {
-			if (v.getVillageType() == VillageType.HOVEL) {
-				// Checks if village is allowed to create strong units
-				if (type == UnitType.SOLDIER || type == UnitType.KNIGHT) {
-					log("Unit not created");
-					return;
+			if((type == UnitType.CANNON && v.getWood() >= 12) || type != UnitType.CANNON){
+				if (v.getVillageType() == VillageType.HOVEL) {
+					// Checks if village is allowed to create strong units
+					if (type == UnitType.SOLDIER || type == UnitType.KNIGHT || type == UnitType.CANNON) {
+						log("Unit not created");
+						return;
+					}
 				}
-			}
-			else if (v.getVillageType() == VillageType.TOWN) {
-				if (type == UnitType.KNIGHT) {
-					log("Unit not created");
-					return;
+				else if (v.getVillageType() == VillageType.TOWN) {
+					if (type == UnitType.KNIGHT || type == UnitType.CANNON) {
+						log("Unit not created");
+						return;
+					}
 				}
+				log("Unit successfully created");
+				v.transactGold(-1 * Unit.unitCost(type));
+				if(type == UnitType.CANNON){
+					v.transactWood(-12);
+				}
+				new Unit(type, v, t);
 			}
-			log("Unit successfully created");
-			v.transactGold(-1 * Unit.unitCost(type));
-			new Unit(type, v, t);
 		}
 	}
 	
@@ -188,12 +202,20 @@ public class GameEngine implements Observer {
 		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT))
 			upgradeVillage(v, VillageType.FORT);
 	}
-	
+	public void upgradeVillageCastle(int x, int y) {
+		Tile t = gameState.getMap().getTile(x, y);
+		Village v = t.getVillage();
+		if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.CASTLE))
+			upgradeVillage(v, VillageType.CASTLE);
+	}
 	void upgradeVillage(Village v, VillageType newLevel) {
 		int cost = Village.villageCost(newLevel) - Village.villageCost(v.getVillageType());
+		int damage = Village.villageMaxHealth(v.getVillageType()) - v.getHealth();
+		int newHealth = Village.villageMaxHealth(newLevel) - damage;
 		if (v.getWood() >= cost) {
 			v.setVillageType(newLevel);
 			v.transactWood(-1 * cost);
+			v.setHealth(newHealth);
 		}
 	}
 	
@@ -243,6 +265,11 @@ public class GameEngine implements Observer {
 			else if (moveType == MoveType.GATHERWOOD) {
 				gatherWood(u);
 			}
+			if(u.getUnitType() == UnitType.CANNON){
+				//Cannons can only move once per turn
+				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
+				u.setCurrentAction(ActionType.MOVED);
+			}
 
 			// Exiting own territory type actions
 			if (dest.getControllingPlayer() == null) {
@@ -258,11 +285,66 @@ public class GameEngine implements Observer {
 			}
 		}
 	}
+	
+	public void bombardTile(int x1, int y1, int x2, int y2) {
+		Tile t1 = gameState.getMap().getTile(x1, y1);
+		Tile t2 = gameState.getMap().getTile(x2, y2);
+		Unit u = t1.getUnit();
+		if (u != null)
+			bombardTile(u, t2);
+	}
+	public void bombardTile(Unit aCannon, Tile aTile){
+		if(aCannon.getUnitType() == UnitType.CANNON && aCannon.getTile().getRegion().getVillage().getWood() >= 1){
+			//Get all enemy tiles within two hex
+			HashSet<Tile> tilesInRange = new HashSet<Tile>();
+			HashSet<Tile> tempSet = new HashSet<Tile>();
+			tilesInRange.addAll(aCannon.getTile().getNeighbours());
+			for(Tile t : tilesInRange){
+				tempSet.addAll(t.getNeighbours());
+			}
+			tilesInRange.addAll(tempSet);
+			tempSet.clear();
+			tempSet.addAll(tilesInRange);
+			for(Tile t : tempSet){
+				if( t.getControllingPlayer() == null || t.getControllingPlayer() == aCannon.getControllingPlayer() ){
+					tilesInRange.remove(t);
+				}
+			}
+			if(tilesInRange.contains(aTile)){
+				if(aTile.getUnit() != null){
+					killUnit(aTile.getUnit());
+				}
+				if(aTile.getVillage() != null){
+					bombardVillage(aTile.getVillage());
+				}
+			}
+			aCannon.getTile().getRegion().getVillage().transactWood(-1);
+			if( aCannon.getCurrentAction() == ActionType.READYFORORDERS ){
+				//Cannons can only move once per turn
+				aCannon.setImmobileUntilRound(gameState.getRoundCount() + 1);
+				aCannon.setCurrentAction(ActionType.MOVED);
+			}
+		}
+	}
+	private void bombardVillage(Village v){
+		v.setHealth(v.getHealth() - 1);
+		if(v.getHealth() == 0){
+			Tile t = v.getTile();
+			t.setVillage(null);
+
+			reconcileRegions(t.getRegion());
+			checkWinConditions();	
+		}
+	}
     public UnitType getCommandedBy(Tile aTile) {
     	UnitType commandedBy = null; 
+    	if(aTile.getUnit() != null){
+    		commandedBy = aTile.getUnit().getUnitType();
+    	}
     	for(Tile t : aTile.getNeighbours()){
     		if(aTile.getControllingPlayer() == t.getControllingPlayer()){
-    			if(t.getUnit() != null){
+    			//cannons only command their own tile
+    			if(t.getUnit() != null && t.getUnit().getUnitType() != UnitType.CANNON){
     				if(Unit.unitLevel(commandedBy) < Unit.unitLevel(t.getUnit().getUnitType())){
     					commandedBy = t.getUnit().getUnitType();
     				}
@@ -272,11 +354,16 @@ public class GameEngine implements Observer {
 						commandedBy = UnitType.INFANTRY;
 					}
 				}
-				//TODO: case when there is a castle
+				if(t.getVillage().getVillageType() == VillageType.CASTLE){
+					if(Unit.unitCost(commandedBy) < Unit.unitLevel(UnitType.KNIGHT)){
+						commandedBy = UnitType.KNIGHT;
+					}
+				}
     		}
     	}
         return commandedBy;
     }
+
 	private MoveType getMoveType(Unit u, Tile dest) {
 		return getMoveType(u.getTile(), dest, u.getUnitType(), u.getImmobileUntilRound(), u.getControllingPlayer());
 	}
@@ -294,7 +381,8 @@ public class GameEngine implements Observer {
 			Region regionOnDest = dest.getRegion();
 
 			if (regionOnDest != null) {
-				if (regionOnDest.getControllingPlayer() != controllingPlayer && uType == UnitType.PEASANT) {
+				if (regionOnDest.getControllingPlayer() != controllingPlayer && 
+						(uType == UnitType.PEASANT || uType == UnitType.CANNON)) {
 					return MoveType.INVALIDMOVE;
 				}
 			}
@@ -365,7 +453,7 @@ public class GameEngine implements Observer {
 				}
 			}
 			if (landOnDest == TerrainType.TREE) {
-				if (uType == UnitType.KNIGHT) {
+				if (uType == UnitType.KNIGHT || uType == UnitType.CANNON) {
 					return MoveType.INVALIDMOVE;
 				}
 				else {
@@ -373,15 +461,17 @@ public class GameEngine implements Observer {
 				}
 			}
 			if (structureOnDest == StructureType.TOMBSTONE) {
-				if (uType == UnitType.KNIGHT) {
+				if (uType == UnitType.KNIGHT || uType == UnitType.CANNON) {
 					return MoveType.INVALIDMOVE;
+					//return MoveType.FREEMOVE
+					//TODO: which return is correct?
 				}
 				else {
 					return MoveType.CLEARTOMB;
 				}
 			}
 			if (landOnDest == TerrainType.MEADOW) {
-				if (uType == UnitType.KNIGHT || uType == UnitType.SOLDIER) {
+				if (uType == UnitType.KNIGHT || uType == UnitType.SOLDIER || uType == UnitType.CANNON) {
 					return MoveType.TRAMPLEMEADOW;
 				}
 				else {
@@ -701,7 +791,7 @@ public class GameEngine implements Observer {
 					unittypes.put(u.getUnitType(), count + 1);
 				}
 			}
-			return new UIVillageDescriptor(x, y, v.getVillageType(), v.getGold(), v.getWood(), unittypes, v.getTotalIncome(),
+			return new UIVillageDescriptor(x, y, v.getVillageType(), v.getGold(), v.getWood(), v.getHealth(), unittypes, v.getTotalIncome(),
 					v.getTotalUpkeep());
 		}
 		else {

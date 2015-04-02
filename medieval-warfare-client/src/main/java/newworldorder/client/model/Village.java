@@ -18,6 +18,7 @@ class Village implements Serializable {
 	private VillageType villageType;
     private int gold;
     private int wood;
+    private int health;
     private final Player controlledBy;
     private final Tile tile;
     private final Region controlledRegion;
@@ -40,6 +41,7 @@ class Village implements Serializable {
         villageType = VillageType.HOVEL;
         gold = 0;
         wood = 0;
+        health = 1;
         controlledBy.addVillage(this);
         
 		for (Tile t : tiles) {
@@ -60,6 +62,7 @@ class Village implements Serializable {
         villageType = VillageType.HOVEL;
         gold = 0;
         wood = 0;
+        health = 1;
         controlledBy.addVillage(this);
         
 		for (Tile t : r.getTiles()) {
@@ -77,6 +80,8 @@ class Village implements Serializable {
             return 1;
         } else if (pVillageType == VillageType.FORT) {
             return 2;
+        } else if (pVillageType == VillageType.CASTLE) {
+        	return 3;
         }
         return -1;
     }
@@ -88,6 +93,21 @@ class Village implements Serializable {
             return 8;
         } else if (pVillageType == VillageType.FORT) {
             return 16;
+        } else if (pVillageType == VillageType.CASTLE) {
+        	return 28;
+        }
+        return -1;
+    }
+    
+    public static int villageMaxHealth(VillageType pVillageType){
+        if (pVillageType == VillageType.HOVEL) {
+            return 1;
+        } else if (pVillageType == VillageType.TOWN) {
+            return 2;
+        } else if (pVillageType == VillageType.FORT) {
+            return 3;
+        } else if (pVillageType == VillageType.CASTLE) {
+        	return 10;
         }
         return -1;
     }
@@ -109,6 +129,13 @@ class Village implements Serializable {
         return wood;
     }
     
+    public int getHealth(){
+    	return health;
+    }
+    
+    public void setHealth(int newHealth){
+    	health = newHealth;
+    }
     public Player getControlledBy() {
         return controlledBy;
     }

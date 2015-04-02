@@ -7,5 +7,6 @@ package newworldorder.client.shared;
 public enum VillageType {
     HOVEL,
     TOWN,
-    FORT
+    FORT,
+    CASTLE
 }

@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class UIVillageDescriptor {
 	public UIVillageDescriptor(int x, int y, VillageType villageType, int gold,
-			int wood, Map<UnitType, Integer> unitCounts, int income,
+			int wood, int health, Map<UnitType, Integer> unitCounts, int income,
 			int expenses) {
 		super();
 		this.x = x;
@@ -19,6 +19,7 @@ public class UIVillageDescriptor {
 		this.villageType = villageType;
 		this.gold = gold;
 		this.wood = wood;
+		this.health = health;
 		this.unitCounts = new HashMap<UnitType, Integer>(unitCounts);
 		this.income = income;
 		this.expenses = expenses;
@@ -28,6 +29,7 @@ public class UIVillageDescriptor {
 	public final VillageType villageType;
 	public final int gold;
 	public final int wood;
+	public final int health;
 	public final Map<UnitType,Integer> unitCounts;
 	public final int income;
 	public final int expenses;

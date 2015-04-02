@@ -39,14 +39,21 @@ class Unit implements Serializable {
             return 3;
         } else if (u == UnitType.KNIGHT) {
             return 4;
+        }else if(u == UnitType.CANNON){
+        	return 3;
+        	//cannon has str on a soldier
         }
         return -1;
     }
 
     public static int unitCost(UnitType u) {
         int level;
-        level = Unit.unitLevel(u);
-        level = level * 10;
+        if( u == UnitType.CANNON){
+        	level = 35;
+        }else{
+        	level = Unit.unitLevel(u);
+        	level = level * 10;
+        }
         return level;
     }
 
@@ -58,9 +65,13 @@ class Unit implements Serializable {
         unitType = pUnitType;
         int level, cost;
         level = Unit.unitLevel(unitType);
-        cost = 2;
-        for (int i = 1; i < level; i++) {
-            cost = cost * 3;
+        if(pUnitType == UnitType.CANNON){
+        	cost = 5;
+        }else{
+        	cost = 2;
+        	for (int i = 1; i < level; i++) {
+        		cost = cost * 3;
+        	}
         }
         upkeep = cost;
         tile.setUnit(this);
