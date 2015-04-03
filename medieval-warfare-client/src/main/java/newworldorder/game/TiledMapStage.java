@@ -31,6 +31,7 @@ public class TiledMapStage extends Stage {
 	
 	private TiledMap tiledMap;
 	private final TiledMapDescriptors tiledMapDescriptors; 
+	private TiledMapActor currentlyOutlined; 
 	private boolean multiActionInput;
 	private TiledMapActor previousActor;
 	private ModelController model;
@@ -180,6 +181,9 @@ public class TiledMapStage extends Stage {
 
 			case KNIGHT: updateCell.setTile(tiledMapDescriptors.knightTile);
 			break;
+			
+			case CANNON: updateCell.setTile(tiledMapDescriptors.cannonTile);
+			break;
 			}
 
 		}
@@ -202,6 +206,8 @@ public class TiledMapStage extends Stage {
 
 			case FORT: updateCell.setTile(tiledMapDescriptors.fortTile);
 			break;
+			
+			case CASTLE: updateCell.setTile(tiledMapDescriptors.castleTile);
 
 			}
 
@@ -247,6 +253,14 @@ public class TiledMapStage extends Stage {
 
 	public TiledMapActor getPreviousActor(){
 		return previousActor;
+	}
+	
+	public TiledMapActor getCurrentlyOutlined(){
+		return currentlyOutlined;
+	}
+	
+	public void setCurrentlyOutlined(TiledMapActor currentlyOutlined){
+		this.currentlyOutlined = currentlyOutlined;
 	}
 	
 	public TiledMapDescriptors getTiledMapDescritors(){

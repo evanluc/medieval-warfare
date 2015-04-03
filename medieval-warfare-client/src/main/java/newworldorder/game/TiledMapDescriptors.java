@@ -32,7 +32,8 @@ public class TiledMapDescriptors {
 		this.redTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(7);
 		this.yellowTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(8);
 		this.neutralTile = tiledMap.getTileSets().getTileSet("colourtiles").getTile(9);
-		this.outlineTile = tiledMap.getTileSets().getTileSet("outlinetiles").getTile(22);
+		//outline tile added late so odd numbering
+		this.outlineTile = tiledMap.getTileSets().getTileSet("outlinetiles").getTile(27);
 		
 		//setting our tile terrains for easy acess
 		
@@ -48,18 +49,20 @@ public class TiledMapDescriptors {
 		this.knightTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(16);
 		this.peasantTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(17);
 		this.soldierTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(18);
+		this.cannonTile = tiledMap.getTileSets().getTileSet("unittiles").getTile(19);
 
 		//setting our structure tiles for easy access
 		
-		this.roadTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(19);
-		this.tombstoneTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(20);
-		this.towerTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(21);
+		this.roadTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(20);
+		this.tombstoneTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(21);
+		this.towerTile = tiledMap.getTileSets().getTileSet("structuretiles").getTile(22);
 		
 		//setting our village tiles for easy access
 		
-		this.hovelTile = villageTileSet.getTile(22);
-		this.townTile = villageTileSet.getTile(23);
-		this.fortTile = villageTileSet.getTile(24);
+		this.hovelTile = villageTileSet.getTile(23);
+		this.townTile = villageTileSet.getTile(24);
+		this.fortTile = villageTileSet.getTile(25);
+		this.castleTile = villageTileSet.getTile(26);
 
 	}
 	
@@ -107,6 +110,7 @@ public class TiledMapDescriptors {
 	public final TiledMapTile infantryTile;
 	public final TiledMapTile soldierTile;
 	public final TiledMapTile knightTile;
+	public final TiledMapTile cannonTile; 
 
 	public final TiledMapTile roadTile;
 	public final TiledMapTile towerTile;
@@ -117,5 +121,6 @@ public class TiledMapDescriptors {
 	public final TiledMapTile hovelTile;
 	public final TiledMapTile townTile;
 	public final TiledMapTile fortTile;
+	public final TiledMapTile castleTile; 
 
 }

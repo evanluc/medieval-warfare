@@ -61,17 +61,30 @@ public class TiledMapClickListener extends ClickListener {
 
 			}*/ if (stage.getMultiActionInput() == false) {
 				
+				if(stage.getCurrentlyOutlined() != null){
+					TiledMapActor previouslyOutlined = stage.getCurrentlyOutlined();
+					Cell previouslyOutlinedCell = stage.getTiledMapDescritors().outlineLayer.getCell(previouslyOutlined.getXCell(),previouslyOutlined.getYCell());					
+					previouslyOutlinedCell.setTile(stage.getTiledMapDescritors().nullTile);
+				}
+				
 				Cell outlineCell = stage.getTiledMapDescritors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescritors().outlineTile);
+				stage.setCurrentlyOutlined(actor);
 				
 				//creating popup window with moves
 				
-				PopUpWindow popUp = new PopUpWindow("moves", skin, actor, stage);
-				popUp.setWidth(250);
-				popUp.setHeight(450);
-				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
+				ValidMovesTable popUp = new ValidMovesTable("Moves", skin, actor);
+					popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
 						/ 2);
-				stage.addActor(popUp);
+						stage.addActor(popUp);
+					
+
+			//	PopUpWindow popUp = new PopUpWindow("moves", skin, actor, stage);
+			//	popUp.setWidth(250);
+		//		popUp.setHeight(450);
+			//	popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
+				//		/ 2);
+			//	stage.addActor(popUp);
 			}
 
 			 if (stage.getMultiActionInput() == true) {

@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.graphics.setDisplayMode(1064, 850, false);
+		//Gdx.graphics.setDisplayMode(1064, 850, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();	
 		camera = new OrthographicCamera();
