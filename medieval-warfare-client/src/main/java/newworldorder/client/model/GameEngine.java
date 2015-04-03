@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Queue;
 import java.util.Set;
 
 import newworldorder.client.shared.ColourType;
@@ -227,8 +229,44 @@ public class GameEngine implements Observer {
 		if (u != null)
 			moveUnit(u, t2);
 	}
-	
-	void moveUnit(Unit u, Tile dest) {
+	void moveUnit(Unit u, Tile dest){
+		HashMap<Tile, Boolean> vis = new HashMap<Tile, Boolean>();
+
+		HashMap<Tile, Tile> prev = new HashMap<Tile, Tile>();
+	    List<Tile> directions = new LinkedList<Tile>();
+	    Queue<Tile> q = new LinkedList<Tile>();
+	    Tile current = u.getTile();
+	    q.add(current);
+	    vis.put(current, true);
+	    while(!q.isEmpty()){
+	        current = q.remove();
+	        if (current.equals(dest)){
+	            break;
+	        }else{
+	            for(Tile node : current.getNeighbours()){
+	            	MoveType move = getMoveType(current, node, u.getUnitType(), u.getImmobileUntilRound(), u.getControllingPlayer());
+	    			if(( current.getControllingPlayer() == node.getControllingPlayer() &&(move == MoveType.FREEMOVE || move == MoveType.TRAMPLEMEADOW)) || node == dest){	
+	    				if(!vis.containsKey(node)){
+	    					q.add(node);
+	    					vis.put(node, true);
+	    					prev.put(node, current);
+	    				}
+	    			}
+	            }
+	        }
+	    }
+	    if (!current.equals(dest)){
+	        System.out.println("can't reach destination");
+	    }
+	    for(Tile node = dest; node != null; node = prev.get(node)) {
+	        directions.add(0, node);
+	    }
+	    for(int i = 1 ; i < directions.size() ; i++){
+	    	moveUnitHelp(u, directions.get(i));
+	    }
+
+	}
+	void moveUnitHelp(Unit u, Tile dest) {
 		MoveType moveType = getMoveType(u, dest);
 
 		if (moveType == MoveType.INVALIDMOVE) {
