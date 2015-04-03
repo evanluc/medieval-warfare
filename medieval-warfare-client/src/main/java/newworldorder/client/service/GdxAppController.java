@@ -16,18 +16,16 @@ public class GdxAppController implements IGameLauncher {
 
 	@Override
 	public void launchGame(GameInfo info) {
-		if (gameRunning) {
-			model.leaveGame();
-		} else {
+		if (!gameRunning) {
 			gameRunning = true;
 			model = ModelController.getInstance();
+			model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 			config.resizable = false;
 			config.height = 850;
 			config.width = 1064;
 			new LwjglApplication(new MedievalWarfareGame(), config);
 		}
-		model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
 	}
 
 	public void setUsername(String username) {

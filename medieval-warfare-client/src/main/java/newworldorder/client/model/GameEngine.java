@@ -543,6 +543,7 @@ public class GameEngine implements Observer {
 	
 
 	private void combineRegions(Tile t) {
+		System.out.println("combineRegions : x = " + t.getX() + " y = " + t.getY());
 		List<Tile> adjacent = t.getNeighbours();
 
 		for (Tile t1 : adjacent) {
@@ -602,6 +603,7 @@ public class GameEngine implements Observer {
 	 *            The region to reconcile.
 	 */
 	private void reconcileRegions(Region r) {
+		System.out.println("reconcileRegions");
 		Player controllingPlayer = r.getControllingPlayer();
 		Village originalVillage = r.getVillage();
 		List<Tile> unreached = new ArrayList<Tile>(r.getTiles());
@@ -642,7 +644,7 @@ public class GameEngine implements Observer {
 				Village newVillage;
 				newRegion = new Region(regCandidate, controllingPlayer);
 				if (regCandidate.contains(originalVillage.getTile())) {
-					newVillage = new Village(originalVillage.getTile(), controllingPlayer, regCandidate);
+					newVillage = new Village(originalVillage.getTile(), controllingPlayer, newRegion);
 					newRegion.setVillage(newVillage);
 				}
 				else {
