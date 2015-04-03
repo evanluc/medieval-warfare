@@ -16,10 +16,13 @@ public class GdxAppController implements IGameLauncher {
 
 	@Override
 	public void launchGame(GameInfo info) {
+		model = ModelController.getInstance();
+		model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
+	}
+	
+	public static void showGdxApp() {
 		if (!gameRunning) {
 			gameRunning = true;
-			model = ModelController.getInstance();
-			model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 			config.resizable = false;
 			config.height = 850;

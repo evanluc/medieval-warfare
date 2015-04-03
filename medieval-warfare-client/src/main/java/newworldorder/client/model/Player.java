@@ -2,7 +2,9 @@ package newworldorder.client.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import newworldorder.client.shared.ColourType;
 
@@ -15,7 +17,7 @@ class Player implements Serializable {
     private final String username;
     private PlayerStatus status;
     private ColourType colour;
-    private List<Village> controlledVillages;
+    private Set<Village> controlledVillages;
     
     /**
      * @param username
@@ -26,7 +28,7 @@ class Player implements Serializable {
         this.username = username;
         this.status = null;
         this.colour = null;
-        this.controlledVillages = new ArrayList<Village>();
+        this.controlledVillages = new HashSet<Village>();
     }
     
     public static void setUpPlayers(List<Player> players) {
@@ -61,7 +63,7 @@ class Player implements Serializable {
     }
 
     public List<Village> getVillages() {
-        return controlledVillages;
+        return new ArrayList<Village>(controlledVillages);
     }
 
     public void addVillage(Village pVillage) {

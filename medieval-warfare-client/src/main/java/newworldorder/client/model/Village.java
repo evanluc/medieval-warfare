@@ -26,16 +26,15 @@ class Village implements Serializable {
     
     /**
      * Creating a Village with the list of 
-     * @param pTile The tile the Village is on. This object must be in the pControlledTiles list of tiles.
-     * @param pPlayer The Player who controls this village.
-     * @param tiles The Tiles this village controls.
-     */
-    public Village(Tile pTile, Player pPlayer, Set<Tile> tiles) {
-        assert(tiles.contains(pTile));
-        tile = pTile;
+     * @param tile The tile the Village is on. This object must be in the pControlledTiles list of tiles.
+     * @param player The Player who controls this village.
+     * @param region The Tiles this village controls.
+     */    
+    public Village(Tile tile, Player player, Region region) {
+        this.tile = tile;
         tile.setVillage(this);
-        controlledBy = pPlayer;
-        controlledRegion = new Region(tiles, pPlayer);
+        controlledBy = player;
+        controlledRegion = region;
         controlledRegion.setVillage(this);
         supportedUnits = new HashSet<Unit>();
         villageType = VillageType.HOVEL;
@@ -44,28 +43,7 @@ class Village implements Serializable {
         health = 1;
         controlledBy.addVillage(this);
         
-		for (Tile t : tiles) {
-			if (t.getUnit() != null) {
-				this.addUnit(t.getUnit());
-				t.getUnit().setVillage(this);
-			}
-		}
-    }
-    
-    public Village(Tile pTile, Player pPlayer, Region r) {
-        tile = pTile;
-        tile.setVillage(this);
-        controlledBy = pPlayer;
-        controlledRegion = r;
-        controlledRegion.setVillage(this);
-        supportedUnits = new HashSet<Unit>();
-        villageType = VillageType.HOVEL;
-        gold = 0;
-        wood = 0;
-        health = 1;
-        controlledBy.addVillage(this);
-        
-		for (Tile t : r.getTiles()) {
+		for (Tile t : region.getTiles()) {
 			if (t.getUnit() != null) {
 				this.addUnit(t.getUnit());
 				t.getUnit().setVillage(this);

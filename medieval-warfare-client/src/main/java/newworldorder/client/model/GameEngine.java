@@ -425,13 +425,8 @@ public class GameEngine implements Observer {
 					return MoveType.INVALIDMOVE;
 				}
 			}
-
-			if (unitOnDest != null) {
-				if (unitOnDest.getControllingPlayer() == controllingPlayer) {
-					// Combine units
-					return MoveType.COMBINEUNITS;
-				}
-				else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(uType)) {
+			if (tileCommandedBy != null && dest.getControllingPlayer() != controllingPlayer) {
+				if (Unit.unitLevel(tileCommandedBy) >= Unit.unitLevel(uType)) {
 					// Enemy unit is stronger
 					return MoveType.INVALIDMOVE;
 				}
@@ -445,8 +440,12 @@ public class GameEngine implements Observer {
 					return MoveType.FREEMOVE;
 				}
 			}
-			if (tileCommandedBy != null && dest.getControllingPlayer() != controllingPlayer) {
-				if (Unit.unitLevel(tileCommandedBy) >= Unit.unitLevel(uType)) {
+			if (unitOnDest != null) {
+				if (unitOnDest.getControllingPlayer() == controllingPlayer) {
+					// Combine units
+					return MoveType.COMBINEUNITS;
+				}
+				else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(uType)) {
 					// Enemy unit is stronger
 					return MoveType.INVALIDMOVE;
 				}
@@ -683,7 +682,12 @@ public class GameEngine implements Observer {
 				newRegion = new Region(regCandidate, controllingPlayer);
 				if (regCandidate.contains(originalVillage.getTile())) {
 					newVillage = new Village(originalVillage.getTile(), controllingPlayer, newRegion);
+					newVillage.transactGold(originalVillage.getGold());
+					newVillage.transactWood(originalVillage.getWood());
+					newVillage.setVillageType(originalVillage.getVillageType());
+					newVillage.setHealth(originalVillage.getHealth());
 					newRegion.setVillage(newVillage);
+					controllingPlayer.addVillage(newVillage);
 				}
 				else {
 					if (isTurnOfPlayer(localPlayerName)) {
@@ -699,6 +703,7 @@ public class GameEngine implements Observer {
 				}
 			}
 		}
+		controllingPlayer.removeVillage(originalVillage);
 	}
 
 	/**
@@ -725,7 +730,7 @@ public class GameEngine implements Observer {
 	
 	private void takeoverTile(Tile dest) {
 		Unit unit = dest.getUnit();
-		Region destRegion = dest.getRegion();
+		Region oldRegion = dest.getRegion();
 		Village destVillage = dest.getVillage();
 		Village unitsVillage = unit.getVillage();
 
@@ -735,9 +740,10 @@ public class GameEngine implements Observer {
 			dest.setVillage(null);
 		}
 
-		destRegion.removeTile(dest);
+		oldRegion.removeTile(dest);
 		unitsVillage.getRegion().addTile(dest);
-		reconcileRegions(destRegion);
+		reconcileRegions(oldRegion);
+		combineRegions(dest);
 		checkWinConditions();
 	}
 	
