@@ -36,7 +36,9 @@ public class CommandFactory {
 	}
 	
 	private static void sendCommand(IGameCommand command) {
-		amqpAdapter.send(command, exchange, "");
+		if (command != null) {
+			amqpAdapter.send(command, exchange, "");
+		}
 	}
 	
 	private static void setupNetworking() {
