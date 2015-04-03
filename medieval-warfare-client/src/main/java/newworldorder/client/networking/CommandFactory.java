@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 
+import newworldorder.client.service.GdxAppController;
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.model.GameEngine;
 import newworldorder.client.model.ModelController;
@@ -35,7 +36,9 @@ public class CommandFactory {
 	}
 	
 	private static void sendCommand(IGameCommand command) {
-		amqpAdapter.send(command, exchange, "");
+		if (command != null) {
+			amqpAdapter.send(command, exchange, "");
+		}
 	}
 	
 	private static void setupNetworking() {
@@ -181,6 +184,7 @@ public class CommandFactory {
 		@Override
 		public void execute() {
 			engine.setGameState(gameState);
+			GdxAppController.showGdxApp();
 		}
 
 	}

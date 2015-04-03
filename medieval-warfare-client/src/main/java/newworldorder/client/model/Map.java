@@ -81,11 +81,11 @@ class Map implements Serializable {
 				// if the tile passed the above check,
 				// determine whether a region of size 3 can be made
 				if (canPlaceRegion) {
-					Set<Tile> newRegion = new HashSet<Tile>();
-					newRegion.add(randTile);
+					Set<Tile> newRegionTiles = new HashSet<Tile>();
+					newRegionTiles.add(randTile);
 					Tile curTile = randTileNeighbours.get(0);
 
-					while (newRegion.size() < INIT_VILLAGE_REGION_SIZE) {
+					while (newRegionTiles.size() < INIT_VILLAGE_REGION_SIZE) {
 						// the tile must not be sea or already controlled by another player
 						if (curTile.getTerrainType() != TerrainType.SEA && curTile.getRegion() == null) {
 							for (Tile n : curTile.getNeighbours()) {
@@ -105,8 +105,8 @@ class Map implements Serializable {
 						if (canPlaceRegion) {
 							// if curTile did not border the player, then add it
 							// to the newRegion
-							newRegion.add(curTile);
-							if (newRegion.size() < INIT_VILLAGE_REGION_SIZE && randTileNeighbours.size() > 0) {
+							newRegionTiles.add(curTile);
+							if (newRegionTiles.size() < INIT_VILLAGE_REGION_SIZE && randTileNeighbours.size() > 0) {
 								curTile = randTileNeighbours.get(0);
 							} else {
 								break;
@@ -125,10 +125,12 @@ class Map implements Serializable {
 
 					// if the tile passed the above check, create
 					// the region and add the tiles
-					if (newRegion.size() >= INIT_VILLAGE_REGION_SIZE) {
-						Village v = new Village(randTile, p, newRegion);
+					if (newRegionTiles.size() >= INIT_VILLAGE_REGION_SIZE) {
+						Region r = new Region(newRegionTiles, p);
+						r.createVillage(randTile);
+						Village v = r.getVillage();
 						v.transactGold(INIT_VILLAGE_GOLD_AMT);
-						remainingGrassTiles.removeAll(newRegion);
+						remainingGrassTiles.removeAll(newRegionTiles);
 					}
 				}
 			}
@@ -184,7 +186,7 @@ class Map implements Serializable {
 	public void replaceTombstonesWithTrees(Player player) {
 		for (Tile t : tiles.values()) {
 			if (t.getStructure() == StructureType.TOMBSTONE
-					&& player == t.getControllingPlayer()) {
+					&& (player == t.getControllingPlayer() || t.getControllingPlayer() == null)) {
 				t.setStructure(null);
 				t.setTerrainType(TerrainType.TREE);
 			}

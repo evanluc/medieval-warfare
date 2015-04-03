@@ -15,8 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import newworldorder.game.desktop.DesktopLauncher;
-
 @org.springframework.stereotype.Component
 public class MatchedPanel extends BasePanel {
 	/**
@@ -72,7 +70,7 @@ public class MatchedPanel extends BasePanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panelController.hideFrame();
-				new DesktopLauncher();
+				//new DesktopLauncher();
 			}
 		});
 		leftPanel.add(map);

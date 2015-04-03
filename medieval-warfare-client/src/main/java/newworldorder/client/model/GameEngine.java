@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Queue;
 import java.util.Set;
 
 import newworldorder.client.shared.ColourType;
@@ -227,8 +229,44 @@ public class GameEngine implements Observer {
 		if (u != null)
 			moveUnit(u, t2);
 	}
-	
-	void moveUnit(Unit u, Tile dest) {
+	void moveUnit(Unit u, Tile dest){
+		HashMap<Tile, Boolean> vis = new HashMap<Tile, Boolean>();
+
+		HashMap<Tile, Tile> prev = new HashMap<Tile, Tile>();
+	    List<Tile> directions = new LinkedList<Tile>();
+	    Queue<Tile> q = new LinkedList<Tile>();
+	    Tile current = u.getTile();
+	    q.add(current);
+	    vis.put(current, true);
+	    while(!q.isEmpty()){
+	        current = q.remove();
+	        if (current.equals(dest)){
+	            break;
+	        }else{
+	            for(Tile node : current.getNeighbours()){
+	            	MoveType move = getMoveType(current, node, u.getUnitType(), u.getImmobileUntilRound(), u.getControllingPlayer());
+	    			if(( current.getControllingPlayer() == node.getControllingPlayer() &&(move == MoveType.FREEMOVE || move == MoveType.TRAMPLEMEADOW)) || node == dest){	
+	    				if(!vis.containsKey(node)){
+	    					q.add(node);
+	    					vis.put(node, true);
+	    					prev.put(node, current);
+	    				}
+	    			}
+	            }
+	        }
+	    }
+	    if (!current.equals(dest)){
+	        System.out.println("can't reach destination");
+	    }
+	    for(Tile node = dest; node != null; node = prev.get(node)) {
+	        directions.add(0, node);
+	    }
+	    for(int i = 1 ; i < directions.size() ; i++){
+	    	moveUnitHelp(u, directions.get(i));
+	    }
+
+	}
+	void moveUnitHelp(Unit u, Tile dest) {
 		MoveType moveType = getMoveType(u, dest);
 
 		if (moveType == MoveType.INVALIDMOVE) {
@@ -387,13 +425,8 @@ public class GameEngine implements Observer {
 					return MoveType.INVALIDMOVE;
 				}
 			}
-
-			if (unitOnDest != null) {
-				if (unitOnDest.getControllingPlayer() == controllingPlayer) {
-					// Combine units
-					return MoveType.COMBINEUNITS;
-				}
-				else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(uType)) {
+			if (tileCommandedBy != null && dest.getControllingPlayer() != controllingPlayer) {
+				if (Unit.unitLevel(tileCommandedBy) >= Unit.unitLevel(uType)) {
 					// Enemy unit is stronger
 					return MoveType.INVALIDMOVE;
 				}
@@ -407,8 +440,12 @@ public class GameEngine implements Observer {
 					return MoveType.FREEMOVE;
 				}
 			}
-			if (tileCommandedBy != null && dest.getControllingPlayer() != controllingPlayer) {
-				if (Unit.unitLevel(tileCommandedBy) >= Unit.unitLevel(uType)) {
+			if (unitOnDest != null) {
+				if (unitOnDest.getControllingPlayer() == controllingPlayer) {
+					// Combine units
+					return MoveType.COMBINEUNITS;
+				}
+				else if (Unit.unitLevel(unitOnDest.getUnitType()) >= Unit.unitLevel(uType)) {
 					// Enemy unit is stronger
 					return MoveType.INVALIDMOVE;
 				}
@@ -543,6 +580,7 @@ public class GameEngine implements Observer {
 	
 
 	private void combineRegions(Tile t) {
+		System.out.println("combineRegions : x = " + t.getX() + " y = " + t.getY());
 		List<Tile> adjacent = t.getNeighbours();
 
 		for (Tile t1 : adjacent) {
@@ -602,6 +640,7 @@ public class GameEngine implements Observer {
 	 *            The region to reconcile.
 	 */
 	private void reconcileRegions(Region r) {
+		System.out.println("reconcileRegions");
 		Player controllingPlayer = r.getControllingPlayer();
 		Village originalVillage = r.getVillage();
 		List<Tile> unreached = new ArrayList<Tile>(r.getTiles());
@@ -642,8 +681,13 @@ public class GameEngine implements Observer {
 				Village newVillage;
 				newRegion = new Region(regCandidate, controllingPlayer);
 				if (regCandidate.contains(originalVillage.getTile())) {
-					newVillage = new Village(originalVillage.getTile(), controllingPlayer, regCandidate);
+					newVillage = new Village(originalVillage.getTile(), controllingPlayer, newRegion);
+					newVillage.transactGold(originalVillage.getGold());
+					newVillage.transactWood(originalVillage.getWood());
+					newVillage.setVillageType(originalVillage.getVillageType());
+					newVillage.setHealth(originalVillage.getHealth());
 					newRegion.setVillage(newVillage);
+					controllingPlayer.addVillage(newVillage);
 				}
 				else {
 					if (isTurnOfPlayer(localPlayerName)) {
@@ -659,6 +703,7 @@ public class GameEngine implements Observer {
 				}
 			}
 		}
+		controllingPlayer.removeVillage(originalVillage);
 	}
 
 	/**
@@ -685,7 +730,7 @@ public class GameEngine implements Observer {
 	
 	private void takeoverTile(Tile dest) {
 		Unit unit = dest.getUnit();
-		Region destRegion = dest.getRegion();
+		Region oldRegion = dest.getRegion();
 		Village destVillage = dest.getVillage();
 		Village unitsVillage = unit.getVillage();
 
@@ -695,9 +740,10 @@ public class GameEngine implements Observer {
 			dest.setVillage(null);
 		}
 
-		destRegion.removeTile(dest);
+		oldRegion.removeTile(dest);
 		unitsVillage.getRegion().addTile(dest);
-		reconcileRegions(destRegion);
+		reconcileRegions(oldRegion);
+		combineRegions(dest);
 		checkWinConditions();
 	}
 	
