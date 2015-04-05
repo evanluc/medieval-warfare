@@ -375,7 +375,7 @@ public class GameEngine implements Observer {
 			checkWinConditions();	
 		}
 	}
-    public UnitType getCommandedBy(Tile aTile) {
+    private UnitType getCommandedBy(Tile aTile) {
     	UnitType commandedBy = null; 
     	if(aTile.getUnit() != null){
     		commandedBy = aTile.getUnit().getUnitType();
@@ -775,7 +775,7 @@ public class GameEngine implements Observer {
 		return gameState.getMap().getWidth();
 	}
 	
-	UITileDescriptor getTile(int x, int y) {
+	synchronized UITileDescriptor getTile(int x, int y) {
 		Tile t =gameState.getMap().getTile(x, y);
 		TerrainType tt = t.getTerrainType();
 		UnitType ut = null;
@@ -796,11 +796,11 @@ public class GameEngine implements Observer {
 		return new UITileDescriptor(x, y, tt, st, ut, vt, ct);
 	}
 	
-	boolean hasUpdatedTiles() {
+	synchronized boolean hasUpdatedTiles() {
 		return !updatedTiles.isEmpty();
 	}
 	
-	List<UITileDescriptor> getUpdatedTiles() {
+	synchronized List<UITileDescriptor> getUpdatedTiles() {
 		List<UITileDescriptor> ret = new ArrayList<UITileDescriptor>();
 		for (Tile t : updatedTiles) {
 			TerrainType tt = t.getTerrainType();
@@ -823,7 +823,7 @@ public class GameEngine implements Observer {
 		return ret;
 	}
 	
-	UIVillageDescriptor getVillage(int x, int y) {
+	synchronized UIVillageDescriptor getVillage(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Village v = t.getVillage();
 		if (v != null) {
@@ -846,7 +846,7 @@ public class GameEngine implements Observer {
 		}
 	}
 	
-	boolean isTurnOfPlayer(String name) {
+	synchronized boolean isTurnOfPlayer(String name) {
 		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
 	}
 	
@@ -855,11 +855,11 @@ public class GameEngine implements Observer {
 		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(gameState.getPlayers().get(size - 1).getUsername()) == 1);
 	}
 	
-	String getCurrentTurnPlayerName() {
+	synchronized String getCurrentTurnPlayerName() {
 		return gameState.getCurrentTurnPlayer().getUsername();
 	}
 	
-	int getCurrentRoundCount() {
+	synchronized int getCurrentRoundCount() {
 		return gameState.getRoundCount();
 	}
 	

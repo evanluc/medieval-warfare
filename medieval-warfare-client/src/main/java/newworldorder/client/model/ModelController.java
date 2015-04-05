@@ -128,6 +128,7 @@ public class ModelController {
 		this.localPlayerName = username;
 		engine.setLocalPlayerName(username);
 		CommandFactory.setupNetworking(exchange);
+		System.out.println("Exchange : " + exchange);
 		Map presetMap = null;
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
