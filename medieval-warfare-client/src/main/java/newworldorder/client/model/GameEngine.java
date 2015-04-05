@@ -52,7 +52,7 @@ public class GameEngine implements Observer {
 	public void buildTower(int x, int y) {
 		Tile t = gameState.getMap().getTile(x, y);
 		Village village = t.getRegion().getVillage();
-		if (village != null) {
+		if (village != null && t.getStructure() != StructureType.WATCHTOWER) {
 			if (village.getWood() >= 5) {
 				t.setStructure(StructureType.WATCHTOWER);
 				village.transactWood(-5);
@@ -285,7 +285,7 @@ public class GameEngine implements Observer {
 					killUnit(dest.getUnit());
 				}
 				if (dest.getStructure() == StructureType.WATCHTOWER) {
-					dest.setTerrainType(null);
+					dest.setStructure(null);
 				}
 
 			}
@@ -1022,7 +1022,8 @@ public class GameEngine implements Observer {
 			case BUILDTOWER:
 				t = gameState.getMap().getTile(x, y);
 				v = t.getRegion().getVillage();
-				if (v.getWood() >= 5 && v.getVillageType() != VillageType.HOVEL) {
+				if (v.getWood() >= 5 && v.getVillageType() != VillageType.HOVEL && 
+						t.getStructure() != StructureType.WATCHTOWER) {
 					legalMoves.add(UIActionType.BUILDTOWER);
 				}
 				break;
