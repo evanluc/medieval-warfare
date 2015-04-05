@@ -40,7 +40,8 @@ public class GameEngine implements Observer {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null) {
-			if (u.getUnitType() == UnitType.PEASANT && t.getStructure() != StructureType.ROAD) {
+			if (u.getUnitType() == UnitType.PEASANT && t.getStructure() != StructureType.ROAD &&
+					u.getImmobileUntilRound() <= gameState.getRoundCount()) {
 				u.setCurrentAction(ActionType.BUILDINGROAD);
 				u.setImmobileUntilRound(gameState.getRoundCount() + 1);
 				t.setStructure(StructureType.ROAD);
@@ -142,7 +143,8 @@ public class GameEngine implements Observer {
 		Tile t = gameState.getMap().getTile(x, y);
 		Unit u = t.getUnit();
 		if (u != null) {
-			if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS) {
+			if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS &&
+					u.getImmobileUntilRound() <= gameState.getRoundCount()) {
 				u.setCurrentAction(ActionType.STARTCULTIVATING);
 				u.setImmobileUntilRound(gameState.getRoundCount() + 2);
 				// The meadow terrain is built in phaseBuild of beginTurn because it
@@ -409,7 +411,7 @@ public class GameEngine implements Observer {
 
 	private MoveType getMoveType(Tile origin, Tile dest, UnitType uType, int immobileUntilRound, Player controllingPlayer) {
 		List<Tile> adjacent = origin.getNeighbours();
-
+		System.out.println("ImmobileUntil Round: "+immobileUntilRound+" Current Turn: "+gameState.getRoundCount());
 		if (immobileUntilRound <= gameState.getRoundCount() && adjacent.contains(dest)
 				&& controllingPlayer == gameState.getCurrentTurnPlayer()) {
 			TerrainType landOnDest = dest.getTerrainType();
@@ -1011,7 +1013,8 @@ public class GameEngine implements Observer {
 			case BUILDROAD:
 				t = gameState.getMap().getTile(x, y);
 				if (u != null) {
-					if (u.getUnitType() == UnitType.PEASANT && t.getStructure() != StructureType.ROAD) {
+					if (u.getUnitType() == UnitType.PEASANT && t.getStructure() != StructureType.ROAD &&
+							u.getImmobileUntilRound() <= gameState.getRoundCount()) {
 						legalMoves.add(UIActionType.BUILDROAD);
 					}
 				}
@@ -1019,7 +1022,7 @@ public class GameEngine implements Observer {
 			case BUILDTOWER:
 				t = gameState.getMap().getTile(x, y);
 				v = t.getRegion().getVillage();
-				if (v.getWood() >= 5) {
+				if (v.getWood() >= 5 && v.getVillageType() != VillageType.HOVEL) {
 					legalMoves.add(UIActionType.BUILDTOWER);
 				}
 				break;
@@ -1029,7 +1032,8 @@ public class GameEngine implements Observer {
 				}
 				break;
 			case BUILDUNITKNIGHT:
-				if(u == null && v.getGold() >= Unit.unitCost(UnitType.KNIGHT)){
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.KNIGHT)&& 
+						(v.getVillageType() != VillageType.HOVEL && v.getVillageType() != VillageType.TOWN)){
 					legalMoves.add(UIActionType.BUILDUNITKNIGHT);
 				}
 				break;
@@ -1039,18 +1043,21 @@ public class GameEngine implements Observer {
 				}
 				break;
 			case BUILDUNITSOLDIER:
-				if(u == null && v.getGold() >= Unit.unitCost(UnitType.SOLDIER)){
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.SOLDIER) && 
+				v.getVillageType() != VillageType.HOVEL){
 					legalMoves.add(UIActionType.BUILDUNITSOLDIER);
 				}
 				break;
 			case BUILDUNITCANNON:
-				if(u == null && v.getGold() >= Unit.unitCost(UnitType.CANNON)){
+				if(u == null && v.getGold() >= Unit.unitCost(UnitType.CANNON) && 
+				(v.getVillageType() != VillageType.HOVEL && v.getVillageType() != VillageType.TOWN)){
 					legalMoves.add(UIActionType.BUILDUNITCANNON);
 				}
 				break;
 			case CULTIVATEMEADOW:
 				if (u != null) {
-					if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS) {
+					if (u.getUnitType() == UnitType.PEASANT && t.getTerrainType() == TerrainType.GRASS &&
+							u.getImmobileUntilRound() <= gameState.getRoundCount()) {
 						legalMoves.add(UIActionType.CULTIVATEMEADOW);
 					}
 				}
@@ -1086,7 +1093,8 @@ public class GameEngine implements Observer {
 				}
 				break;
 			case UPGRADEVILLAGETOWN:
-				if (Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT)){
+				if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.TOWN) 
+						&& t.getVillage() != null ){
 					int cost = Village.villageCost(VillageType.TOWN) - Village.villageCost(v.getVillageType());
 					if (v.getWood() >= cost) {
 						legalMoves.add(UIActionType.UPGRADEVILLAGETOWN);
@@ -1094,10 +1102,20 @@ public class GameEngine implements Observer {
 				}
 				break;
 			case UPGRADEVILLAGEFORT:
-				if (Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT)){
-					int cost = Village.villageCost(VillageType.TOWN) - Village.villageCost(v.getVillageType());
+				if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.FORT)
+						&& t.getVillage() != null){
+					int cost = Village.villageCost(VillageType.FORT) - Village.villageCost(v.getVillageType());
 					if (v.getWood() >= cost) {
-						legalMoves.add(UIActionType.UPGRADEVILLAGETOWN);
+						legalMoves.add(UIActionType.UPGRADEVILLAGEFORT);
+					}
+				}
+				break;
+			case UPGRADEVILLAGECASTLE:
+				if (v != null && Village.villageLevel(v.getVillageType()) < Village.villageLevel(VillageType.CASTLE) 
+						&& t.getVillage() != null ){
+					int cost = Village.villageCost(VillageType.CASTLE) - Village.villageCost(v.getVillageType());
+					if (v.getWood() >= cost) {
+						legalMoves.add(UIActionType.UPGRADEVILLAGECASTLE);
 					}
 				}
 				break;
