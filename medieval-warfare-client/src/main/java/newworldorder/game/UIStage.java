@@ -53,7 +53,10 @@ public class UIStage extends Stage{
 		
 		List <UIActionType> legalMovesList= ModelController.getInstance().getLegalMoves(selectedCell.getXCell(), selectedCell.getYCell());
 		for (UIActionType UIAction : legalMovesList){
-			tree.add(new Node(new TextButton(uiActionTypeToString(UIAction), skin)));
+			TextButton newButton = new TextButton(uiActionTypeToString(UIAction), skin);
+			tree.add(new Node(newButton));
+			if (UIAction == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
+			else newButton.addListener(new DoubleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
 		} 
 		//adding dismiss node
 

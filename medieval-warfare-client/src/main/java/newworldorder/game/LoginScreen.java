@@ -50,7 +50,7 @@ public class LoginScreen implements Screen{
 
 	@Override
 	public void show() {
-		Gdx.graphics.setDisplayMode(512, 512, false);
+		Gdx.graphics.setDisplayMode(700, 356, false);
 
 		batch = new SpriteBatch();
 		Texture texture = new Texture(Gdx.files.internal("./images/background.jpg"));

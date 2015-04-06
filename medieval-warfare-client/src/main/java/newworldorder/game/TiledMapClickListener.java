@@ -49,7 +49,8 @@ public class TiledMapClickListener extends ClickListener {
 			notTurnWindow.setHeight(100);
 			notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y - notTurnWindow.getHeight()
 					/ 2);
-			stage.addActor(notTurnWindow);
+//			stage.addActor(notTurnWindow);
+			stage.getUIStage().addActor(notTurnWindow);
 		}
 		
 		else{
@@ -68,12 +69,12 @@ public class TiledMapClickListener extends ClickListener {
 
 
 				//creating popup window with moves
-
-				ValidMovesTable popUp = new ValidMovesTable("Moves", skin, actor);
-				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
-						/ 2);
-				
-				stage.addActor(popUp);
+//
+//				ValidMovesTable popUp = new ValidMovesTable("Moves", skin, actor);
+//				popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
+//						/ 2);
+//				
+//				stage.addActor(popUp);
 			}
 
 			//case for movement. 

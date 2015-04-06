@@ -12,14 +12,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Tree;
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Scaling;
+
 
 public class GameScreen implements Screen {
 	// private Stage stage = new Stage();
@@ -33,14 +29,12 @@ public class GameScreen implements Screen {
 	private OrthographicCamera camera;
 
 	public GameScreen(final MedievalWarfareGame game) {
+	//	Gdx.graphics.setDisplayMode(1064, 755, true);
 		this.game = game;
-
 		this.tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+//		float w = Gdx.graphics.getWidth();
+//		float h = Gdx.graphics.getHeight();
 		this.tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, w, h);		
 		this.UIstage = new UIStage(skin);
 		this.stage = new TiledMapStage(tiledMap,ModelController.getInstance(),UIstage);
 
@@ -48,8 +42,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-
-		//Gdx.graphics.setDisplayMode(1064, 850, false);
+		Gdx.graphics.setDisplayMode(1064, 755, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();	
 		camera = new OrthographicCamera();
@@ -66,7 +59,7 @@ public class GameScreen implements Screen {
 				.getModel().getTurnNumber(), height);
 		hud.setWidth(150);
 		hud.setHeight(150);
-		hud.setPosition(35, height);
+		hud.setPosition(5,5);
 
 		UIstage.addActor(hud);
 		
@@ -94,6 +87,7 @@ public class GameScreen implements Screen {
 		stage.act();
 		stage.draw();
 		move(delta);
+		UIstage.act();
 		UIstage.draw();
 
 	}
@@ -116,7 +110,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 
 	}
 
