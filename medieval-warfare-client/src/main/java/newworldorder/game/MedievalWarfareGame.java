@@ -34,17 +34,9 @@ public class MedievalWarfareGame extends Game {
 	public void create () {
 
 		
-		tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-		tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, w, h);		
-
-		TiledMapStage stage = new TiledMapStage(tiledMap,model);
-		gameScreen = new GameScreen(this, tiledMapRenderer, stage, camera);
+	gameScreen = new GameScreen(this);
 	//this.setScreen(new LoginScreen(gameScreen, this));
-		this.setScreen(gameScreen);
+	this.setScreen(gameScreen);
 		
 	}
 

@@ -5,20 +5,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Tree;
-import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 
 import java.util.List;
 
 import newworldorder.client.model.ModelController;
-import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.ColourType;
 //import newworldorder.game.model.Map;
@@ -36,11 +29,13 @@ public class TiledMapStage extends Stage {
 	private TiledMapActor previousActor;
 	private ModelController model;
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-
-	public TiledMapStage(TiledMap tiledMap, ModelController model) {
+	private UIStage uistage; 
+	
+	public TiledMapStage(TiledMap tiledMap, ModelController model, UIStage uistage) {
 
 		this.multiActionInput = false;
 		this.model = model;
+		this.uistage = uistage; 
 
 		//creating our tiledMapDescriptors for easy access when we update
 		this.tiledMapDescriptors = new TiledMapDescriptors(tiledMap);
@@ -263,12 +258,16 @@ public class TiledMapStage extends Stage {
 		this.currentlyOutlined = currentlyOutlined;
 	}
 	
-	public TiledMapDescriptors getTiledMapDescritors(){
+	public TiledMapDescriptors getTiledMapDescriptors(){
 		return tiledMapDescriptors;
 	}
 
 	public ModelController getModel(){
 		return model;
+	}
+
+	public UIStage getUIStage() {
+		return this.uistage;
 	}
 }
 

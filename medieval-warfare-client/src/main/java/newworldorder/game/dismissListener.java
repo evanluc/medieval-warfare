@@ -12,8 +12,8 @@ public class dismissListener extends ClickListener{
 	}
 	
 	@Override
-	public void clicked(InputEvent event, float x, float y) {
+	 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 		window.setVisible(false);
-		
+		return false;	
 	}
 }

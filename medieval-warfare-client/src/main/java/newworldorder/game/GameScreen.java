@@ -1,12 +1,17 @@
 package newworldorder.game;
 
+import newworldorder.client.model.ModelController;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,30 +26,36 @@ public class GameScreen implements Screen {
 	private TiledMapRenderer tiledMapRenderer;
 	private TiledMapStage stage;
 	private MedievalWarfareGame game;
+	private TiledMap tiledMap;
 	private HUD hud;
-	private Stage UIstage;
+	private UIStage UIstage;
 	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	private OrthographicCamera camera;
 
-	public GameScreen(final MedievalWarfareGame game,
-			TiledMapRenderer tiledMapRenderer, TiledMapStage stage, OrthographicCamera camera2) {
-		this.tiledMapRenderer = tiledMapRenderer;
-		this.stage = stage;
+	public GameScreen(final MedievalWarfareGame game) {
 		this.game = game;
+
+		this.tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
+		this.tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, w, h);		
 		this.UIstage = new UIStage(skin);
+		this.stage = new TiledMapStage(tiledMap,ModelController.getInstance(),UIstage);
 
 	}
 
 	@Override
 	public void show() {
+
 		//Gdx.graphics.setDisplayMode(1064, 850, false);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();	
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, w, h);		
 		
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(stage);
+	
 		stage.tiledMapRenderUpdate(game.getModel()
 				.getUpdatedTiles());
 
@@ -58,9 +69,13 @@ public class GameScreen implements Screen {
 		hud.setPosition(35, height);
 
 		UIstage.addActor(hud);
-
 		
+		
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(stage);
+
 		inputMultiplexer.addProcessor(UIstage);
+
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		
