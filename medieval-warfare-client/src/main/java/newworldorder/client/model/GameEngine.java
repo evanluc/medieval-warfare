@@ -328,6 +328,7 @@ public class GameEngine implements Observer {
 	}
 	
 	public void bombardTile(int x1, int y1, int x2, int y2) {
+		
 		Tile t1 = gameState.getMap().getTile(x1, y1);
 		Tile t2 = gameState.getMap().getTile(x2, y2);
 		Unit u = t1.getUnit();
@@ -1051,6 +1052,7 @@ public class GameEngine implements Observer {
 				break;
 			case BUILDUNITCANNON:
 				if(u == null && v.getGold() >= Unit.unitCost(UnitType.CANNON) && 
+				v.getWood() >= 12 &&
 				(v.getVillageType() != VillageType.HOVEL && v.getVillageType() != VillageType.TOWN)){
 					legalMoves.add(UIActionType.BUILDUNITCANNON);
 				}
@@ -1127,7 +1129,7 @@ public class GameEngine implements Observer {
 				break;
 			case BOMBARDTILE:
 				if(u != null && u.getUnitType() == UnitType.CANNON && u.getImmobileUntilRound() <= gameState.getRoundCount()){
-					legalMoves.add(UIActionType.MOVEUNIT);
+					legalMoves.add(UIActionType.BOMBARDTILE);
 				}
 				break;
 			case ENDTURN:
