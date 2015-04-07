@@ -1189,7 +1189,7 @@ public class GameEngine implements Observer {
 			MoveType move = getMoveType(startTile, t, onStartType, immobileUntil, controllingPlayer );
 			if(move == MoveType.FREEMOVE || move == MoveType.TRAMPLEMEADOW){
 				reachableTiles.add(t);
-				if (t.getControllingPlayer() == controllingPlayer) {
+				if (t.getControllingPlayer() == controllingPlayer || unitOnStart.getUnitType() != UnitType.CANNON) {
 					getReachableHelper(t, onStartType, immobileUntil, controllingPlayer, reachableTiles);
 				}
 			}
