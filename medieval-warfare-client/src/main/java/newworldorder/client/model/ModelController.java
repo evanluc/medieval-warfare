@@ -123,29 +123,12 @@ public class ModelController {
 			e.printStackTrace();
 		}
 	}
-	
-	void newGame(String username, List<String> players, String mapFilePath) {
-		this.localPlayerName = username;
-		Map presetMap = null;
-		try {
-			presetMap = ModelSerializer.loadMap(mapFilePath);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (presetMap != null) {
-			if (players.get(0).compareTo(username) == 0) {
-				engine.newGame(players, presetMap);
-				System.out.println("First player");
-			}
-			gameRunning = true;
-		}
-	}
 
 	public void newGame(String username, List<String> players, String exchange, String mapFilePath) {
 		this.localPlayerName = username;
 		engine.setLocalPlayerName(username);
 		CommandFactory.setupNetworking(exchange);
+		System.out.println("Exchange : " + exchange);
 		Map presetMap = null;
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
@@ -205,7 +188,7 @@ public class ModelController {
 	}
 	
 	public boolean isLastPlayer() {
-		return engine.isTurnOfLastPlayer();
+		return engine.isLastPlayer();
 	}
 
 	public void setLocalPlayerName(String localPlayerName) {
