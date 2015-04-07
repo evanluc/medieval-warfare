@@ -120,6 +120,8 @@ public class CommandFactory {
 		case UPGRADEVILLAGEFORT:
 			command =  new UpgradeVillageFortCommand(x, y);
 			break;
+		case UPGRADEVILLAGECASTLE:
+			command = new UpgradeVillageCastleCommand(x, y);
 		case ENDTURN:
 			command =  new EndTurnCommand();
 			break;
@@ -466,7 +468,23 @@ public class CommandFactory {
 			engine.upgradeVillageFort(x, y);
 		}
 	}
+	private static class UpgradeVillageCastleCommand extends SingleTileGameCommand {
 
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -8706255677908771947L;
+
+		private UpgradeVillageCastleCommand(int x, int y) {
+			super(x, y);
+		}
+
+		@Override
+		public void doExecute() {
+			engine.upgradeVillageCastle(x, y);
+		}
+	}
 	private static abstract class SingleTileGameCommand extends AbstractGameCommand {
 		/**
 		 * 
