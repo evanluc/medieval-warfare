@@ -54,7 +54,6 @@ dependencies {
 
     compile 'org.springframework:spring-context'
     compile 'org.springframework.boot:spring-boot-starter-amqp'
-    compile 'org.hibernate:hibernate-core:4.3.8.Final'
     compile project(':medieval-warfare-common')
     
     testCompile 'org.springframework:spring-test'
