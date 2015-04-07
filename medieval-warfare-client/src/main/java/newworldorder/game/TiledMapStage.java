@@ -254,6 +254,7 @@ public class TiledMapStage extends Stage {
 		return currentlyOutlined;
 	}
 	
+	
 	public void setCurrentlyOutlined(TiledMapActor currentlyOutlined){
 		this.currentlyOutlined = currentlyOutlined;
 	}

@@ -1,6 +1,7 @@
 package newworldorder.game;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -12,6 +13,7 @@ public class DoubleClickListener extends ClickListener {
 	private TiledMapActor actor;
 	private Window window;
 	private UIActionType actionType;
+	private TiledMapStage stage; 
 	private Tree tree;
 	private ModelController controller = ModelController.getInstance();
 
@@ -19,18 +21,20 @@ public class DoubleClickListener extends ClickListener {
 		this.actor = actor;
 		this.window = window;
 		this.actionType = actionType;
+		this.stage = stage;
 	}
 
 	public DoubleClickListener(TiledMapActor actor, Tree tree, TiledMapStage stage, UIActionType actionType) {
 			this.actor = actor;
 			this.tree = tree;
 			this.actionType = actionType;
+			this.stage = stage; 
 	}
 
 	@Override
 	public void clicked(InputEvent event, float x, float y) {
 		if (window != null) window.setVisible(false);
-		if (tree != null) tree.clear();
+		if (tree != null) stage.getUIStage().buttonRenderUpdate(actor);
 		System.out.println("sending action type : " + actionType);
 		controller.informOfUserAction(actionType, actor.getXCell(), actor.getYCell());
 	}

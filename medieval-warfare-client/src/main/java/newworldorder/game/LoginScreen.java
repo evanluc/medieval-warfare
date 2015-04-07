@@ -62,12 +62,12 @@ public class LoginScreen implements Screen{
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());		
 		stage.getViewport().setCamera(camera);
-	
 		Gdx.input.setInputProcessor(stage);
 
+
 		//password field
-		TextField usernameField = new TextField("Enter Username", skin);
-		TextField passwordField = new TextField("Enter password", skin);
+		TextField usernameField = new TextField("", skin);
+		TextField passwordField = new TextField("", skin);
 		passwordField.setPasswordMode(true);
 		//adding username and password nodes
 		final Node usernameNode= new Node (usernameField);
@@ -95,7 +95,7 @@ public class LoginScreen implements Screen{
 		
 		loginButton.addListener(new ClickListener(){
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
 				//login check
 				if ((passwordField.getText().equals(validPassword) == false || (usernameField.getText().equals(validUsername)) == false)){
@@ -110,6 +110,7 @@ public class LoginScreen implements Screen{
 					//call networking stuff
 					thisGame.setScreen(gameScreen);
 				}
+				return false;
 			}//end of click listener
 		});
 

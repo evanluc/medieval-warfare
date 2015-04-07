@@ -40,12 +40,14 @@ public class PopUpWindow extends Window{
 		Label wood = new Label("Village wood : " + villageDescription.wood,skin);
 		Label gold = new Label("Village gold : " + villageDescription.gold,skin);
 		Label income = new Label("Village income : " + villageDescription.income,skin);
+		Label health = new Label ("Village health : " + villageDescription.health+"/2",skin);
 		TextButton dismiss = new TextButton("dismiss",skin);
 		dismiss.addListener(new dismissListener(this));
 		this.add(wood).row();
 		this.add(gold).row();
 		this.add(income).row();
-		this.add(dismiss).row();
+		this.add(health).row();
+		//this.add(dismiss).row();
 
 	}
 

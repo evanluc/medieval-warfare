@@ -19,24 +19,19 @@ public class MedievalWarfareGame extends Game {
 	Texture texture;
 	OrthographicCamera camera;
 	GameScreen gameScreen;
-	private ModelController model = ModelController.getInstance();
 
 	@Override
 	public void create () {
 
 		
 	gameScreen = new GameScreen(this);
-	this.setScreen(new LoginScreen(gameScreen, this));
-	//this.setScreen(gameScreen);
+	//this.setScreen(new LoginScreen(gameScreen, this));
+	this.setScreen(gameScreen);
 		
 	}
 
 	@Override
 	public void render () {
 		super.render();
-	}
-	
-	public ModelController getModel(){
-		return model;
 	}
 }

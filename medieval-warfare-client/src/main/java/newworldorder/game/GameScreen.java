@@ -21,7 +21,6 @@ public class GameScreen implements Screen {
 	// private Stage stage = new Stage();
 	private TiledMapRenderer tiledMapRenderer;
 	private TiledMapStage stage;
-	private MedievalWarfareGame game;
 	private TiledMap tiledMap;
 	private HUD hud;
 	private UIStage UIstage;
@@ -30,12 +29,12 @@ public class GameScreen implements Screen {
 
 	public GameScreen(final MedievalWarfareGame game) {
 	//	Gdx.graphics.setDisplayMode(1064, 755, true);
-		this.game = game;
 		this.tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
 //		float w = Gdx.graphics.getWidth();
 //		float h = Gdx.graphics.getHeight();
 		this.tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
 		this.UIstage = new UIStage(skin);
+
 		this.stage = new TiledMapStage(tiledMap,ModelController.getInstance(),UIstage);
 
 	}
@@ -49,20 +48,12 @@ public class GameScreen implements Screen {
 		camera.setToOrtho(false, w, h);		
 		
 	
-		stage.tiledMapRenderUpdate(game.getModel()
+		stage.tiledMapRenderUpdate(ModelController.getInstance()
 				.getUpdatedTiles());
 
 		stage.getViewport().setCamera(camera);
 
-		float height = stage.getHeight();
-		hud = new HUD("HUD", skin, game.getModel().getCurrentTurnPlayer(), game
-				.getModel().getTurnNumber(), height);
-		hud.setWidth(150);
-		hud.setHeight(150);
-		hud.setPosition(5,5);
-
-		UIstage.addActor(hud);
-		
+			
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
@@ -81,13 +72,13 @@ public class GameScreen implements Screen {
 		camera.update();
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
-		stage.tiledMapRenderUpdate(game.getModel().getUpdatedTiles());
-		hud.setCurrentUsername(game.getModel().getCurrentTurnPlayer());
-		hud.setCurrentTurn(game.getModel().getTurnNumber());
+		stage.tiledMapRenderUpdate(ModelController.getInstance().getUpdatedTiles());
 		stage.act();
 		stage.draw();
 		move(delta);
 		UIstage.act();
+		if (ModelController.getInstance().isLocalPlayersTurn()) UIstage.currentTurnRenderUpdate();
+		else UIstage.notTurnRenderUpdate();
 		UIstage.draw();
 
 	}

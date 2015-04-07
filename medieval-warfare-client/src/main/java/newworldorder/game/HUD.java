@@ -1,5 +1,4 @@
 package newworldorder.game;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -7,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 public class HUD extends Window {
 	private Label playerTurnLabel, turnNumberLabel, playerTurnText, turnNumberText;
 
-	public HUD(String title, Skin skin, String userName, int turnNumber, float height) {
+	public HUD(String title, Skin skin, String userName, int turnNumber) {
 		super(title, skin);
 		playerTurnLabel = new Label("Current Player:", skin);
 		playerTurnText = new Label("Player1", skin);
