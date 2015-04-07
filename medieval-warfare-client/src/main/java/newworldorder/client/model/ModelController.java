@@ -188,7 +188,7 @@ public class ModelController {
 	}
 	
 	public boolean isLastPlayer() {
-		return engine.isTurnOfLastPlayer();
+		return engine.isLastPlayer();
 	}
 
 	public void setLocalPlayerName(String localPlayerName) {
