@@ -1,5 +1,10 @@
 package newworldorder.common.network.command;
 
+import newworldorder.common.model.User;
+import newworldorder.common.persistence.IUserTransaction;
+import newworldorder.common.persistence.PersistenceException;
+import newworldorder.common.service.IServerServiceLocator;
+
 public class LoginCommand extends RemoteCommand {
 	/**
 	 * 
@@ -14,7 +19,15 @@ public class LoginCommand extends RemoteCommand {
 
 	@Override
 	public void execute() {
-		System.out.println("[" + getSender() + ", " + password + "]");
+		User user = new User(this.getSender(), password);
+		IServerServiceLocator locator = this.getServiceLocator();
+		IUserTransaction transaction = locator.getUserTransaction();
+		try {
+			transaction.loginUser(user);
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
