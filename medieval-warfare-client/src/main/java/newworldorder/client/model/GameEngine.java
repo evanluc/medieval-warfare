@@ -28,7 +28,7 @@ public class GameEngine implements Observer {
 	private ModelController controller;
 	private Game gameState;
 	private Set<Tile> updatedTiles;
-	private String localPlayerName;
+	private String localUsername;
 
 	GameEngine(ModelController controller) {
 		this.gameState = null;
@@ -693,7 +693,7 @@ public class GameEngine implements Observer {
 					controllingPlayer.addVillage(newVillage);
 				}
 				else {
-					if (isTurnOfPlayer(localPlayerName)) {
+					if (isTurnOfPlayer(localUsername)) {
 						newRegion.createVillage();
 						newVillage = newRegion.getVillage();
 						controller.placeVillageAtForPeers(newVillage.getTile().hashCode());
@@ -853,9 +853,9 @@ public class GameEngine implements Observer {
 		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
 	}
 	
-	boolean isTurnOfLastPlayer() {
+	boolean isLastPlayer() {
 		int size = gameState.getPlayers().size();
-		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(gameState.getPlayers().get(size - 1).getUsername()) == 1);
+		return (localUsername.compareTo(gameState.getPlayers().get(size - 1).getUsername()) == 0);
 	}
 	
 	synchronized String getCurrentTurnPlayerName() {
@@ -979,7 +979,7 @@ public class GameEngine implements Observer {
 	}
 
 	void setLocalPlayerName(String localPlayerName) {
-		this.localPlayerName = localPlayerName;
+		this.localUsername = localPlayerName;
 	}
 
 	Game getGameState() {
