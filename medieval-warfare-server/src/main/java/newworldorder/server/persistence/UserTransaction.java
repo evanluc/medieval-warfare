@@ -1,10 +1,13 @@
 
 package newworldorder.server.persistence;
 
+import org.springframework.stereotype.Component;
+
 import newworldorder.common.model.User;
 import newworldorder.common.persistence.IUserTransaction;
 import newworldorder.common.persistence.PersistenceException;
 
+@Component
 public class UserTransaction implements IUserTransaction {
 	private UserStore userStore;
 	
