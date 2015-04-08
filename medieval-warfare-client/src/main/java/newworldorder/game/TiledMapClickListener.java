@@ -37,7 +37,16 @@ public class TiledMapClickListener extends ClickListener {
 		final TiledMapStage stage = (TiledMapStage) actor.getStage();
 
 		if(stage.getModel().isLocalPlayersTurn()== false){
-			
+			if(stage.getCurrentlyOutlined() != null){
+				TiledMapActor previouslyOutlined = stage.getCurrentlyOutlined();
+				Cell previouslyOutlinedCell = stage.getTiledMapDescriptors().outlineLayer.getCell(previouslyOutlined.getXCell(),previouslyOutlined.getYCell());					
+				previouslyOutlinedCell.setTile(stage.getTiledMapDescriptors().nullTile);
+			}
+
+			Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
+			outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
+			stage.setCurrentlyOutlined(actor);
+			stage.getUIStage().buttonRenderUpdate(actor);
 		}
 
 		else{
@@ -52,7 +61,6 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
-				stage.getUIStage().buttonRenderUpdate(actor);
 
 			}
 

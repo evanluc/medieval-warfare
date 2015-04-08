@@ -20,7 +20,6 @@ public class UIStage extends Stage{
 	private Table table;
 	private HUD hud;
 	private Window notTurnWindow;
-	private Window yourTurnWindow;
 	
 	
 	public UIStage(Skin skin){
@@ -29,7 +28,6 @@ public class UIStage extends Stage{
 		hud = new HUD("HUD", skin, ModelController.getInstance().getCurrentTurnPlayer(), ModelController.getInstance().getTurnNumber());
 		hud.setPosition(5,this.getViewport().getScreenHeight()-5);
 		this.addActor(hud);
-		
 		
 		this.notTurnWindow = new Window("Not your turn!", skin);
 		Label stopItText = new Label("Your opponent is still making moves.\n Please wait until their turn ends\n"
@@ -40,16 +38,6 @@ public class UIStage extends Stage{
 		notTurnWindow.setPosition(this.getCamera().position.x - notTurnWindow.getWidth()/2, 5);
 		this.addActor(notTurnWindow);
 		
-
-
-//		this.yourTurnWindow = new Window("It's your turn!", skin);
-//		Label goForItText = new Label("Select a tile and make a move!",skin);
-//		notTurnWindow.add(goForItText).row();			
-//		notTurnWindow.setWidth(450);
-//		notTurnWindow.setHeight(100);
-//		notTurnWindow.setPosition(this.getCamera().position.x - yourTurnWindow.getWidth() / 2, 5);
-//		this.addActor(yourTurnWindow);
-	
 		
 		this.table = new Table();
 		table.setFillParent(true);

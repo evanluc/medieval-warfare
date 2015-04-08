@@ -32,7 +32,7 @@ public class VillageClickListener extends ClickListener{
 			popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
 					/ 2);
 
-			stage.addActor(popUp);
+			stage.getUIStage().addActor(popUp);
 
 		}
 
