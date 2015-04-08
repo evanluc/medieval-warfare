@@ -1,5 +1,7 @@
 package newworldorder.client;
 
+import newworldorder.client.service.GdxAppController;
+
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ClientApplication {
@@ -10,5 +12,6 @@ public class ClientApplication {
 		ctx.register(ClientConfiguration.class);
 		ctx.refresh();
 		ctx.registerShutdownHook();
+		GdxAppController.showGdxApp();
 	}
 }

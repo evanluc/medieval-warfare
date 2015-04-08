@@ -15,6 +15,7 @@ public class ClientController implements IController {
 	private final AmqpAdapter adapter;
 	private final Session session;
 	private final CommandConsumer consumer;
+	private static ClientController instance;
 
 	@Value("${rabbitmq.consumeFrom}")
 	private String notifyExchange;
@@ -31,6 +32,16 @@ public class ClientController implements IController {
 		this.adapter = adapter;
 		this.session = session;
 		this.consumer = consumer;
+		if (instance == null) {
+			instance = this;
+		}
+	}
+	
+	public static ClientController getInstance() {
+		if (instance == null) {
+			System.out.println("Halp");
+		}
+		return instance;
 	}
 
 	@Override

@@ -1,5 +1,11 @@
 package newworldorder.game;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import newworldorder.client.controller.ClientController;
+import newworldorder.client.controller.IController;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
@@ -25,12 +31,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+@Component
 public class LoginScreen implements Screen{
 
 	//temporary password
 	private String validPassword = "valid";
 	//temporary userame
 	private String validUsername = "valid";
+	
+	@Autowired private IController controller;
 	
 	OrthographicCamera camera;
 	Stage stage;
@@ -96,20 +105,23 @@ public class LoginScreen implements Screen{
 		loginButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				
+				String username = usernameField.getText();
+				String password = passwordField.getText();
 
 				//login check
-				if ((passwordField.getText().equals(validPassword) == false || (usernameField.getText().equals(validUsername)) == false)){
+				controller = ClientController.getInstance();
+				if (controller.login(username, password)){
+					//call networking stuff
+					controller.requestGame(2);
+				} 
+				else{ 
 					new Dialog("Error", skin){
 						protected void result (Object object) {
 							this.hide();	
 						}
 					}.text("Please enter a valid \n username or password").button("OK").show(stage);
 				} //end of no password case
-
-				else{ 
-					//call networking stuff
-					thisGame.setScreen(gameScreen);
-				}
 				return false;
 			}//end of click listener
 		});

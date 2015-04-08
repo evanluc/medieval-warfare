@@ -34,6 +34,7 @@ public class GameEngine implements Observer {
 		this.gameState = null;
 		this.updatedTiles = new HashSet<Tile>();
 		this.controller = controller;
+		this.localUsername = "";
 	}
 	
 	public void buildRoad(int x, int y) {
@@ -850,7 +851,11 @@ public class GameEngine implements Observer {
 	}
 	
 	synchronized boolean isTurnOfPlayer(String name) {
-		return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
+		if (gameState == null) {
+			return false;
+		} else {
+			return (gameState.getCurrentTurnPlayer().getUsername().compareTo(name) == 0);
+		}
 	}
 	
 	boolean isLastPlayer() {
@@ -859,11 +864,19 @@ public class GameEngine implements Observer {
 	}
 	
 	synchronized String getCurrentTurnPlayerName() {
-		return gameState.getCurrentTurnPlayer().getUsername();
+		if (gameState == null) {
+			return "";
+		} else {
+			return gameState.getCurrentTurnPlayer().getUsername();
+		}
 	}
 	
 	synchronized int getCurrentRoundCount() {
-		return gameState.getRoundCount();
+		if (gameState == null) {
+			return 0;
+		} else {
+			return gameState.getRoundCount();
+		}
 	}
 	
 	void newGame(List<String> players, Map map) {
