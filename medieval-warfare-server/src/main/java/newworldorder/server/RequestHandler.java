@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import newworldorder.common.network.command.AbstractCommand;
 import newworldorder.common.network.command.CommandHandler;
-import newworldorder.common.network.command.LoginCommand;
 import newworldorder.common.network.command.RemoteCommand;
 import newworldorder.common.network.command.ReplyCommandHandler;
 import newworldorder.common.service.IServerServiceLocator;
@@ -41,14 +40,15 @@ public class RequestHandler implements CommandHandler, ReplyCommandHandler {
 	public Object handleAndReply(AbstractCommand command) {
 		logger.info("Received new command from [" + command.getSender() + "]: " + command.toString());
 		
-		if (command instanceof LoginCommand) {
-			LoginCommand loginCommand = (LoginCommand) command;
-			loginCommand.setServiceLocator(locator);
-			loginCommand.execute();
-			return loginCommand.getResult();
-		}
-		else {
-			return null;
-		}
+//		if (command instanceof LoginCommand) {
+//			LoginCommand loginCommand = (LoginCommand) command;
+//			loginCommand.setServiceLocator(locator);
+//			loginCommand.execute();
+//			return loginCommand.getResult();
+//		}
+//		else {
+//			return null;
+//		}
+		return true;
 	}
 }
