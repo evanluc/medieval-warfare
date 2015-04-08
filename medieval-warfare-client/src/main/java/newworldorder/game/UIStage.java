@@ -26,25 +26,27 @@ public class UIStage extends Stage{
 		this.skin = skin;
 		
 		hud = new HUD("HUD", skin, ModelController.getInstance().getCurrentTurnPlayer(), ModelController.getInstance().getTurnNumber());
-		hud.setPosition(5,this.getViewport().getScreenHeight()-5);
+		hud.setPosition(5,5);
 		this.addActor(hud);
 		
 		this.notTurnWindow = new Window("Not your turn!", skin);
 		Label stopItText = new Label("Your opponent is still making moves.\n Please wait until their turn ends\n"
 				+ "In the meantime you can still survey your tiles and villages.",skin);
 		notTurnWindow.add(stopItText).row();			
-		notTurnWindow.setWidth(250);
-		notTurnWindow.setHeight(150);
+		notTurnWindow.setWidth(350);
+		notTurnWindow.setHeight(100);
 		notTurnWindow.setPosition(this.getCamera().position.x - notTurnWindow.getWidth()/2, 5);
 		this.addActor(notTurnWindow);
 		
 		
 		this.table = new Table();
 		table.setFillParent(true);
-		this.addActor(table);
 		this.tree = new Tree(skin);
 		table.add(tree).fill().expand();
-		table.left();
+		table.bottom();
+		this.addActor(table);
+
+		
 	
 
 	}
@@ -74,11 +76,6 @@ public class UIStage extends Stage{
 			if (UIAction == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
 			else newButton.addListener(new DoubleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
 		} 
-		
-	}
-	
-	
-	public void flushWindow(){
 		
 	}
 	

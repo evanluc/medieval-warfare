@@ -26,11 +26,10 @@ public class VillageClickListener extends ClickListener{
 				actor.getYCell());
 		
 		if (vil != null) {
-			PopUpWindow popUp = new PopUpWindow("Village Info", skin, actor, stage, vil);
+			VillageWindow popUp = new VillageWindow("Village Info", skin, actor, stage, vil);
 			popUp.setWidth(250);
 			popUp.setHeight(150);
-			popUp.setPosition(stage.getCamera().position.x - popUp.getWidth() / 2, stage.getCamera().position.y - popUp.getHeight()
-					/ 2);
+			popUp.setPosition(stage.getWidth() - 5, 5);
 
 			stage.getUIStage().addActor(popUp);
 

@@ -20,36 +20,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
-public class PopUpWindow extends Window{
+public class VillageWindow extends Window{
 	Skin skin;
 	private TiledMapActor actor;
 	private TiledMapStage stage; 
+	private Label wood, gold, income, expenses, health;
+	private TextButton endTurn;
+	private UIVillageDescriptor villageDescription;
 
-
-	public PopUpWindow(String title, Skin skin, TiledMapActor actor, TiledMapStage stage){
+	public VillageWindow(String title, Skin skin, TiledMapActor actor, TiledMapStage stage, UIVillageDescriptor villageDescription){
 		super(title, skin);
 		this.skin = skin;
 		this.actor = actor;
 		this.stage = stage;
-		createButtons();
-	}
 
-	public PopUpWindow(String title, Skin skin, TiledMapActor actor, TiledMapStage stage, UIVillageDescriptor villageDescription){
-		super(title, skin);
-		this.skin = skin;
-		this.actor = actor;
-		this.stage = stage;
-		createVillageDescription(villageDescription);
-
-
-	}
-
-	private void createVillageDescription(UIVillageDescriptor villageDescription) {
-		Label wood = new Label("Village wood : " + villageDescription.wood,skin);
-		Label gold = new Label("Village gold : " + villageDescription.gold,skin);
-		Label income = new Label("Village income : " + villageDescription.income,skin);
-		Label expenses = new Label("Village expense : " + villageDescription.expenses,skin);
-		Label health = new Label ("Village health : " + villageDescription.health+"/2",skin);
+		wood = new Label("Village wood : " + villageDescription.wood,skin);
+		gold = new Label("Village gold : " + villageDescription.gold,skin);
+		income = new Label("Village income : " + villageDescription.income,skin);
+		expenses = new Label("Village expense : " + villageDescription.expenses,skin);
+		health = new Label ("Village health : " + villageDescription.health+"/2",skin);
 		this.add(wood).row();
 		this.add(gold).row();
 		this.add(income).row();
@@ -57,26 +46,30 @@ public class PopUpWindow extends Window{
 		this.add(health).row();
 
 
-			
-		
-		if(ModelController.getInstance().isLocalPlayersTurn()){
-		TextButton endTurn = new TextButton("EndTurn",skin);
+		endTurn = new TextButton("EndTurn",skin);
 		endTurn.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				 ModelController.getInstance().informOfUserAction(UIActionType.ENDTURN);
+				ModelController.getInstance().informOfUserAction(UIActionType.ENDTURN);
 				return false;
 			}			
 		});
-		this.add(endTurn).row();
-		}
+	}
+
+
+	public void renderVillageWindow(){
+		wood.setText("Wood : " + villageDescription.wood);
+		gold.setText("Gold : " + villageDescription.gold);
+		income.setText("Income : " + villageDescription.income);
+		expenses.setText("Expenses : " + villageDescription.expenses);
+		health.setText("Health : " + villageDescription.health+"/2");
 		
 	}
 
 	private void createButtons(){
 
 		for (UIActionType types : UIActionType.values()){
-			
+
 			TextButton newButton = new TextButton(uiActionTypeToString(types), skin);
 			if (types == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(actor,this,stage,types));
 			else newButton.addListener(new DoubleClickListener(actor,this,stage,types));
@@ -86,9 +79,9 @@ public class PopUpWindow extends Window{
 		TextButton dismiss = new TextButton("dismiss",skin);
 		dismiss.addListener(new dismissListener(this));
 		this.add(dismiss).row();
-		
+
 	}
-	
+
 	public String uiActionTypeToString(UIActionType action){
 		switch(action){
 		case MOVEUNIT: return "Move unit";

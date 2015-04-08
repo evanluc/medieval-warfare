@@ -29,8 +29,6 @@ public class TiledMapClickListener extends ClickListener {
 
 	@Override
 	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)  {
-		UIVillageDescriptor vil = ((TiledMapStage) actor.getStage()).getModel().getVillage(actor.getXCell(),
-				actor.getYCell());
 
 		System.out.println("clicked on tiled map click listener");
 
@@ -47,6 +45,7 @@ public class TiledMapClickListener extends ClickListener {
 			outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 			stage.setCurrentlyOutlined(actor);
 			stage.getUIStage().buttonRenderUpdate(actor);
+			System.out.println("button render updated here");
 		}
 
 		else{
@@ -61,6 +60,8 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
+				stage.getUIStage().buttonRenderUpdate(actor);
+
 
 			}
 
@@ -82,9 +83,7 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
-
 				stage.getUIStage().buttonRenderUpdate(actor);
-
 				stage.setPreviousActor(null);
 				stage.setMultiActionInput(false);
 
