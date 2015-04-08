@@ -51,7 +51,7 @@ public class UserTransaction implements IUserTransaction {
 	}
 
 	@Override
-	public synchronized void logoutUser(User user) {
-		onlineUsers.remove(user.getUsername());
+	public synchronized void logoutUser(String username) {
+		onlineUsers.remove(username);
 	}
 }

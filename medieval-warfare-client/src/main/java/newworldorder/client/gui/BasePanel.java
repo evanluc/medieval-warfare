@@ -5,8 +5,9 @@ import javax.swing.JPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import newworldorder.common.service.ISession;
+
 import newworldorder.client.controller.IController;
-import newworldorder.client.controller.ISession;
 import newworldorder.client.controller.PanelController;
 
 @SuppressWarnings("serial")

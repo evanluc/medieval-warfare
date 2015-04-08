@@ -8,5 +8,5 @@ public interface IUserTransaction {
 	
 	public boolean loginUser(User user) throws PersistenceException;
 	
-	public void logoutUser(User user);
+	public void logoutUser(String username);
 }
