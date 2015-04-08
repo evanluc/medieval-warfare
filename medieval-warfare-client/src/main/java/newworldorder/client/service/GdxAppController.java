@@ -41,7 +41,7 @@ public class GdxAppController implements IGameLauncher {
 			config.height = 850;
 			config.width = 1064;
 			mwg = new MedievalWarfareGame();
-			gdxApp = new LwjglApplication(new MedievalWarfareGame(), config);
+			gdxApp = new LwjglApplication(mwg, config);
 		}
 	}
 

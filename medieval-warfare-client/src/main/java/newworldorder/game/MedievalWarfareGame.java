@@ -31,6 +31,10 @@ public class MedievalWarfareGame extends Game {
 	//this.setScreen(gameScreen);
 		
 	}
+	
+	public MedievalWarfareGame() {
+		super();
+	}
 
 	@Override
 	public void render () {
