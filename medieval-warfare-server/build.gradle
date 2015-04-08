@@ -54,6 +54,7 @@ dependencies {
 
     compile 'org.springframework:spring-context'
     compile 'org.springframework.boot:spring-boot-starter-amqp'
+    compile 'com.opencsv:opencsv:3.3'
     compile project(':medieval-warfare-common')
     
     testCompile 'org.springframework:spring-test'
