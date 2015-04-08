@@ -1,6 +1,7 @@
 package newworldorder.server.persistence;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -12,20 +13,24 @@ import org.junit.Test;
 
 import newworldorder.common.model.User;
 import newworldorder.common.persistence.PersistenceException;
+import newworldorder.server.service.OnlineUsers;
 
 public class UserTransactionTest {
 	private String testFilename = ".testStore.csv";
 	private UserTransaction transaction;
+	private OnlineUsers onlineUsers;
 	
 	@Before
 	public void setup() throws IOException {
 		UserStore store = new FileUserStore(testFilename);
-		transaction = new UserTransaction(store);
+		onlineUsers = new OnlineUsers();
+		transaction = new UserTransaction(store, onlineUsers);
 	}
 	
 	@After
 	public void tearDown() {
 		transaction = null;
+		onlineUsers = null;
 		new File(testFilename).delete();
 	}
 	
@@ -50,26 +55,26 @@ public class UserTransactionTest {
 	
 	@Test
 	public void testLoginWithoutCreating() throws PersistenceException {
-		boolean expected = false;
-		boolean actual = transaction.loginUser(new User("test-user-1", "test-pass-1"));
-		assertEquals(expected, actual);
+		boolean result = transaction.loginUser(new User("test-user-1", "test-pass-1"));
+		assertFalse(result);
+		assertFalse(onlineUsers.contains("test-user-1"));
 	}
 	
 	@Test
 	public void testLoginAfterCreate() throws PersistenceException {
-		boolean expected = true;
 		User user = new User("test-user-1", "test-pass-1");
 		transaction.createUser(user);
-		boolean actual = transaction.loginUser(user);
-		assertEquals(expected, actual);
+		boolean result = transaction.loginUser(user);
+		assertTrue(result);
+		assertTrue(onlineUsers.contains("test-user-1"));
 	}
 	
 	@Test
 	public void testLoginAfterCreateWithWrongPassword() throws PersistenceException {
-		boolean expected = false;
 		User user = new User("test-user-1", "test-pass-1");
 		transaction.createUser(user);
-		boolean actual = transaction.loginUser(new User("test-user-1", "test-pass-2"));
-		assertEquals(expected, actual);
+		boolean result = transaction.loginUser(new User("test-user-1", "test-pass-2"));
+		assertFalse(result);
+		assertFalse(onlineUsers.contains("test-user-1"));
 	}
 }
