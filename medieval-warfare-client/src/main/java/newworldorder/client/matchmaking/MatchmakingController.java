@@ -1,5 +1,7 @@
 package newworldorder.client.matchmaking;
 
+import java.util.List;
+
 import newworldorder.common.network.command.LoginCommand;
 
 /**
@@ -20,6 +22,7 @@ public class MatchmakingController {
 		return instance;
 	}
 	
+	
 	public void login(String username, String password){
 		LoginCommand loginCommand = new LoginCommand(username, password);
 		//Send login command to server
@@ -33,7 +36,7 @@ public class MatchmakingController {
 		//Send a command to update info?
 	}
 	
-	public void invitePlayer(String username, Party invitingParty){
+	public void invitePlayer(String username, String invitingPlayer){
 		//send a command to username to set its pendingPartyRequest to invitingParty.playersInParty
 	}
 	
@@ -52,5 +55,21 @@ public class MatchmakingController {
 		if(LocalUser.getInstance().getUsername().equals(Party.getInstance().getLeader())){
 		//Sends a startGame command with list of players in party
 		}
+	}
+	
+	public List<String> getPlayersInParty(){
+		return Party.getInstance().getPlayersInParty();
+	}
+	
+	public String getLeaderOfParty(){
+		return Party.getInstance().getLeader();
+	}
+	
+	public void leaveParty(String username){
+		
+	}
+	
+	public void kickFromParty(String toKick){
+		
 	}
 }

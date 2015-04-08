@@ -8,6 +8,7 @@ public class LocalUser {
 	
 	private LocalUser() {
 		super();
+		inParty = Party.getInstance();
 	}
 	
 	public static LocalUser getInstance() {
