@@ -1,37 +1,23 @@
 package newworldorder.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 
-import newworldorder.common.network.command.AbstractCommand;
-import newworldorder.common.network.command.CommandHandler;
-import newworldorder.common.network.command.RemoteCommand;
-import newworldorder.common.service.IServerServiceLocator;
+import newworldorder.common.network.command.LoginCommand;
 
-@Component
-public class RequestDispatcher implements CommandHandler {
-	private final Logger logger = LoggerFactory.getLogger(RequestDispatcher.class);
-	private final IServerServiceLocator locator;
-
-	@Autowired
-	public RequestDispatcher(IServerServiceLocator locator) {
-		this.locator = locator;
+public class RequestDispatcher extends MessageListenerAdapter {
+	public RequestDispatcher(Object handler, String method) {
+		super(handler, method);
 	}
-
+	
 	@Override
-	public void handle(AbstractCommand command) {
-		logger.info("Received new command from [" + command.getSender() + "]: " + command.toString());
-		
-		if (command instanceof RemoteCommand) {
-			RemoteCommand remoteCommand = (RemoteCommand) command;
-			logger.info("Command: " + command.toString());
-			remoteCommand.setServiceLocator(locator);
-			remoteCommand.execute();
+	protected String getListenerMethodName(Message originalMessage, Object extractedMessage) {
+		if (extractedMessage instanceof LoginCommand) {
+			return "handleAndReply";
 		}
 		else {
-			logger.error("Received command not a remote command. Ignoring.");
+			return getDefaultListenerMethod();
 		}
+		
 	}
 }
