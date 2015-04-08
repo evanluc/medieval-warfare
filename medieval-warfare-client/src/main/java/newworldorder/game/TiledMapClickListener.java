@@ -37,20 +37,7 @@ public class TiledMapClickListener extends ClickListener {
 		final TiledMapStage stage = (TiledMapStage) actor.getStage();
 
 		if(stage.getModel().isLocalPlayersTurn()== false){
-
-//			Window notTurnWindow = new Window("Not your turn!", skin);
-//			Label stopItText = new Label("Your opponent is still making moves.\n Please wait until their turn ends\n",skin);
-//			TextButton dismiss = new TextButton("dismiss",skin);
-//			dismissListener dismissListener = new dismissListener(notTurnWindow);
-//			notTurnWindow.add(stopItText).row();			
-//			notTurnWindow.add(dismiss).row();
-//			notTurnWindow.addListener(dismissListener);
-//			notTurnWindow.setWidth(450);
-//			notTurnWindow.setHeight(100);
-//			notTurnWindow.setPosition(stage.getCamera().position.x - notTurnWindow.getWidth() / 2, stage.getCamera().position.y - notTurnWindow.getHeight()
-//					/ 2);
-//			//			stage.addActor(notTurnWindow);
-//			stage.getUIStage().addActor(notTurnWindow);
+			
 		}
 
 		else{
@@ -87,10 +74,12 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
+
 				stage.getUIStage().buttonRenderUpdate(actor);
 
 				stage.setPreviousActor(null);
 				stage.setMultiActionInput(false);
+
 			}
 		}
 		return false;

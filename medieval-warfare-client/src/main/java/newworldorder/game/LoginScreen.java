@@ -56,6 +56,10 @@ public class LoginScreen implements Screen{
 
 	}
 
+	public LoginScreen(MedievalWarfareGame thisGame) {
+		this.thisGame = thisGame;
+	}
+
 
 	@Override
 	public void show() {

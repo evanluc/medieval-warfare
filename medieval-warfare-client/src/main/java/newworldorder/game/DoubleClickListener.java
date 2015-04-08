@@ -37,5 +37,11 @@ public class DoubleClickListener extends ClickListener {
 		if (tree != null) stage.getUIStage().buttonRenderUpdate(actor);
 		System.out.println("sending action type : " + actionType);
 		controller.informOfUserAction(actionType, actor.getXCell(), actor.getYCell());
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} 
+		stage.getUIStage().buttonRenderUpdate(actor);
 	}
 }

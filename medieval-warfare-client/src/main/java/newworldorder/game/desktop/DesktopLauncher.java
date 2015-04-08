@@ -36,11 +36,12 @@ public class DesktopLauncher {
 		model.newGame(username, info.getPlayers(), info.getGameExchange(), "assets/maps/seaside-skirmish.mwm");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		//config.resizable = false;
-		config.height = 850;
-		config.width = 1064;
+		config.resizable = true;
+//		config.height = 850;
+//		config.width = 1064;
 		final MedievalWarfareGame game = new MedievalWarfareGame();
-		new LwjglApplication(game, config);
+		//new LwjglApplication(game, config);
+		new LwjglApplication(game);
 	}
 
 	// public DesktopLauncher() {
