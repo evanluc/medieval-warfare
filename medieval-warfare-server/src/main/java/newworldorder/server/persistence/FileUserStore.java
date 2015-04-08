@@ -5,15 +5,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.springframework.stereotype.Component;
-
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 import newworldorder.common.model.User;
 
-@Component
-class FileUserStore implements UserStore {
+public class FileUserStore implements UserStore {
 	private String fileStore;
 	
 	public FileUserStore(String filename) throws IOException {

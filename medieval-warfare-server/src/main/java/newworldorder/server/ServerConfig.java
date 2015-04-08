@@ -1,5 +1,7 @@
 package newworldorder.server;
 
+import java.io.IOException;
+
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -20,9 +22,10 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.CommandHandler;
+import newworldorder.server.persistence.FileUserStore;
 
 @Configuration
-@PropertySource("classpath:/rabbitmq.properties")
+@PropertySource("classpath:/server.properties")
 public class ServerConfig {
 
 	@Value("${rabbitmq.host}")
@@ -45,9 +48,17 @@ public class ServerConfig {
 	
 	@Value("${rabbitmq.routingKey}")
 	private String routingKey;
+	
+	@Value("${persistence.file}")
+	private String databaseFile;
 
 	@Autowired
 	CommandHandler handler;
+	
+	@Bean
+	FileUserStore store() throws IOException {
+		return new FileUserStore(databaseFile);
+	}
 
 	@Bean
 	ConnectionFactory connectionFactory() {
