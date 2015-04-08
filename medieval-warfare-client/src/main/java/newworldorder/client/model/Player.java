@@ -15,7 +15,6 @@ class Player implements Serializable {
     
 	private static final long serialVersionUID = -3711737223282059721L;
     private final String username;
-    private PlayerStatus status;
     private ColourType colour;
     private Set<Village> controlledVillages;
     
@@ -26,7 +25,6 @@ class Player implements Serializable {
     public Player(String username)
     {
         this.username = username;
-        this.status = null;
         this.colour = null;
         this.controlledVillages = new HashSet<Village>();
     }
@@ -36,7 +34,6 @@ class Player implements Serializable {
         for (Player p : players) {
             ColourType c = ColourType.values()[i];
             p.setColour(c);
-            p.setStatus(PlayerStatus.ONLINE);
             i++;
         }
     }
@@ -44,14 +41,6 @@ class Player implements Serializable {
 	public String getUsername()
     {
         return username;
-    }
-    
-    public PlayerStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PlayerStatus pStatus) {
-        status = pStatus;
     }
     
     public ColourType getColour() {

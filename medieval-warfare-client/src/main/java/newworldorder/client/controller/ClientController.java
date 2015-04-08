@@ -51,10 +51,12 @@ public class ClientController implements IController {
 		}
 		else {
 			LoginCommand loginCommand = new LoginCommand(username, password);
-			adapter.send(loginCommand, commandExchange, routingKey);
-			session.setUsername(username);
-			consumer.startConsumingFromDirectExchange(notifyExchange, username);
-			return true;
+			boolean result = (Boolean) adapter.sendAndReceive(loginCommand, commandExchange, routingKey);
+			if (result) {
+				session.setUsername(username);
+				consumer.startConsumingFromDirectExchange(notifyExchange, username);
+			}
+			return result;
 		}
 	}
 

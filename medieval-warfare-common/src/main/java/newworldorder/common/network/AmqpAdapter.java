@@ -21,6 +21,10 @@ public class AmqpAdapter {
 	public void send(Command command, String exchange, String routingKey) {
 		template.convertAndSend(exchange, routingKey, command);
 	}
+	
+	public Object sendAndReceive(Command command, String exchange, String routingKey) {
+		return template.convertSendAndReceive(exchange, routingKey, command);
+	}
 
 	public Command receive(String queueName) {
 		return (Command) template.receiveAndConvert(queueName);
