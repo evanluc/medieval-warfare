@@ -114,7 +114,7 @@ public class ServerConfig {
 
 	@Bean
 	MessageListenerAdapter listenerAdapter() {
-		return new MessageListenerAdapter(handler, "handle");
+		return new RequestDispatcher(handler, "handle");
 	}
 
 	@Bean

@@ -11,6 +11,7 @@ public class LoginCommand extends RemoteCommand {
 	 */
 	private static final long serialVersionUID = 7839191183469247807L;
 	private String password;
+	private boolean result = false;
 
 	public LoginCommand(String sender, String password) {
 		super(sender);
@@ -23,11 +24,15 @@ public class LoginCommand extends RemoteCommand {
 		IServerServiceLocator locator = this.getServiceLocator();
 		IUserTransaction transaction = locator.getUserTransaction();
 		try {
-			transaction.loginUser(user);
+			result = transaction.loginUser(user);
 		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean getResult() {
+		return result;
 	}
 
 	@Override

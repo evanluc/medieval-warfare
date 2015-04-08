@@ -71,7 +71,7 @@ public class LoginPanel extends BasePanel {
 					panelController.setJoinGame();
 				}
 				else {
-					JOptionPane.showMessageDialog(enter, "Please enter a valid username.", "Invalid username", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(enter, "Please enter a valid username & password.", "Invalid username", JOptionPane.ERROR_MESSAGE);
 				}
 				field.setText("");
 			}
