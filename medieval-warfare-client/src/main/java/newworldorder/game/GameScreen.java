@@ -27,21 +27,14 @@ public class GameScreen implements Screen {
 	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	private OrthographicCamera camera;
 
-	public GameScreen(final MedievalWarfareGame game) {
-	//	Gdx.graphics.setDisplayMode(1064, 755, true);
-		this.tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
-//		float w = Gdx.graphics.getWidth();
-//		float h = Gdx.graphics.getHeight();
-		this.tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
-		this.UIstage = new UIStage(skin);
-
-		this.stage = new TiledMapStage(tiledMap,ModelController.getInstance(),UIstage);
-
-	}
 
 	@Override
 	public void show() {
 		Gdx.graphics.setDisplayMode(1064, 755, false);
+		this.tiledMap = new TmxMapLoader().load("./map/blankMap.tmx");
+		this.tiledMapRenderer = new HexagonalTiledMapRenderer(tiledMap);
+		this.UIstage = new UIStage(skin);
+		this.stage = new TiledMapStage(tiledMap,ModelController.getInstance(),UIstage);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();	
 		camera = new OrthographicCamera();
@@ -56,9 +49,10 @@ public class GameScreen implements Screen {
 			
 		
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(UIstage);
+
 		inputMultiplexer.addProcessor(stage);
 
-		inputMultiplexer.addProcessor(UIstage);
 
 		Gdx.input.setInputProcessor(inputMultiplexer);
 

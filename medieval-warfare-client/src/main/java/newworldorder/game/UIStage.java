@@ -5,8 +5,6 @@ import java.util.List;
 import newworldorder.client.model.ModelController;
 import newworldorder.client.shared.UIActionType;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class UIStage extends Stage{
 	private Skin skin;
@@ -30,7 +27,7 @@ public class UIStage extends Stage{
 		this.skin = skin;
 		
 		hud = new HUD("HUD", skin, ModelController.getInstance().getCurrentTurnPlayer(), ModelController.getInstance().getTurnNumber());
-		hud.setPosition(5,this.getCamera().position.y);
+		hud.setPosition(5,this.getViewport().getScreenHeight()-5);
 		this.addActor(hud);
 		
 		
@@ -38,10 +35,12 @@ public class UIStage extends Stage{
 		Label stopItText = new Label("Your opponent is still making moves.\n Please wait until their turn ends\n"
 				+ "In the meantime you can still survey your tiles and villages.",skin);
 		notTurnWindow.add(stopItText).row();			
-		notTurnWindow.setWidth(150);
+		notTurnWindow.setWidth(250);
 		notTurnWindow.setHeight(150);
-		notTurnWindow.setPosition(this.getCamera().position.x - notTurnWindow.getWidth() / 2, 5);
+		notTurnWindow.setPosition(this.getCamera().position.x - notTurnWindow.getWidth()/2, 5);
 		this.addActor(notTurnWindow);
+		
+
 
 //		this.yourTurnWindow = new Window("It's your turn!", skin);
 //		Label goForItText = new Label("Select a tile and make a move!",skin);
@@ -57,7 +56,7 @@ public class UIStage extends Stage{
 		this.addActor(table);
 		this.tree = new Tree(skin);
 		table.add(tree).fill().expand();
-		table.bottom();
+		table.left();
 	
 
 	}
@@ -80,7 +79,6 @@ public class UIStage extends Stage{
 	
 	public void buttonRenderUpdate(TiledMapActor selectedCell){
 		tree.clear();
-		
 		List <UIActionType> legalMovesList= ModelController.getInstance().getLegalMoves(selectedCell.getXCell(), selectedCell.getYCell());
 		for (UIActionType UIAction : legalMovesList){
 			TextButton newButton = new TextButton(uiActionTypeToString(UIAction), skin);
@@ -88,13 +86,6 @@ public class UIStage extends Stage{
 			if (UIAction == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
 			else newButton.addListener(new DoubleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
 		} 
-		//adding dismiss node
-
-//		TextButton dismiss = new TextButton("dismiss",skin);
-//		dismiss.addListener(new TreeClearListener(table));
-//		Node dismissNode = new Node(dismiss);
-		//window.add(tree).fill().expand();
-		//tree.add(dismissNode);
 		
 	}
 	
@@ -122,6 +113,7 @@ public class UIStage extends Stage{
 		case UPGRADEVILLAGETOWN:return "Upgrade to town";
 		case BOMBARDTILE:return "Upgrade bombarding tile!";
 		case BUILDUNITCANNON: return "Upgrade to town";
+		case UPGRADEVILLAGECASTLE: return "Upgrade to castle";
 
 		}
 		return null;

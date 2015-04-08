@@ -19,14 +19,15 @@ public class MedievalWarfareGame extends Game {
 	Texture texture;
 	OrthographicCamera camera;
 	GameScreen gameScreen;
+	LoginScreen loginScreen;
 
 	@Override
 	public void create () {
 
 		
-	gameScreen = new GameScreen(this);
-	//this.setScreen(new LoginScreen(gameScreen, this));
-	this.setScreen(gameScreen);
+	gameScreen = new GameScreen();
+	loginScreen =new LoginScreen(this);
+	this.setScreen(loginScreen);
 		
 	}
 

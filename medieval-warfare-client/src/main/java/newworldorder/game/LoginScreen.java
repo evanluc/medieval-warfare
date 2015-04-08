@@ -47,6 +47,10 @@ public class LoginScreen implements Screen{
 
 	}
 
+	public LoginScreen(MedievalWarfareGame thisGame) {
+		this.thisGame = thisGame;
+	}
+
 
 	@Override
 	public void show() {
@@ -108,7 +112,7 @@ public class LoginScreen implements Screen{
 
 				else{ 
 					//call networking stuff
-					thisGame.setScreen(gameScreen);
+					thisGame.setScreen(thisGame.gameScreen);
 				}
 				return false;
 			}//end of click listener
