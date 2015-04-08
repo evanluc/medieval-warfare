@@ -1,5 +1,7 @@
 package newworldorder.client.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -62,5 +64,53 @@ public class ClientController implements IController {
 		GameRequest curRequest = new GameRequest(username, numPlayers);
 		JoinGameCommand joinGameCommand = new JoinGameCommand(username, curRequest);
 		adapter.send(joinGameCommand, commandExchange, routingKey);
+	}
+
+	@Override
+	public boolean newAccount(String username, String password) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void invitePlayer(String username, String invitingPlayer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void acceptInvite() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startPartyGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<String> getPlayersInParty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getLeaderOfParty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void leaveParty(String username) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void kickFromParty(String toKick) {
+		// TODO Auto-generated method stub
+		
 	}
 }
