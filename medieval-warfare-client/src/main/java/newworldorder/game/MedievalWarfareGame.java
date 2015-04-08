@@ -26,7 +26,8 @@ public class MedievalWarfareGame extends Game {
 
 	gameScreen = new GameScreen();
 	loginScreen =new LoginScreen(this);
-	this.setScreen(loginScreen);
+	this.setScreen(gameScreen);
+//	this.setScreen(loginScreen);
 	}
 	
 	public MedievalWarfareGame() {

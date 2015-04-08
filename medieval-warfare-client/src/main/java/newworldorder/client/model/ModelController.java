@@ -127,7 +127,9 @@ public class ModelController {
 	public void newGame(String username, List<String> players, String exchange, String mapFilePath) {
 		this.localPlayerName = username;
 		engine.setLocalPlayerName(username);
-		CommandFactory.setupNetworking(exchange);
+		if (exchange != null) {
+			CommandFactory.setupNetworking(exchange);
+		}
 		System.out.println("Exchange : " + exchange);
 		Map presetMap = null;
 		try {
@@ -140,7 +142,9 @@ public class ModelController {
 			if (players.get(0).compareTo(username) == 0) {
 				engine.newGame(players, presetMap);
 				System.out.println("First player");
-				CommandFactory.createSetupGameCommand(engine.getGameState());
+				if (exchange != null) {
+					CommandFactory.createSetupGameCommand(engine.getGameState());
+				}
 			}
 			gameRunning = true;
 		}
