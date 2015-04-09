@@ -2,6 +2,7 @@ package newworldorder.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -32,14 +34,19 @@ public class MatchmakingScreen implements Screen {
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	GameScreen gameScreen;
 	MedievalWarfareGame thisGame;
-	private Image map;
+	private Image mapPreviewImage;
 	private boolean mapChanged = false;
 	private float alpha = 0f;
 	Sprite sprite;
+	private String loadGamePath;
+	List<String> onlinePlayers;
+	Array<String> mapOptionsArray;
+	SelectBox<String> mapSelectBox;
 
-	public MatchmakingScreen() {
+	public MatchmakingScreen(MedievalWarfareGame thisGame) {
 		super();
-		
+		this.thisGame = thisGame;
+		this.loadGamePath = null;
 	}
 
 	@Override
@@ -72,13 +79,20 @@ public class MatchmakingScreen implements Screen {
 		stage.draw();
 		if (mapChanged) {
 			alpha += delta;
-			map.setColor(1.0f, 1.0f, 1.0f, alpha);
+			mapPreviewImage.setColor(1.0f, 1.0f, 1.0f, alpha);
 			if (alpha >= 1.0f) {
 				mapChanged = false;
 				alpha = 0f;
 			}
 		}
-		
+		if (loadGamePath != null) {
+			// disable new game options
+			if (!mapOptionsArray.contains("Saved Game", false)) {
+				mapOptionsArray.add("Saved Game");
+				mapSelectBox.setItems(mapOptionsArray);
+			}
+			mapSelectBox.setSelected("Saved Game");
+		}
 	}
 
 	@Override
@@ -106,9 +120,9 @@ public class MatchmakingScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		stage.dispose();
-		batch.dispose();
-		skin.dispose();
+//		stage.dispose();
+//		batch.dispose();
+//		skin.dispose();
 	}
 	
 	private void initUI() {
@@ -120,24 +134,62 @@ public class MatchmakingScreen implements Screen {
 		loadButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				Dialog loadGame = new Dialog("Load Game", skin){
+					@Override
+					protected void result (Object object) {
+						this.hide();	
+					}
+				};
+				
+				Window loadGameWindow = new Window("Please select a saved game to load", skin);
+				loadGameWindow.setMovable(false);
+				List<String> loadGameList = new List<>(skin);
+				FileHandle[] files = Gdx.files.local("assets/saves/").list();
+				String[] saveFiles = new String[files.length];
+				for(int i = 0; i < files.length; i++) {
+					saveFiles[i] = files[i].name();
+				}
+				
+				Array<String> p = new Array<>(saveFiles);
+				loadGameList.setItems(p);
+				ScrollPane loadGamePane = new ScrollPane(loadGameList, skin);
+				loadGameWindow.add(loadGamePane).expand().fill();
+				
+				loadGame.add(loadGameWindow).expandY().fill().pad(20);
+				TextButton selectButton = new TextButton("Load Game", skin);
+				selectButton.addListener(new ClickListener() {
+					@Override
+					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+						loadGamePath = loadGameList.getSelected();
+						return true;
+					}
+				});
+				loadGame.button(selectButton);
+				
+				loadGame.show(stage);
 				return true;
 			}
 		});
 		
-		SelectBox<String> mapSelect = new SelectBox<>(skin);
-		Array<String> items = new Array<>();
-		items.add("Seaside Skirmish");
-		items.add("The Dark Forest");
-		items.add("Half-Moon Bay");
-		mapSelect.setItems(items);
-		TextureRegionDrawable[] maps = new TextureRegionDrawable[3];
-		mapSelect.addListener(new ChangeListener() {
+		mapSelectBox = new SelectBox<>(skin);
+		mapOptionsArray = new Array<>();
+		mapOptionsArray.add("Seaside Skirmish");
+		mapOptionsArray.add("The Dark Forest");
+		mapOptionsArray.add("Half-Moon Bay");
+		mapSelectBox.setItems(mapOptionsArray);
+		TextureRegionDrawable[] maps = new TextureRegionDrawable[4];
+		mapSelectBox.addListener(new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				mapChanged = true;
-				map.setColor(1.0f, 1.0f, 1.0f, 0.0f);
-				map.setDrawable(maps[mapSelect.getSelectedIndex()]);
+				mapPreviewImage.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+				mapPreviewImage.setDrawable(maps[mapSelectBox.getSelectedIndex()]);
+				if (!mapSelectBox.getSelected().equals("Saved Game")) {
+					mapOptionsArray.removeValue("Saved Game", false);
+					loadGamePath = null;
+					mapSelectBox.setItems(mapOptionsArray);
+				}
 			}
 			
 		});
@@ -153,13 +205,13 @@ public class MatchmakingScreen implements Screen {
 		
 		table.row().width(150).pad(35, 0, 40, 0);
 		table.add(loadButton).expandX().width(125);
-		table.add(mapSelect).expandX().width(175);
+		table.add(mapSelectBox).expandX().width(175);
 		table.add(numPlayerSelect).expandX().width(155);
 		table.row();
 		
 		Window onlineWindow = new Window("Online Players", skin);
 		onlineWindow.setMovable(false);
-		List<String> onlinePlayers = new List<>(skin);
+		onlinePlayers = new List<>(skin);
 		String[] players = {"player1", "player2", "player3", "player4", "player5", "player6", "player7"};
 		Array<String> p = new Array<>(players);
 		onlinePlayers.setItems(p);
@@ -172,6 +224,7 @@ public class MatchmakingScreen implements Screen {
 		maps[0] = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("./images/seaside-skirmish.jpg"))));
 		maps[1] = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("./images/dark-forest.jpg"))));
 		maps[2] = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("./images/half-moon-bay.jpg"))));
+		maps[3] = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("./images/saved-game-preview.jpg"))));
 		
 		TextButton inviteButton = new TextButton("Invite To Party", skin);
 		inviteButton.addListener(new ClickListener(){
@@ -202,8 +255,8 @@ public class MatchmakingScreen implements Screen {
 			}
 		});
 		middleColumn.columnDefaults(0).width(150).pad(5);
-		map = new Image(maps[mapSelect.getSelectedIndex()]);
-		middleColumn.add(map).size(450, 300).expand().top().pad(10, 0, 40, 0).fill();
+		mapPreviewImage = new Image(maps[mapSelectBox.getSelectedIndex()]);
+		middleColumn.add(mapPreviewImage).size(450, 300).expand().top().pad(10, 0, 40, 0).fill();
 		middleColumn.row();
 		middleColumn.add(inviteButton).uniform();
 		middleColumn.row();

@@ -22,11 +22,11 @@ public class MedievalWarfareGame extends Game {
 	@Override
 	public void create () {
 
-	gameScreen = new GameScreen();
-	loginScreen =new LoginScreen(this);
-	matchmakingScreen = new MatchmakingScreen();
-	this.setScreen(matchmakingScreen);
-//	this.setScreen(loginScreen);
+	gameScreen = new GameScreen(this);
+	loginScreen = new LoginScreen(this);
+	matchmakingScreen = new MatchmakingScreen(this);
+//	this.setScreen(matchmakingScreen);
+	this.setScreen(loginScreen);
 //	this.setScreen(gameScreen);
 	}
 	
@@ -40,10 +40,14 @@ public class MedievalWarfareGame extends Game {
 	}
 	
 	public void setGameScreen() {
-		this.setScreen(new GameScreen());
+		this.setScreen(gameScreen);
 	}
 	
 	public void setLoginScreen() {
-		this.setScreen(new LoginScreen(this));
+		this.setScreen(loginScreen);
+	}
+	
+	public void setMatchmakingScreen() {
+		this.setScreen(matchmakingScreen);
 	}
 }

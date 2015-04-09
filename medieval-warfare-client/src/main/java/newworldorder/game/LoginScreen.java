@@ -1,8 +1,5 @@
 package newworldorder.game;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -25,31 +22,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import newworldorder.client.controller.ClientController;
 import newworldorder.client.controller.IController;
 
-@Component
 public class LoginScreen implements Screen{
-
-	//temporary password
-	private String validPassword = "valid";
-	//temporary userame
-	private String validUsername = "valid";
 	
-	@Autowired private IController controller;
+	private IController controller;
 	
 	OrthographicCamera camera;
 	Stage stage;
 	SpriteBatch batch;
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-	GameScreen gameScreen;
 	MedievalWarfareGame thisGame;
 
 	Sprite sprite;
 
-	public LoginScreen(GameScreen gameScreen, MedievalWarfareGame thisGame){
-		this.gameScreen = gameScreen;
-		this.thisGame = thisGame;
-	}
-
 	public LoginScreen(MedievalWarfareGame thisGame) {
+		super();
 		this.thisGame = thisGame;
 	}
 
@@ -109,8 +95,8 @@ public class LoginScreen implements Screen{
 				//login check
 				controller = ClientController.getInstance();
 				if (controller.login(username, password)){
-					//call networking stuff
-					controller.requestGame(2);
+					// switch to matchmaking screen
+					thisGame.setMatchmakingScreen();
 				} 
 				else{ 
 					new Dialog("Error", skin){
@@ -164,9 +150,9 @@ public class LoginScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		stage.dispose();
-		batch.dispose();
-		skin.dispose();
+//		stage.dispose();
+//		batch.dispose();
+//		skin.dispose();
 	}
 
 

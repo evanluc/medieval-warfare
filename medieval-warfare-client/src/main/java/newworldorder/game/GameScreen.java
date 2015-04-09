@@ -12,9 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Scaling;
 
 
 public class GameScreen implements Screen {
@@ -26,6 +24,12 @@ public class GameScreen implements Screen {
 	private UIStage UIstage;
 	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	private OrthographicCamera camera;
+	MedievalWarfareGame thisGame;
+	
+	public GameScreen(MedievalWarfareGame thisGame) {
+		super();
+		this.thisGame = thisGame;
+	}
 
 
 	@Override
@@ -117,10 +121,10 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		stage.dispose();
-		tiledMap.dispose();
-		UIstage.dispose();
-		skin.dispose();
+//		stage.dispose();
+//		tiledMap.dispose();
+//		UIstage.dispose();
+//		skin.dispose();
 	}
 
 }
