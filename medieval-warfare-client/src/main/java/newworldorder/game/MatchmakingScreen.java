@@ -337,8 +337,12 @@ public class MatchmakingScreen implements Screen {
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				if (loadGamePath != null) {
 					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
+					
+					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
+						thisGame.setGameScreen();
+					}
 				}
-				thisGame.setGameScreen();
+				
 				return true;
 			}
 		});

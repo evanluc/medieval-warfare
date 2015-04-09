@@ -222,4 +222,19 @@ public class ModelController {
 	public List<UIActionType> getLegalMoves(int x, int y){
 		return engine.getLegalMoves(x, y);
 	}
+	
+	public boolean validatePlayers(List<String> playerNames) {
+		if (engine.getGameState() == null) {
+			return false;
+		} else {
+			List<Player> players = engine.getGameState().getPlayers();
+			for (Player p : players) {
+				if (!playerNames.contains(p.getUsername())) {
+					return false;
+				}
+			}
+			if (playerNames.size() != players.size()) return false;
+		}
+		return true;
+	}
 }
