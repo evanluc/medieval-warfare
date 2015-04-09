@@ -27,8 +27,8 @@ public class MedievalWarfareGame extends Game {
 	loginScreen = new LoginScreen(this);
 	accountCreationScreen = new AccountCreationScreen(this);
 	matchmakingScreen = new MatchmakingScreen(this);
-//	this.setScreen(matchmakingScreen);
-	this.setScreen(loginScreen);
+	this.setScreen(matchmakingScreen);
+	//this.setScreen(loginScreen);
 //	this.setScreen(gameScreen);
 	}
 	

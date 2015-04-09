@@ -1,5 +1,7 @@
 package newworldorder.game;
 
+import java.util.Random;
+
 import newworldorder.client.controller.ClientController;
 import newworldorder.common.network.command.SynchronizePartyCommand;
 import newworldorder.client.model.ModelController;
@@ -291,11 +293,37 @@ public class MatchmakingScreen implements Screen {
 		});
 		TextButton statsButton = new TextButton("View Stats", skin);
 		statsButton.addListener(new ClickListener(){
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-		});
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					Dialog statisticDialog = new Dialog(onlinePlayers.getSelected()+" Statistics", skin){
+						@Override
+						protected void result (Object object) {
+							this.hide();	
+						}
+					}.button("Close").show(stage);;
+					Window statsWindow = new Window(onlinePlayers.getSelected(), skin);
+					statsWindow.setMovable(false);
+					List<String> statList = new List<>(skin);
+					Random generator = new Random();
+					int randWin = generator.nextInt(100);
+					int randTie = generator.nextInt(100);
+					int randLoss = generator.nextInt(100);
+					String win = "Wins: "+randWin;
+					String tie = "Ties: "+randTie;
+					String loss = "Losses: "+randLoss;
+					String[] stats = new String[3];
+					stats[0] = win;
+					stats[1] = tie;
+					stats[2] = loss;
+					Array<String> p = new Array<>(stats);
+					statList.setItems(p);
+					ScrollPane statsPane = new ScrollPane(statList, skin);
+					statsWindow.add(statsPane).expand().fill();
+					statisticDialog.add(statsWindow).expandY().fill().pad(20);
+					statisticDialog.show(stage);
+					return true;
+				}
+			});
 		TextButton playButton = new TextButton("Play", skin);
 		playButton.addListener(new ClickListener(){
 			@Override

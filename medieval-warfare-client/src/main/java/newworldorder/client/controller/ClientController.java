@@ -97,6 +97,9 @@ public class ClientController implements IController {
 
 	@Override
 	public boolean newAccount(String username, String password) {
+		if (username.equals("") || username == null|| password.equals("") || password == null) {
+			return false;
+		}
 		CreateAccountCommand command = new CreateAccountCommand(username, password);
 		boolean result = (Boolean) adapter.sendAndReceive(command, commandExchange, routingKey);
 		return result;
