@@ -38,7 +38,7 @@ public class FileUserStore implements UserStore {
 
 	@Override
 	public void insertUser(User user) throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(fileStore));
+		CSVWriter writer = new CSVWriter(new FileWriter(fileStore, true));
 		try {
 			String[] entry = new String[] {user.getUsername(), user.getPassword()};
 			writer.writeNext(entry);
