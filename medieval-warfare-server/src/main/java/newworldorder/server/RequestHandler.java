@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import newworldorder.common.network.command.AbstractCommand;
 import newworldorder.common.network.command.CommandHandler;
+import newworldorder.common.network.command.CreateAccountCommand;
+import newworldorder.common.network.command.GetOnlinePlayersCommand;
+import newworldorder.common.network.command.LoginCommand;
 import newworldorder.common.network.command.RemoteCommand;
 import newworldorder.common.network.command.ReplyCommandHandler;
 import newworldorder.common.service.IServerServiceLocator;
@@ -40,21 +43,26 @@ public class RequestHandler implements CommandHandler, ReplyCommandHandler {
 	public Object handleAndReply(AbstractCommand command) {
 		logger.info("Received new command from [" + command.getSender() + "]: " + command.toString());
 		
-//		if (command instanceof LoginCommand) {
-//			LoginCommand loginCommand = (LoginCommand) command;
-//			loginCommand.setServiceLocator(locator);
-//			loginCommand.execute();
-//			return loginCommand.getResult();
-//		}
-//		else if (command instanceof CreateAccountCommand) {
-//			CreateAccountCommand accountCommand = (CreateAccountCommand) command;
-//			accountCommand.setServiceLocator(locator);
-//			accountCommand.execute();
-//			return accountCommand.getResult();
-//		}
-//		else {
-//			return null;
-//		}
-		return true;
+		if (command instanceof LoginCommand) {
+			LoginCommand loginCommand = (LoginCommand) command;
+			loginCommand.setServiceLocator(locator);
+			loginCommand.execute();
+			return loginCommand.getResult();
+		}
+		else if (command instanceof CreateAccountCommand) {
+			CreateAccountCommand accountCommand = (CreateAccountCommand) command;
+			accountCommand.setServiceLocator(locator);
+			accountCommand.execute();
+			return accountCommand.getResult();
+		}
+		else if (command instanceof GetOnlinePlayersCommand) {
+			GetOnlinePlayersCommand c = (GetOnlinePlayersCommand) command;
+			c.setServiceLocator(locator);
+			c.execute();
+			return c.getOnlinePlayers();
+		}
+		else {
+			return null;
+		}
 	}
 }

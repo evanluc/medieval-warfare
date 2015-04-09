@@ -70,14 +70,14 @@ public class AccountCreationScreen implements Screen{
 			confirmPasswordField.setPasswordCharacter('*');
 			confirmPasswordField.setMessageText("Confirm Password");
 			//adding username and password nodes
-			final Node usernameNode= new Node (usernameField);
-			final Node passwordNode = new Node(passwordField);
-			final Node confirmPasswordNode = new Node(confirmPasswordField);
+//			final Node usernameNode= new Node (usernameField);
+//			final Node passwordNode = new Node(passwordField);
+//			final Node confirmPasswordNode = new Node(confirmPasswordField);
 
 			/*creating login and button tables */
 			Table table = new Table();
 
-			final Tree tree = new Tree(skin);
+//			final Tree tree = new Tree(skin);
 
 
 			TextButton enterButton = new TextButton("Enter", skin);
@@ -85,16 +85,15 @@ public class AccountCreationScreen implements Screen{
 			TextButton backButton = new TextButton("Back", skin);
 
 			
-			final Node enter = new Node(enterButton);
+//			final Node enter = new Node(enterButton);
+//			
+//			final Node back = new Node(backButton);
 			
-			final Node back = new Node(backButton);
-			
-			tree.add(usernameNode);
-			tree.add(passwordNode);
-			tree.add(confirmPasswordNode);
-			tree.add(enter);
-			tree.add(back);
-			table.add(tree).fill().expand();						
+			table.add(usernameField).row();
+			table.add(passwordField).row();
+			table.add(confirmPasswordField).row();
+			table.add(enterButton).row();
+			table.add(backButton).row();
 			stage.addActor(table);
 			table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()
 					/ 2);
@@ -122,6 +121,7 @@ public class AccountCreationScreen implements Screen{
 						controller = ClientController.getInstance();
 						if (controller.newAccount(username, password)){
 							// switch to matchmaking screen
+							controller.login(username, password);
 							thisGame.setMatchmakingScreen();
 						} 
 						else{ 
