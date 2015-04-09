@@ -83,7 +83,6 @@ public class LoginScreen implements Screen{
 		final Node login = new Node(loginButton);
 		final Node accountCreation = new Node(accountCreationButton);
 
-		tree.add(title);
 		tree.add(usernameNode);
 		tree.add(passwordNode);
 		tree.add(login);
