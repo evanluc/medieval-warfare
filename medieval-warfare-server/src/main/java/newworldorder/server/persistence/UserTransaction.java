@@ -21,18 +21,22 @@ public class UserTransaction implements IUserTransaction {
 	}
 	
 	@Override
-	public synchronized void createUser(User user) throws PersistenceException {
+	public synchronized boolean createUser(User user) throws PersistenceException {
+		boolean result;
 		try {
 			if (!userStore.containsUsername(user.getUsername())) {
 				userStore.insertUser(user);
+				result = true;
 			}
 			else {
-				throw new PersistenceException("User with username '" + user.getUsername() + "' already exists.");
+				result = false;
 			}
 		}
 		catch (Exception e) {
 			throw new PersistenceException("Unknown exception.");
 		}
+		
+		return result;
 	}
 
 	@Override

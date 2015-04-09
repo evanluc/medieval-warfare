@@ -46,6 +46,12 @@ public class RequestHandler implements CommandHandler, ReplyCommandHandler {
 //			loginCommand.execute();
 //			return loginCommand.getResult();
 //		}
+//		else if (command instanceof CreateAccountCommand) {
+//			CreateAccountCommand accountCommand = (CreateAccountCommand) command;
+//			accountCommand.setServiceLocator(locator);
+//			accountCommand.execute();
+//			return accountCommand.getResult();
+//		}
 //		else {
 //			return null;
 //		}
