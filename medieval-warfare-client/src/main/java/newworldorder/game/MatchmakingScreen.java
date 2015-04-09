@@ -113,6 +113,10 @@ public class MatchmakingScreen implements Screen {
 		java.util.List<String> inParty = controller.getAcceptedPlayersInParty(); 
 		String[] partyPlayers =  inParty.toArray(new String[inParty.size()]);
 		party.setItems(new Array<String>(partyPlayers));
+		
+		java.util.List<String> online = controller.getOnlinePlayers();
+		String[] players = online.toArray(new String[online.size()]);
+		onlinePlayers.setItems(new Array<String>(players));
 		//Makes the dialog for accepting invite if you have been invited
 		if (!controller.getPlayersInParty().isEmpty() && !controller.acceptedPartyInvite() && invite == null) {
 			invite = new Dialog("Party Invite", skin){

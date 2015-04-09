@@ -1,6 +1,8 @@
 package newworldorder.client.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CheckPartyCommand;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.CreateAccountCommand;
+import newworldorder.common.network.command.GetOnlinePlayersCommand;
 import newworldorder.common.network.command.JoinGameCommand;
 import newworldorder.common.network.command.LoginCommand;
 import newworldorder.common.network.command.LogoutCommand;
@@ -170,6 +173,12 @@ public class ClientController implements IController {
 			RemoveFromPartyCommand command = new RemoveFromPartyCommand(session.getUsername(), toKick);
 			sendToAllParty(command);
 		}
+	}
+	public List<String> getOnlinePlayers(){
+		GetOnlinePlayersCommand command = new GetOnlinePlayersCommand(session.getUsername());
+		 Set<String> result = (Set<String>) adapter.sendAndReceive(command, commandExchange, routingKey);
+		 return new ArrayList<String>(result);
+	
 	}
 	
 	private void sendToAllParty(ClientCommand command) {
