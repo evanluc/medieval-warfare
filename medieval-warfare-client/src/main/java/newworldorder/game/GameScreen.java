@@ -112,14 +112,15 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		this.dispose();
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		stage.dispose();
+		tiledMap.dispose();
+		UIstage.dispose();
+		skin.dispose();
 	}
 
 }

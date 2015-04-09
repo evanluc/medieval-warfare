@@ -1,45 +1,30 @@
 package newworldorder.game;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import newworldorder.client.controller.ClientController;
-import newworldorder.client.controller.IController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 
-@Component
-public class LoginScreen implements Screen{
-
-	//temporary password
-	private String validPassword = "valid";
-	//temporary userame
-	private String validUsername = "valid";
-	
-	@Autowired private IController controller;
+public class MatchmakingScreen implements Screen {
 	
 	OrthographicCamera camera;
 	Stage stage;
@@ -47,23 +32,17 @@ public class LoginScreen implements Screen{
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	GameScreen gameScreen;
 	MedievalWarfareGame thisGame;
-
+	
 	Sprite sprite;
 
-	public LoginScreen(GameScreen gameScreen, MedievalWarfareGame thisGame){
-		this.gameScreen = gameScreen;
-		this.thisGame = thisGame;
-
+	public MatchmakingScreen() {
+		super();
+		
 	}
-
-	public LoginScreen(MedievalWarfareGame thisGame) {
-		this.thisGame = thisGame;
-	}
-
 
 	@Override
 	public void show() {
-		Gdx.graphics.setDisplayMode(700, 356, false);
+		Gdx.graphics.setDisplayMode(1064, 755, false);
 
 		batch = new SpriteBatch();
 		Texture texture = new Texture(Gdx.files.internal("./images/background.jpg"));
@@ -76,63 +55,47 @@ public class LoginScreen implements Screen{
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());		
 		stage.getViewport().setCamera(camera);
 		Gdx.input.setInputProcessor(stage);
-
-
-		//password field
-		TextField usernameField = new TextField("", skin);
-		TextField passwordField = new TextField("", skin);
-		passwordField.setPasswordMode(true);
-		//adding username and password nodes
-		final Node usernameNode= new Node (usernameField);
-		final Node passwordNode = new Node(passwordField);
-
-		/*creating login and button tables */
-		Table table = new Table();
-
-		final Tree tree = new Tree(skin);
-
-
-		TextButton loginButton = new TextButton("Login", skin);
-
 		
-		final Node login = new Node(loginButton);
-
-		tree.add(usernameNode);
-		tree.add(passwordNode);
-		tree.add(login);
-		table.add(tree).fill().expand();						
-		stage.addActor(table);
-		table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()
-				/ 2);
-		
-		
+		TextButton loginButton = new TextButton("Load Game", skin);
 		loginButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				
-				String username = usernameField.getText();
-				String password = passwordField.getText();
-
-				//login check
-				controller = ClientController.getInstance();
-				if (controller.login(username, password)){
-					//call networking stuff
-					controller.requestGame(2);
-				} 
-				else{ 
-					new Dialog("Error", skin){
-						protected void result (Object object) {
-							this.hide();	
-						}
-					}.text("Please enter a valid \n username or password").button("OK").show(stage);
-				} //end of no password case
-				return false;
+				return true;
 			}//end of click listener
 		});
-
+		
+		final Node login = new Node(loginButton);
+		
+		final Tree tree = new Tree(skin);
+		
+		tree.add(login);
+		
+		final SelectBox<String> mapSelect = new SelectBox<String>(skin);
+		Array<String> items = new Array<String>();
+		items.add("Seaside Skirmish");
+		items.add("The Dark Forest");
+		items.add("Half-Moon Bay");
+		mapSelect.setItems(items);
+		
+		tree.add(new Node(mapSelect));
+		
+		Table table = new Table();
+		table.add(tree).fill().expand();
+		
+		
+		
+		stage.addActor(table);
+		
+		table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()
+				/ 2);
+		
+		final SelectBox<String> onlinePlayerSelect = new SelectBox<String>(skin);
+		stage.addActor(onlinePlayerSelect);
+		onlinePlayerSelect.setItems(items);
+		onlinePlayerSelect.setHeight(40);
+		onlinePlayerSelect.setWidth(20);
+		onlinePlayerSelect.setPosition(10, 10);
 	}
-
-
 
 	@Override
 	public void render(float delta) {
@@ -142,7 +105,7 @@ public class LoginScreen implements Screen{
 		sprite.draw(batch);
 		batch.end();
 		stage.act();
-		stage.draw();		
+		stage.draw();
 	}
 
 	@Override
@@ -174,6 +137,5 @@ public class LoginScreen implements Screen{
 		batch.dispose();
 		skin.dispose();
 	}
-
 
 }

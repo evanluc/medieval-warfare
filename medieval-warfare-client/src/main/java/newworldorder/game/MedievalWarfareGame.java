@@ -20,13 +20,17 @@ public class MedievalWarfareGame extends Game {
 	OrthographicCamera camera;
 	GameScreen gameScreen;
 	LoginScreen loginScreen;
+	MatchmakingScreen matchmakingScreen;
 
 	@Override
 	public void create () {
 
 	gameScreen = new GameScreen();
 	loginScreen =new LoginScreen(this);
-	this.setScreen(gameScreen);
+	matchmakingScreen = new MatchmakingScreen();
+	this.setScreen(matchmakingScreen);
+//	this.setScreen(loginScreen);
+//	this.setScreen(gameScreen);
 //	this.setScreen(loginScreen);
 	}
 	
@@ -40,10 +44,10 @@ public class MedievalWarfareGame extends Game {
 	}
 	
 	public void setGameScreen() {
-		this.setScreen(gameScreen);
+		this.setScreen(new GameScreen());
 	}
 	
 	public void setLoginScreen() {
-		this.setScreen(loginScreen);
+		this.setScreen(new LoginScreen(this));
 	}
 }
