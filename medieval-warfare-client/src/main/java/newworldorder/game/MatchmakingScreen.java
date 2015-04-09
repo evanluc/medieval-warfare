@@ -2,6 +2,7 @@ package newworldorder.game;
 
 import newworldorder.client.controller.ClientController;
 import newworldorder.common.network.command.SynchronizePartyCommand;
+import newworldorder.client.model.ModelController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -50,6 +51,7 @@ public class MatchmakingScreen implements Screen {
 	List<String> party;
 	Dialog invite;
 
+	ModelController modelController = ModelController.getInstance();
 
 	public MatchmakingScreen(MedievalWarfareGame thisGame) {
 		super();
@@ -189,7 +191,6 @@ public class MatchmakingScreen implements Screen {
 				for(int i = 0; i < files.length; i++) {
 					saveFiles[i] = files[i].name();
 				}
-				
 				Array<String> p = new Array<>(saveFiles);
 				loadGameList.setItems(p);
 				ScrollPane loadGamePane = new ScrollPane(loadGameList, skin);
@@ -299,6 +300,10 @@ public class MatchmakingScreen implements Screen {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (loadGamePath != null) {
+					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
+				}
+				thisGame.setGameScreen();
 				return true;
 			}
 		});

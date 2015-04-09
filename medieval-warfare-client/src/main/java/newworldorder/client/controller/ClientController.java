@@ -198,4 +198,8 @@ public class ClientController implements IController {
 				.map(p -> p.getUsername())
 				.collect(Collectors.toList());
 	}
+	
+	public String getLocalUsername() {
+		return session.getUsername();
+	}
 }

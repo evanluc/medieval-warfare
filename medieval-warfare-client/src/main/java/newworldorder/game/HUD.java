@@ -2,19 +2,29 @@ package newworldorder.game;
 import newworldorder.client.model.ModelController;
 import newworldorder.client.shared.UIActionType;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 
 public class HUD extends Window {
-	private Label playerTurnLabel, turnNumberLabel, playerTurnText, turnNumberText;
-	private TextButton endTurn;
+	private Label playerTurnLabel, playerTurnText, turnNumberText;
+	private TextButton endTurn, saveGameButton;
+	private UIStage stage;
+	private ModelController modelController = ModelController.getInstance();
 
-	public HUD(String title, Skin skin, String userName, int turnNumber) {
+	public HUD(String title, Skin skin, String userName, int turnNumber, UIStage gameScreen) {
 		super(title, skin);
+		this.stage = gameScreen;
 		playerTurnLabel = new Label("Current Player:", skin);
 		playerTurnText = new Label("Player1", skin);
 		turnNumberText = new Label("0", skin);
@@ -23,7 +33,7 @@ public class HUD extends Window {
 		this.add(playerTurnText).row();
 		this.add(turnNumberText).row();
 		
-		endTurn = new TextButton("EndTurn",skin);
+		endTurn = new TextButton("End Turn",skin);
 		endTurn.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -33,6 +43,59 @@ public class HUD extends Window {
 		});
 		
 		this.add(endTurn).row();
+		
+		saveGameButton = new TextButton("Save Game", skin);
+		saveGameButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				Dialog saveGameDialog = new Dialog("Save Game", skin){
+					@Override
+					protected void result (Object object) {
+						this.hide();	
+					}
+				};
+				
+				Window saveGameWindow = new Window("Please provide a save game file name", skin);
+				saveGameWindow.setMovable(false);
+//				@SuppressWarnings("unchecked")
+//				Cell<Actor> newRow = saveGameDialog.row();
+				List<String> saveGameList = new List<>(skin);
+				FileHandle[] files = Gdx.files.local("assets/saves/").list();
+				String[] saveFiles = new String[files.length];
+				for(int i = 0; i < files.length; i++) {
+					saveFiles[i] = files[i].name();
+				}
+				Array<String> p = new Array<>(saveFiles);
+				saveGameList.setItems(p);
+				ScrollPane saveGameListPane = new ScrollPane(saveGameList, skin);
+				saveGameWindow.add(saveGameListPane).expand().fill();
+//				newRow.setActor(saveGameWindow).expandY().fill().pad(20);
+				saveGameDialog.add(saveGameWindow).expandY().fill().pad(20);
+//				newRow = saveGameDialog.row();
+				TextField saveFileNameTextField = new TextField("", skin);
+//				newRow.setActor(saveFileNameTextField).expand().fill();
+				saveGameWindow.add(saveFileNameTextField).expand().fill();
+				TextButton confirmButton = new TextButton("Save Game", skin);
+				confirmButton.addListener(new ClickListener() {
+					@Override
+					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+						if (!saveFileNameTextField.getText().isEmpty()) {
+							modelController.saveGame("assets/saves/"+saveFileNameTextField.getText()+".mwg");
+						}
+						return true;
+					}
+				});
+				
+				saveGameDialog.button(confirmButton);
+				TextButton closeButton = new TextButton("Close", skin);
+				saveGameDialog.button(closeButton);
+				
+				saveGameDialog.show(stage);
+				return true;
+			}
+		});
+		
+		this.add(saveGameButton);
 	}
 
 	public void setCurrentUsername(String currentUsername) {

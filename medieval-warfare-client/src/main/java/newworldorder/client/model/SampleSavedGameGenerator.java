@@ -17,7 +17,7 @@ public class SampleSavedGameGenerator {
 
 		System.out.println("Attempt creating new game");
 
-		model.newGame("Bob", players, "", mappath);
+		model.newGame("Bob", players, null, mappath);
 
 		System.out.println("Created new game");
 

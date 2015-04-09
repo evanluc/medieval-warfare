@@ -2,6 +2,7 @@ package newworldorder.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,12 +12,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import newworldorder.client.controller.ClientController;
@@ -56,10 +59,12 @@ public class LoginScreen implements Screen{
 		stage.getViewport().setCamera(camera);
 		Gdx.input.setInputProcessor(stage);
 
-
 		//password field
 		TextField usernameField = new TextField("", skin);
+		usernameField.setMessageText("Username");
 		TextField passwordField = new TextField("", skin);
+		passwordField.setMessageText("Password");
+		passwordField.setPasswordCharacter('*');
 		passwordField.setPasswordMode(true);
 		//adding username and password nodes
 		final Node usernameNode= new Node (usernameField);
@@ -72,13 +77,16 @@ public class LoginScreen implements Screen{
 
 
 		TextButton loginButton = new TextButton("Login", skin);
-
 		
+		TextButton accountCreationButton = new TextButton("Create an Account", skin);
+
 		final Node login = new Node(loginButton);
+		final Node accountCreation = new Node(accountCreationButton);
 
 		tree.add(usernameNode);
 		tree.add(passwordNode);
 		tree.add(login);
+		tree.add(accountCreation);
 		table.add(tree).fill().expand();						
 		stage.addActor(table);
 		table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()
@@ -107,6 +115,14 @@ public class LoginScreen implements Screen{
 					}.text("Please enter a valid \n username or password").button("OK").show(stage);
 				} //end of no password case
 				return false;
+			}//end of click listener
+		});
+		
+		accountCreationButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				thisGame.setAccountCreationScreen();
+				return true;
 			}//end of click listener
 		});
 
