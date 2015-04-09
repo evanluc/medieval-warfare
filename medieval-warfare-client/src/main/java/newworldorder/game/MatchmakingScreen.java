@@ -33,6 +33,8 @@ public class MatchmakingScreen implements Screen {
 	GameScreen gameScreen;
 	MedievalWarfareGame thisGame;
 	private Image map;
+	private boolean mapChanged = false;
+	private float alpha = 0f;
 	Sprite sprite;
 
 	public MatchmakingScreen() {
@@ -68,6 +70,15 @@ public class MatchmakingScreen implements Screen {
 		batch.end();
 		stage.act();
 		stage.draw();
+		if (mapChanged) {
+			alpha += delta;
+			map.setColor(1.0f, 1.0f, 1.0f, alpha);
+			if (alpha >= 1.0f) {
+				mapChanged = false;
+				alpha = 0f;
+			}
+		}
+		
 	}
 
 	@Override
@@ -124,6 +135,8 @@ public class MatchmakingScreen implements Screen {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				mapChanged = true;
+				map.setColor(1.0f, 1.0f, 1.0f, 0.0f);
 				map.setDrawable(maps[mapSelect.getSelectedIndex()]);
 			}
 			
