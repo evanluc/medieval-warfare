@@ -121,6 +121,7 @@ public class AccountCreationScreen implements Screen{
 						controller = ClientController.getInstance();
 						if (controller.newAccount(username, password)){
 							// switch to matchmaking screen
+							controller.login(username, password);
 							thisGame.setMatchmakingScreen();
 						} 
 						else{ 
