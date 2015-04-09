@@ -4,7 +4,10 @@ import java.util.List;
 
 import newworldorder.client.model.ModelController;
 import newworldorder.client.shared.UIActionType;
+import newworldorder.client.shared.UIVillageDescriptor;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class UIStage extends Stage{
 	private Skin skin;
@@ -20,6 +24,13 @@ public class UIStage extends Stage{
 	private Table table;
 	private HUD hud;
 	private Window notTurnWindow;
+	private Label wood;
+	private Label gold;
+	private Label income;
+	private Label expenses;
+	private Label health;
+	private TextButton endTurn;
+	private Window villageWindow;
 	
 	
 	public UIStage(Skin skin){
@@ -37,17 +48,33 @@ public class UIStage extends Stage{
 		notTurnWindow.setHeight(100);
 		notTurnWindow.setPosition(this.getCamera().position.x - notTurnWindow.getWidth()/2, 5);
 		this.addActor(notTurnWindow);
+		//village stuff
+		villageWindow = new Window("Village stats", skin);
+		wood = new Label("Village wood : " ,skin);
+		gold = new Label("Village gold : " ,skin);
+		income = new Label("Village income : " ,skin);
+		expenses = new Label("Village expense : " ,skin);
+		health = new Label ("Village health : " ,skin);
+		villageWindow.add(wood).row();
+		villageWindow.add(gold).row();
+		villageWindow.add(income).row();
+		villageWindow.add(expenses).row();
+		villageWindow.add(health).row();
+		villageWindow.setVisible(false);
+		villageWindow.setPosition(this.getCamera().viewportWidth - 5,5);
+		this.addActor(villageWindow);
 		
+		//village stuff
 		
 		this.table = new Table();
 		table.setFillParent(true);
-		this.tree = new Tree(skin);
-		table.add(tree).fill().expand();
-		table.bottom();
+		//this.tree = new Tree(skin);
+		//table.add(tree).fill().expand();
+		//table.setPosition(this.getCamera().viewportWidth/2 , this.getCamera().viewportHeight);
+		System.out.println(table.getWidth());
+	//	table.bottom();
 		this.addActor(table);
 
-		
-	
 
 	}
 	//here we render stuff for the current turn
@@ -62,21 +89,44 @@ public class UIStage extends Stage{
 		notTurnWindow.setVisible(true);
 		hud.setCurrentUsername(ModelController.getInstance().getCurrentTurnPlayer());
 		hud.setCurrentTurn(ModelController.getInstance().getTurnNumber());
+		if(ModelController.getInstance().isLocalPlayersTurn()) table.removeActor(endTurn);
+		else table.add(endTurn);
 		if (tree != null) tree.clear();
 		
 		
 	}
 	
 	public void buttonRenderUpdate(TiledMapActor selectedCell){
-		tree.clear();
+		table.clear();
 		List <UIActionType> legalMovesList= ModelController.getInstance().getLegalMoves(selectedCell.getXCell(), selectedCell.getYCell());
 		for (UIActionType UIAction : legalMovesList){
+			if (UIAction != UIActionType.ENDTURN){
 			TextButton newButton = new TextButton(uiActionTypeToString(UIAction), skin);
-			tree.add(new Node(newButton));
+			table.add(newButton).pad(1);
+			//tree.add(new Node(newButton));
 			if (UIAction == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
 			else newButton.addListener(new DoubleClickListener(selectedCell,tree,(TiledMapStage) selectedCell.getStage(),UIAction));
-		} 
+
+		}
+		}
+		    table.bottom().pad(10);
+
+	
+		//village render stuff
+		if(ModelController.getInstance().getVillage(selectedCell.getXCell(), selectedCell.getYCell()) != null){
+			 System.out.println("here is a village");
+			UIVillageDescriptor villageDescription = ModelController.getInstance().getVillage(selectedCell.getXCell(), selectedCell.getYCell());
+				wood.setText("Wood : " + villageDescription.wood);
+				gold.setText("Gold : " + villageDescription.gold);
+				income.setText("Income : " + villageDescription.income);
+				expenses.setText("Expenses : " + villageDescription.expenses);
+				health.setText("Health : " + villageDescription.health+"/2");
+				villageWindow.setVisible(true);
+				
+		}
+		else villageWindow.setVisible(false);
 		
+		//village render stuff
 	}
 	
 	

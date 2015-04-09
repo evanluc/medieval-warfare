@@ -3,9 +3,9 @@ package newworldorder.client.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import newworldorder.client.controller.ISession;
 import newworldorder.common.service.IClientServiceLocator;
 import newworldorder.common.service.IGameLauncher;
+import newworldorder.common.service.ISession;
 
 @Component
 public class ServiceLocator implements IClientServiceLocator {
@@ -25,4 +25,8 @@ public class ServiceLocator implements IClientServiceLocator {
 		return launcher;
 	}
 
+	@Override
+	public ISession getSession() {
+		return session;
+	}
 }

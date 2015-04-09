@@ -39,18 +39,20 @@ public class UserTransactionTest {
 		transaction.createUser(new User("test-user-1", "test-pass-1"));
 	}
 	
-	@Test(expected=PersistenceException.class)
+	@Test
 	public void testCreateExistingUserThrowsException() throws PersistenceException {
 		User user = new User("test-user-1", "test-pass-1");
 		try {
-			transaction.createUser(user);	// This one should be ok
+			boolean first = transaction.createUser(user);	// This one should be ok
+			assertTrue(first);
 		}
 		catch (PersistenceException e) {
 			fail();
 		}
 		
 		User user2 = new User("test-user-1", "test-pass-2");
-		transaction.createUser(user2);
+		boolean repeatUser = transaction.createUser(user2);
+		assertFalse(repeatUser);
 	}
 	
 	@Test

@@ -17,12 +17,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import newworldorder.client.controller.IController;
-import newworldorder.client.controller.ISession;
+import newworldorder.client.networking.CommandDispatcher;
 import newworldorder.client.service.GdxAppController;
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CommandHandler;
 import newworldorder.common.service.IGameLauncher;
+import newworldorder.common.service.ISession;
 
 @Configuration
 @ComponentScan
@@ -109,7 +110,7 @@ public class ClientConfiguration {
 
 	@Bean
 	MessageListenerAdapter listenerAdapter() {
-		return new MessageListenerAdapter(handler, "handle");
+		return new CommandDispatcher(handler, "handle");
 	}
 
 	@Bean
