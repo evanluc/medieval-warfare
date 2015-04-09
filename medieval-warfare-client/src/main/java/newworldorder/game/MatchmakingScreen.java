@@ -1,5 +1,8 @@
 package newworldorder.game;
 
+import newworldorder.client.controller.ClientController;
+import newworldorder.common.network.command.SynchronizePartyCommand;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -28,6 +31,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class MatchmakingScreen implements Screen {
 	
+	ClientController controller = ClientController.getInstance();
 	OrthographicCamera camera;
 	Stage stage;
 	SpriteBatch batch;
@@ -42,11 +46,16 @@ public class MatchmakingScreen implements Screen {
 	List<String> onlinePlayers;
 	Array<String> mapOptionsArray;
 	SelectBox<String> mapSelectBox;
+	List<String> pending; 
+	List<String> party;
+	Dialog invite;
+
 
 	public MatchmakingScreen(MedievalWarfareGame thisGame) {
 		super();
 		this.thisGame = thisGame;
 		this.loadGamePath = null;
+
 	}
 
 	@Override
@@ -93,6 +102,37 @@ public class MatchmakingScreen implements Screen {
 			}
 			mapSelectBox.setSelected("Saved Game");
 		}
+		java.util.List<String> pendInv = controller.getNotAcceptedPlayersInParty(); 
+		String[] pendingPlayers =  pendInv.toArray(new String[pendInv.size()]);
+		pending.setItems(new Array<String>(pendingPlayers));
+		
+		java.util.List<String> inParty = controller.getAcceptedPlayersInParty(); 
+		String[] partyPlayers =  inParty.toArray(new String[inParty.size()]);
+		party.setItems(new Array<String>(partyPlayers));
+		//Makes the dialog for accepting invite if you have been invited
+		if (!controller.getPlayersInParty().isEmpty() && !controller.acceptedPartyInvite() && invite == null) {
+			invite = new Dialog("Party Invite", skin){
+				@Override
+				protected void result (Object object) {
+					this.hide();	
+				}
+			};
+			
+			
+			
+			TextButton selectButton = new TextButton("Accept Invite", skin);
+			selectButton.addListener(new ClickListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					controller.acceptInvite();
+					invite = null;
+					return true;
+				}
+			});
+			invite.button(selectButton);
+			invite.show(stage);
+		}
+		
 	}
 
 	@Override
@@ -230,6 +270,10 @@ public class MatchmakingScreen implements Screen {
 		inviteButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				String selected = onlinePlayers.getSelected();
+				if(selected != null){
+					controller.invitePlayer(controller.getUsername(), selected);
+				}
 				return true;
 			}
 		});
@@ -237,6 +281,10 @@ public class MatchmakingScreen implements Screen {
 		kickButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				String selected = party.getSelected();
+				if(selected != null){
+					controller.kickFromParty(selected);
+				}
 				return true;
 			}
 		});
@@ -270,7 +318,7 @@ public class MatchmakingScreen implements Screen {
 		
 		Table partyInfo = new Table();
 		
-		List<String> pending = new List<>(skin);
+		pending = new List<>(skin);
 		String[] pendingPlayers = {"player1", "player2", "player3"};
 		pending.setItems(new Array<String>(pendingPlayers));
 		ScrollPane pendingPlayerPane = new ScrollPane(pending, skin);
@@ -281,7 +329,7 @@ public class MatchmakingScreen implements Screen {
 		partyInfo.add(pendingWindow).expand().fill().pad(25, 0, 10, 0);
 		partyInfo.row();
 		
-		List<String> party = new List<>(skin);
+		party = new List<>(skin);
 		String[] partyPlayers = {"player3", "player4", "player5"};
 		party.setItems(new Array<String>(partyPlayers));
 		ScrollPane partyPlayerPane = new ScrollPane(party, skin);
@@ -291,7 +339,9 @@ public class MatchmakingScreen implements Screen {
 		partyInfo.add(partyWindow).expand().fill().pad(10, 0, 0, 0);
 
 		table.add(partyInfo).fill().pad(20);
-		
+
 		stage.addActor(table);
+		
+
 	}
 }
