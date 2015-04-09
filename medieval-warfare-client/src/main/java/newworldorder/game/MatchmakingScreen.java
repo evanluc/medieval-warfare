@@ -281,7 +281,7 @@ public class MatchmakingScreen implements Screen {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				String selected = onlinePlayers.getSelected();
-				if(selected != null){
+				if(selected != null && !selected.equals(controller.getUsername())){
 					controller.invitePlayer(controller.getUsername(), selected);
 				}
 				return true;
