@@ -63,9 +63,7 @@ public class TiledMapStage extends Stage {
 						tiledLayer.getTileHeight());
 				addActor(actor);
 				EventListener eventListener = new TiledMapClickListener(actor, skin);
-				VillageClickListener villageListener = new VillageClickListener(actor, skin);
 				actor.addListener(eventListener);
-				actor.addListener(villageListener);
 
 			}
 		}

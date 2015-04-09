@@ -73,21 +73,14 @@ public class LoginScreen implements Screen{
 		/*creating login and button tables */
 		Table table = new Table();
 
-		final Tree tree = new Tree(skin);
-
-
-		TextButton loginButton = new TextButton("Login", skin);
-		
+		TextButton loginButton = new TextButton("Login", skin);	
 		TextButton accountCreationButton = new TextButton("Create an Account", skin);
 
-		final Node login = new Node(loginButton);
-		final Node accountCreation = new Node(accountCreationButton);
-
-		tree.add(usernameNode);
-		tree.add(passwordNode);
-		tree.add(login);
-		tree.add(accountCreation);
-		table.add(tree).fill().expand();						
+		
+		table.add(usernameField).left().row();
+		table.add(passwordField).left().row();
+		table.add(loginButton).left().row();
+		table.add(accountCreationButton).left().row();				
 		stage.addActor(table);
 		table.setPosition(stage.getCamera().position.x - table.getWidth() / 2, stage.getCamera().position.y - table.getHeight()
 				/ 2);
@@ -166,9 +159,9 @@ public class LoginScreen implements Screen{
 
 	@Override
 	public void dispose() {
-//		stage.dispose();
-//		batch.dispose();
-//		skin.dispose();
+		stage.dispose();
+		batch.dispose();
+		skin.dispose();
 	}
 
 
