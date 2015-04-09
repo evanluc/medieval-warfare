@@ -351,6 +351,7 @@ public class MatchmakingScreen implements Screen {
 				}else{
 					controller.startPartyGame();
 				}
+				
 				return true;
 			}
 		});
