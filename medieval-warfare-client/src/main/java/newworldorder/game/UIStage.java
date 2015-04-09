@@ -3,9 +3,12 @@ package newworldorder.game;
 import java.util.List;
 
 import newworldorder.client.model.ModelController;
+import newworldorder.client.shared.StructureType;
+import newworldorder.client.shared.TerrainType;
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.UIVillageDescriptor;
+import newworldorder.client.shared.UnitType;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -48,7 +51,7 @@ public class UIStage extends Stage {
 						+ "In the meantime you can still survey your tiles and villages.",
 				skin);
 		notTurnWindow.add(stopItText).row();
-		notTurnWindow.setWidth(350);
+		notTurnWindow.setWidth(450);
 		notTurnWindow.setHeight(100);
 		notTurnWindow.setPosition(
 				this.getCamera().position.x - notTurnWindow.getWidth() / 2, 5);
@@ -143,7 +146,7 @@ public class UIStage extends Stage {
 			gold.setText("Gold : " + villageDescription.gold);
 			income.setText("Income : " + villageDescription.income);
 			expenses.setText("Expenses : " + villageDescription.expenses);
-			health.setText("Health : " + villageDescription.health + "/2");
+			health.setText("Health : " + villageDescription.health);
 			villageWindow.setVisible(true);
 		} else
 			villageWindow.setVisible(false);
@@ -156,18 +159,18 @@ public class UIStage extends Stage {
 				selectedCell.getXCell(), selectedCell.getYCell());
 		tileWindow.clear();
 		if (tileDescription.structureType != null) {
-			structure.setText(tileDescription.structureType.toString());
-			tileWindow.add(structure);
+			structure.setText("Structure: " + uiStructureTypeToString(tileDescription.structureType));
+			tileWindow.add(structure).row();
 		}
 
 		if (tileDescription.unitType != null) {
-			structure.setText(tileDescription.unitType.toString());
-			tileWindow.add(unit);
+			unit.setText("Unit:" + uiUnitTypeToString(tileDescription.unitType));
+			tileWindow.add(unit).row();
 		}
 
 		if (tileDescription.terrainType != null) {
-			structure.setText(tileDescription.terrainType.toString());
-			tileWindow.add(terrain);
+			terrain.setText("Terrain: " + uiTerrainTypeToString(tileDescription.terrainType));
+			tileWindow.add(terrain).row();
 		}
 		tileWindow.setVisible(true);
 
@@ -176,7 +179,38 @@ public class UIStage extends Stage {
 	// tile render stuff
 
 	//
+	private String uiStructureTypeToString(StructureType structureType){
+		switch(structureType){
+		case ROAD: return "Road";
+		case TOMBSTONE: return "Tombstone";
+		case WATCHTOWER: return "Watchtower";
+		}
+		return null;
+	}
+	
 
+	private String uiUnitTypeToString(final UnitType unitType){
+		switch(unitType){
+		case CANNON: return "Cannon";
+		case INFANTRY: return "Infantry";
+		case KNIGHT: return "Knight";
+		case PEASANT: return "Peasant";
+		case SOLDIER: return "Soldier";
+		}
+		return null; 
+	}
+	
+	private String uiTerrainTypeToString (final TerrainType terrainType){
+		switch(terrainType){
+		case GRASS: return "Grass";
+		case MEADOW: return "Meadow";
+		case SEA: return "Sea";
+		case TREE: return "Tree";
+		}
+		return null;
+	}
+
+	
 	private String uiActionTypeToString(UIActionType action) {
 		switch (action) {
 		case MOVEUNIT:
