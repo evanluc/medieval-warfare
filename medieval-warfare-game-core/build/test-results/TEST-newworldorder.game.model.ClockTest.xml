@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="newworldorder.game.model.ClockTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2015-03-10T00:17:20" hostname="Owner-PC" time="1.503">
+  <properties/>
+  <testcase name="testGetNow2" classname="newworldorder.game.model.ClockTest" time="1.502"/>
+  <testcase name="testGetNow" classname="newworldorder.game.model.ClockTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

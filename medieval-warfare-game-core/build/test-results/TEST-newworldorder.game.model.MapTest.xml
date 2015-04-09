@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="newworldorder.game.model.MapTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2015-03-10T00:17:21" hostname="Owner-PC" time="0.012">
+  <properties/>
+  <testcase name="testGetTiles" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testGetWidth" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testGetVillages" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testGetTilesWithStructure" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testGrowNewTrees" classname="newworldorder.game.model.MapTest" time="0.007"/>
+  <testcase name="testGetHeight" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testReplaceTombstonesWithTrees" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testGetTilesWithTerrain" classname="newworldorder.game.model.MapTest" time="0.0"/>
+  <testcase name="testSetUpMap" classname="newworldorder.game.model.MapTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="newworldorder.game.model.PlayerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2015-03-10T00:17:21" hostname="Owner-PC" time="0.014">
+  <properties/>
+  <testcase name="testGetSetWins" classname="newworldorder.game.model.PlayerTest" time="0.001"/>
+  <testcase name="testGetPassword" classname="newworldorder.game.model.PlayerTest" time="0.0"/>
+  <testcase name="testSetUpPlayers" classname="newworldorder.game.model.PlayerTest" time="0.0"/>
+  <testcase name="testGetSetColour" classname="newworldorder.game.model.PlayerTest" time="0.0"/>
+  <testcase name="testGetUsername" classname="newworldorder.game.model.PlayerTest" time="0.0"/>
+  <testcase name="testGetSetLosses" classname="newworldorder.game.model.PlayerTest" time="0.0"/>
+  <testcase name="testGetSetStatus" classname="newworldorder.game.model.PlayerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="newworldorder.game.model.RegionTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2015-03-10T00:17:21" hostname="Owner-PC" time="0.019">
+  <properties/>
+  <testcase name="testGetTiles" classname="newworldorder.game.model.RegionTest" time="0.001"/>
+  <testcase name="testSetVillage" classname="newworldorder.game.model.RegionTest" time="0.001"/>
+  <testcase name="testAddTile" classname="newworldorder.game.model.RegionTest" time="0.0"/>
+  <testcase name="getControllingPlayer" classname="newworldorder.game.model.RegionTest" time="0.0"/>
+  <testcase name="testGetTileCount" classname="newworldorder.game.model.RegionTest" time="0.001"/>
+  <testcase name="testCreateVillage" classname="newworldorder.game.model.RegionTest" time="0.0"/>
+  <testcase name="testRemoveTile" classname="newworldorder.game.model.RegionTest" time="0.0"/>
+  <testcase name="testGetVillage" classname="newworldorder.game.model.RegionTest" time="0.014"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
