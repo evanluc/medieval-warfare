@@ -12,9 +12,10 @@ import newworldorder.common.matchmaking.GameInfo;
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.StartGameCommand;
+import newworldorder.common.service.IGameInitializer;
 
 @Component
-public class GameInitializer {
+public class GameInitializer implements IGameInitializer {
 	private final Logger logger = LoggerFactory.getLogger(GameInitializer.class);
 	private final AmqpAdapter amqpAdapter;
 	
@@ -26,6 +27,7 @@ public class GameInitializer {
 		amqpAdapter = adapter;
 	}
 
+	@Override
 	public void initializeGame(List<String> players) {
 		String gameExchangeName = String.valueOf(players.hashCode());
 

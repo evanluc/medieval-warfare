@@ -1,15 +1,23 @@
 package newworldorder.game;
 
 
+import java.util.HashMap;
+import java.util.Iterator;
+
+import newworldorder.client.model.ModelController;
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UIVillageDescriptor;
+import newworldorder.client.shared.UnitType;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 public class PopUpWindow extends Window{
@@ -40,15 +48,29 @@ public class PopUpWindow extends Window{
 		Label wood = new Label("Village wood : " + villageDescription.wood,skin);
 		Label gold = new Label("Village gold : " + villageDescription.gold,skin);
 		Label income = new Label("Village income : " + villageDescription.income,skin);
+		Label expenses = new Label("Village expense : " + villageDescription.expenses,skin);
 		Label health = new Label ("Village health : " + villageDescription.health+"/2",skin);
-		TextButton dismiss = new TextButton("dismiss",skin);
-		dismiss.addListener(new dismissListener(this));
 		this.add(wood).row();
 		this.add(gold).row();
 		this.add(income).row();
+		this.add(expenses).row();
 		this.add(health).row();
-		//this.add(dismiss).row();
 
+
+			
+		
+		if(ModelController.getInstance().isLocalPlayersTurn()){
+		TextButton endTurn = new TextButton("EndTurn",skin);
+		endTurn.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				 ModelController.getInstance().informOfUserAction(UIActionType.ENDTURN);
+				return false;
+			}			
+		});
+		this.add(endTurn).row();
+		}
+		
 	}
 
 	private void createButtons(){
