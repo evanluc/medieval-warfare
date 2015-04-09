@@ -67,8 +67,8 @@ public class LoginScreen implements Screen{
 		passwordField.setPasswordCharacter('*');
 		passwordField.setPasswordMode(true);
 		//adding username and password nodes
-		final Node usernameNode= new Node (usernameField);
-		final Node passwordNode = new Node(passwordField);
+//		final Node usernameNode= new Node (usernameField);
+//		final Node passwordNode = new Node(passwordField);
 
 		/*creating login and button tables */
 		Table table = new Table();
@@ -159,9 +159,9 @@ public class LoginScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		stage.dispose();
-		batch.dispose();
-		skin.dispose();
+//		stage.dispose();
+//		batch.dispose();
+//		skin.dispose();
 	}
 
 
