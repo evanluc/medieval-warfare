@@ -1,15 +1,12 @@
 package newworldorder.game;
 
 import com.badlogic.gdx.Game;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-
-import newworldorder.client.model.ModelController;
 
 public class MedievalWarfareGame extends Game {
 	public TiledMap tiledMap;
@@ -20,14 +17,17 @@ public class MedievalWarfareGame extends Game {
 	OrthographicCamera camera;
 	GameScreen gameScreen;
 	LoginScreen loginScreen;
+	MatchmakingScreen matchmakingScreen;
 
 	@Override
 	public void create () {
 
 	gameScreen = new GameScreen();
 	loginScreen =new LoginScreen(this);
-	this.setScreen(gameScreen);
+	matchmakingScreen = new MatchmakingScreen();
+	this.setScreen(matchmakingScreen);
 //	this.setScreen(loginScreen);
+//	this.setScreen(gameScreen);
 	}
 	
 	public MedievalWarfareGame() {
@@ -40,10 +40,10 @@ public class MedievalWarfareGame extends Game {
 	}
 	
 	public void setGameScreen() {
-		this.setScreen(gameScreen);
+		this.setScreen(new GameScreen());
 	}
 	
 	public void setLoginScreen() {
-		this.setScreen(loginScreen);
+		this.setScreen(new LoginScreen(this));
 	}
 }

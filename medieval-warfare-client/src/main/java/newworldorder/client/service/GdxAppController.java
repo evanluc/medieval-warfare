@@ -45,6 +45,7 @@ public class GdxAppController implements IGameLauncher {
 		}
 	}
 
+	@Override
 	public void setUsername(String username) {
 		this.username = username;
 	}
