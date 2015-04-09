@@ -320,15 +320,14 @@ public class MatchmakingScreen implements Screen {
 					List<String> statList = new List<>(skin);
 					Random generator = new Random();
 					int randWin = generator.nextInt(100);
-					int randTie = generator.nextInt(100);
 					int randLoss = generator.nextInt(100);
 					String win = "Wins: "+randWin;
-					String tie = "Ties: "+randTie;
 					String loss = "Losses: "+randLoss;
+					String ratio = "Win Ratio: " + (randWin/(randWin+randLoss));
 					String[] stats = new String[3];
 					stats[0] = win;
-					stats[1] = tie;
-					stats[2] = loss;
+					stats[1] = loss;
+					stats[2] = ratio;
 					Array<String> p = new Array<>(stats);
 					statList.setItems(p);
 					ScrollPane statsPane = new ScrollPane(statList, skin);
