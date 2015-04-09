@@ -54,6 +54,7 @@ public class MatchmakingScreen implements Screen {
 	Dialog invite;
 	int i = 100000;
 	ModelController modelController = ModelController.getInstance();
+	SelectBox<String> numPlayerSelect;
 
 	public MatchmakingScreen(MedievalWarfareGame thisGame) {
 		super();
@@ -142,6 +143,12 @@ public class MatchmakingScreen implements Screen {
 			});
 			invite.button(selectButton);
 			invite.show(stage);
+		}
+		if(controller.getPlayersInParty().isEmpty()){
+			numPlayerSelect.setVisible(true);
+			
+		}else{
+			numPlayerSelect.setVisible(false);
 		}
 		
 	}
@@ -244,7 +251,7 @@ public class MatchmakingScreen implements Screen {
 			
 		});
 		
-		SelectBox<String> numPlayerSelect = new SelectBox<>(skin);
+		numPlayerSelect = new SelectBox<>(skin);
 		Array<String> nums = new Array<>();
 		nums.add("Choose # players");
 		nums.add("2");
@@ -335,10 +342,15 @@ public class MatchmakingScreen implements Screen {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (loadGamePath != null) {
-					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
+//				if (loadGamePath != null) {
+//					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
+//				}
+//				thisGame.setGameScreen();
+				if(controller.getPlayersInParty().isEmpty()){
+					
+				}else{
+					controller.startPartyGame();
 				}
-				thisGame.setGameScreen();
 				return true;
 			}
 		});
