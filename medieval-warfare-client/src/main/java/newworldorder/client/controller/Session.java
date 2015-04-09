@@ -43,7 +43,7 @@ class Session implements ISession {
 	
 	@Override
 	public void removePlayer(String username) {
-		party.remove(username);
+		party.remove(new PartyInvitation(username));
 	}
 	
 	public void reset() {

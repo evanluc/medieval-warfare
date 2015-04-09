@@ -52,7 +52,7 @@ public class MatchmakingScreen implements Screen {
 	List<String> pending; 
 	List<String> party;
 	Dialog invite;
-
+	int i = 100000;
 	ModelController modelController = ModelController.getInstance();
 
 	public MatchmakingScreen(MedievalWarfareGame thisGame) {
@@ -113,10 +113,13 @@ public class MatchmakingScreen implements Screen {
 		java.util.List<String> inParty = controller.getAcceptedPlayersInParty(); 
 		String[] partyPlayers =  inParty.toArray(new String[inParty.size()]);
 		party.setItems(new Array<String>(partyPlayers));
-		
-		java.util.List<String> online = controller.getOnlinePlayers();
-		String[] players = online.toArray(new String[online.size()]);
-		onlinePlayers.setItems(new Array<String>(players));
+		i++;
+		if( i >= 100){
+			java.util.List<String> online = controller.getOnlinePlayers();
+			String[] players = online.toArray(new String[online.size()]);
+			onlinePlayers.setItems(new Array<String>(players));
+			i = 0;
+		}
 		//Makes the dialog for accepting invite if you have been invited
 		if (!controller.getPlayersInParty().isEmpty() && !controller.acceptedPartyInvite() && invite == null) {
 			invite = new Dialog("Party Invite", skin){
