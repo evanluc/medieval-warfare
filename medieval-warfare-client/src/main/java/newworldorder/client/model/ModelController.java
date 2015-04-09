@@ -101,7 +101,7 @@ public class ModelController {
 		return engine.getVillage(x, y);
 	}
 
-	public void loadGame(String filePath) {
+	public void loadGame(String username, String filePath) {
 		Game gameState = null;
 		try {
 			gameState = ModelSerializer.loadGameState(filePath);
@@ -110,6 +110,8 @@ public class ModelController {
 			e.printStackTrace();
 		}
 		if (gameState != null) {
+			this.localPlayerName = username;
+			
 			engine.setGameState(gameState);
 		}
 	}

@@ -20,7 +20,6 @@ public class GameScreen implements Screen {
 	private TiledMapRenderer tiledMapRenderer;
 	private TiledMapStage stage;
 	private TiledMap tiledMap;
-	private HUD hud;
 	private UIStage UIstage;
 	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	private OrthographicCamera camera;
@@ -42,7 +41,7 @@ public class GameScreen implements Screen {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();	
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, w, h);		
+		camera.setToOrtho(false, w, h);
 		
 	
 		stage.tiledMapRenderUpdate(ModelController.getInstance()
