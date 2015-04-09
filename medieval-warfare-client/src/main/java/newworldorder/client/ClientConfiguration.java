@@ -57,7 +57,7 @@ public class ClientConfiguration {
 	ISession session;
 	
 	@Bean IGameLauncher gameLauncher() {
-		return new GdxAppController();
+		return GdxAppController.getInstance();
 	}
 	
 	@Bean

@@ -9,25 +9,39 @@ import newworldorder.common.service.IGameLauncher;
 import newworldorder.game.MedievalWarfareGame;
 
 public class GdxAppController implements IGameLauncher {
+	private static GdxAppController instance = null;
 	private String username;
 	private static ModelController model;
 	private static final String mappath = "assets/maps/seaside-skirmish.mwm"; //TODO This needs to be removed eventually
-	private static boolean gameRunning = false;
+	private static MedievalWarfareGame mwg;
+	private static LwjglApplication gdxApp;
+	
+	private GdxAppController() {
+		
+	}
 
 	@Override
 	public void launchGame(GameInfo info) {
 		model = ModelController.getInstance();
 		model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
+		mwg.setGameScreen();
+	}
+	
+	public static GdxAppController getInstance() {
+		if (instance == null) {
+			instance = new GdxAppController();
+		}
+		return instance;
 	}
 	
 	public static void showGdxApp() {
-		if (!gameRunning) {
-			gameRunning = true;
+		if (gdxApp == null) {
 			LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 			config.resizable = false;
 			config.height = 850;
 			config.width = 1064;
-			new LwjglApplication(new MedievalWarfareGame(), config);
+			mwg = new MedievalWarfareGame();
+			gdxApp = new LwjglApplication(mwg, config);
 		}
 	}
 

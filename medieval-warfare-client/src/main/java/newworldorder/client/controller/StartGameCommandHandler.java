@@ -20,6 +20,7 @@ public class StartGameCommandHandler implements CommandHandler {
 	@Override
 	public void handle(AbstractCommand command) {
 		if (command instanceof ClientCommand) {
+			System.out.println("Received command: " + command.toString());
 			ClientCommand clientCommand = (ClientCommand) command;
 			clientCommand.setServiceLocator(locator);
 			clientCommand.execute();

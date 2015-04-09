@@ -24,15 +24,26 @@ public class MedievalWarfareGame extends Game {
 	@Override
 	public void create () {
 
-		
 	gameScreen = new GameScreen();
 	loginScreen =new LoginScreen(this);
-	this.setScreen(loginScreen);
-		
+	this.setScreen(gameScreen);
+//	this.setScreen(loginScreen);
+	}
+	
+	public MedievalWarfareGame() {
+		super();
 	}
 
 	@Override
 	public void render () {
 		super.render();
+	}
+	
+	public void setGameScreen() {
+		this.setScreen(gameScreen);
+	}
+	
+	public void setLoginScreen() {
+		this.setScreen(loginScreen);
 	}
 }
