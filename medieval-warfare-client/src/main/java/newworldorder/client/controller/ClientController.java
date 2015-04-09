@@ -57,6 +57,9 @@ public class ClientController implements IController {
 		}
 		return instance;
 	}
+	public String getUsername(){
+		return this.session.getUsername();
+	}
 
 	@Override
 	public boolean login(String username, String password) {
@@ -104,8 +107,19 @@ public class ClientController implements IController {
 
 	@Override
 	public void invitePlayer(String username, String toInvite) {
-		boolean canInvite = (Boolean) adapter.sendAndReceive(new CheckPartyCommand(username), p2pExchange, toInvite);
+		Object o = adapter.sendAndReceive(new CheckPartyCommand(username), p2pExchange, toInvite);
+		boolean canInvite = false;
+		if(o != null){
+			canInvite = (boolean) o;
+		}else{
+			canInvite = true;
+			//requestHandler currently not handling sendAndREceive so CheckPartyCommand is breaking
+		}
 		if (canInvite) {
+			if(session.getParty().isEmpty()){
+				session.addToParty(session.getUsername());
+				session.acceptPartyInvitation();
+			}
 			session.addToParty(toInvite);
 			SynchronizePartyCommand command = new SynchronizePartyCommand(username, session.getParty());
 			sendToAllParty(command);
@@ -164,7 +178,7 @@ public class ClientController implements IController {
 		}
 	}
 	
-	private boolean acceptedPartyInvite() {
+	public boolean acceptedPartyInvite() {
 		for (PartyInvitation p : session.getParty()) {
 			if (p.getUsername().equals(session.getUsername())) {
 				return p.isAccepted();
@@ -174,14 +188,14 @@ public class ClientController implements IController {
 		return false;
 	}
 	
-	private List<String> getAcceptedPlayersInParty() {
+	public List<String> getAcceptedPlayersInParty() {
 		return session.getParty().stream()
 				.filter(p -> p.isAccepted())
 				.map(p -> p.getUsername())
 				.collect(Collectors.toList());
 	}
 	
-	private List<String> getNotAcceptedPlayersInParty() {
+	public List<String> getNotAcceptedPlayersInParty() {
 		return session.getParty().stream()
 				.filter(p -> !p.isAccepted())
 				.map(p -> p.getUsername())
