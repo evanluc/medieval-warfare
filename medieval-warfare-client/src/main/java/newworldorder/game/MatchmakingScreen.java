@@ -316,7 +316,8 @@ public class MatchmakingScreen implements Screen {
 					int randLoss = generator.nextInt(100);
 					String win = "Wins: "+randWin;
 					String loss = "Losses: "+randLoss;
-					String ratio = "Win Ratio: " + (randWin/(randWin+randLoss));
+					double winRatio = (randWin/(randWin+randLoss));
+					String ratio = "Win Ratio: " + winRatio;
 					String[] stats = new String[3];
 					stats[0] = win;
 					stats[1] = loss;
