@@ -112,7 +112,7 @@ public class PresetMapGenerator {
 		// change the name below to generate from any text file you specify
 		// when running from within eclipse, the root directory is the home
 		// directory of the project (/medieval-warfare-game-core/test.txt)
-		generateMapFromDescFile("assets/maps/seaside-skirmish.txt");
+		generateMapFromDescFile("assets/maps/half-moon-bay.txt");
 		System.out.println("done");
 	}
 }
