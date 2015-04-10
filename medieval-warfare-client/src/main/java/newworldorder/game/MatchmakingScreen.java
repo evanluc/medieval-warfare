@@ -5,6 +5,7 @@ import java.util.Random;
 import newworldorder.client.controller.ClientController;
 import newworldorder.common.network.command.SynchronizePartyCommand;
 import newworldorder.client.model.ModelController;
+import newworldorder.client.networking.CommandFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -91,7 +92,11 @@ public class MatchmakingScreen implements Screen {
 		batch.end();
 		stage.act();
 		stage.draw();
-		if(ModelController.getInstance().hasGameState()){
+		// David changed this because he needed to load the saved game to validate
+		// if the players in the party match the players in the save game so even if
+		// they don't match there is still a game state and it switches. This condition
+		// is pretty much equivalent and comes after the start game command is received.
+		if(CommandFactory.hasNetworking()){ 
 			thisGame.setGameScreen();
 		}
 		if (mapChanged) {
@@ -345,22 +350,30 @@ public class MatchmakingScreen implements Screen {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				if (loadGamePath != null) {
-//					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
-//					
-//					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
-//						thisGame.setGameScreen();
-//					}
-//				} else {
+				if (loadGamePath != null) {
+					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
 
-				if(controller.getPlayersInParty().isEmpty()){
-					controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
-				}else{
-					controller.startPartyGame();
+					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
+						controller.startPartyGame();
+						while (!CommandFactory.hasNetworking()){
+//							System.out.println(modelController.getGameState());
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						modelController.distributeGameState();
+					}
+				} else {
+					if(controller.getPlayersInParty().isEmpty()){
+						controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+					}else{
+						controller.startPartyGame();
+					}
 				}
-				
 				return false;
-
 			}
 		});
 		middleColumn.columnDefaults(0).width(150).pad(5);

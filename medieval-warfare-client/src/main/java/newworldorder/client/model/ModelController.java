@@ -140,6 +140,10 @@ public class ModelController {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		if (engine.getGameState() != null) {
+			gameRunning = true;
+			return;
+		}
 		if (presetMap != null) {
 			if (players.get(0).compareTo(username) == 0) {
 				engine.newGame(players, presetMap);
@@ -152,8 +156,13 @@ public class ModelController {
 		}
 	}
 	
+	public void distributeGameState() {
+		CommandFactory.createSetupGameCommand(engine.getGameState());
+	}
+	
 	public void setGameState(Object gameState) {
 		if (gameState instanceof Game) {
+			engine.resetObservers();
 			engine.setGameState((Game) gameState);
 		}
 	}

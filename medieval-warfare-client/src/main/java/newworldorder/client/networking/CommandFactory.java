@@ -22,6 +22,7 @@ public class CommandFactory {
 	private static AmqpAdapter amqpAdapter;
 	private static ModelController model;
 	private static String exchange;
+	private static boolean hasNetworking = false;
 	
 	private CommandFactory() {
 		super();
@@ -36,6 +37,7 @@ public class CommandFactory {
 	}
 	
 	private static void sendCommand(IGameCommand command) {
+		System.out.println("CommandFactory trying to send: " + command);
 		if (command != null) {
 			amqpAdapter.send(command, exchange, "");
 		}
@@ -57,9 +59,17 @@ public class CommandFactory {
 	}	
 
 	public static void setupNetworking(String exchange) {
-		// TODO this will need to be fixed if setupNetworking can only be called once.
-		CommandFactory.exchange = exchange; 
-		setupNetworking();
+		if (hasNetworking) {
+			return;
+		} else {
+			CommandFactory.exchange = exchange; 
+			setupNetworking();
+			hasNetworking = true;
+		}
+	}
+	
+	public static boolean hasNetworking() {
+		return hasNetworking;
 	}
 	
 	public static void createSetupGameCommand(Object gameState) {

@@ -127,7 +127,7 @@ public class UIStage extends Stage {
 				TextButton newButton = new TextButton(
 						uiActionTypeToString(UIAction), skin);
 				table.add(newButton).pad(1);
-				if (UIAction == UIActionType.MOVEUNIT)
+				if (UIAction == UIActionType.MOVEUNIT || UIAction == UIActionType.BOMBARDTILE)
 					newButton.addListener(new SingleClickListener(selectedCell,
 							tree, (TiledMapStage) selectedCell.getStage(),
 							UIAction));
@@ -247,9 +247,9 @@ public class UIStage extends Stage {
 		case UPGRADEVILLAGETOWN:
 			return "Upgrade to town";
 		case BOMBARDTILE:
-			return "Upgrade bombarding tile!";
+			return "Bombard tile";
 		case BUILDUNITCANNON:
-			return "Upgrade to town";
+			return "Build cannon";
 		case UPGRADEVILLAGECASTLE:
 			return "Upgrade to castle";
 

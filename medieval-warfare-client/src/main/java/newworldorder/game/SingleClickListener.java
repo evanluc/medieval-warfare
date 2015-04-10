@@ -32,6 +32,7 @@ public class SingleClickListener extends ClickListener {
 	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
 		System.out.println("moving unit");
 		stage.setMultiActionInput(true);
+		stage.setWhichMutiActionInput(actionType);
 		stage.setPreviousActor(actor);
 		return false;
 

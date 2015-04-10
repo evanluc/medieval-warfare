@@ -373,9 +373,9 @@ public class GameEngine implements Observer {
 		v.setHealth(v.getHealth() - 1);
 		if(v.getHealth() == 0){
 			Tile t = v.getTile();
-			t.setVillage(null);
+			t.setVillage( null );
 
-			reconcileRegions(t.getRegion());
+			reconcileRegions(t.getRegion(), true);
 			checkWinConditions();	
 		}
 	}
@@ -643,7 +643,7 @@ public class GameEngine implements Observer {
 	 * @param r
 	 *            The region to reconcile.
 	 */
-	private void reconcileRegions(Region r) {
+	private void reconcileRegions(Region r, boolean fromBombard) {
 		System.out.println("reconcileRegions");
 		Player controllingPlayer = r.getControllingPlayer();
 		Village originalVillage = r.getVillage();
@@ -685,13 +685,19 @@ public class GameEngine implements Observer {
 				Village newVillage;
 				newRegion = new Region(regCandidate, controllingPlayer);
 				if (regCandidate.contains(originalVillage.getTile())) {
-					newVillage = new Village(originalVillage.getTile(), controllingPlayer, newRegion);
-					newVillage.transactGold(originalVillage.getGold());
-					newVillage.transactWood(originalVillage.getWood());
-					newVillage.setVillageType(originalVillage.getVillageType());
-					newVillage.setHealth(originalVillage.getHealth());
-					newRegion.setVillage(newVillage);
-					controllingPlayer.addVillage(newVillage);
+					if(fromBombard){
+						newVillage = new Village(originalVillage.getTile(), controllingPlayer, newRegion);
+						newRegion.setVillage(newVillage);
+						controllingPlayer.addVillage(newVillage);
+					}else{
+						newVillage = new Village(originalVillage.getTile(), controllingPlayer, newRegion);
+						newVillage.transactGold(originalVillage.getGold());
+						newVillage.transactWood(originalVillage.getWood());
+						newVillage.setVillageType(originalVillage.getVillageType());
+						newVillage.setHealth(originalVillage.getHealth());
+						newRegion.setVillage(newVillage);
+						controllingPlayer.addVillage(newVillage);
+					}
 				}
 				else {
 					if (isTurnOfPlayer(localUsername)) {
@@ -746,7 +752,7 @@ public class GameEngine implements Observer {
 
 		oldRegion.removeTile(dest);
 		unitsVillage.getRegion().addTile(dest);
-		reconcileRegions(oldRegion);
+		reconcileRegions(oldRegion, false);
 		combineRegions(dest);
 		checkWinConditions();
 	}
@@ -975,6 +981,16 @@ public class GameEngine implements Observer {
 			t.addObserver(this);
 			updatedTiles.add(t);
 		}
+	}
+	
+	void resetObservers() {
+		if (gameState == null) 
+			return;
+		Map map = gameState.getMap();
+		for (Tile t : map.getTiles()) {
+			t.deleteObservers();
+		}
+		updatedTiles.clear();
 	}
 	
 	List<Integer> growNewTrees() {
