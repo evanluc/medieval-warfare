@@ -17,6 +17,7 @@ public class ModelController {
 	private GameEngine engine = null;
 	private boolean gameRunning;
 	private String localPlayerName;
+	private String mapFilePath = "assets/maps/seaside-skirmish.mwm";
 	
 	private ModelController() {
 		super();
@@ -126,14 +127,21 @@ public class ModelController {
 			e.printStackTrace();
 		}
 	}
-
-	public void newGame(String username, List<String> players, String exchange, String mapFilePath) {
-		this.localPlayerName = username;
-		engine.setLocalPlayerName(username);
+	
+	public void setMapFilePath(String path) {
+		this.mapFilePath = path;
+	}
+	
+	public void setupNetworking(String exchange) {
 		if (exchange != null) {
+			System.out.println("Exchange : " + exchange);
 			CommandFactory.setupNetworking(exchange);
 		}
-		System.out.println("Exchange : " + exchange);
+	}
+
+	public void newGame(String username, List<String> players) {
+		this.localPlayerName = username;
+		engine.setLocalPlayerName(username);
 		Map presetMap = null;
 		try {
 			presetMap = ModelSerializer.loadMap(mapFilePath);
@@ -149,9 +157,15 @@ public class ModelController {
 			if (players.get(0).compareTo(username) == 0) {
 				engine.newGame(players, presetMap);
 				System.out.println("First player");
-				if (exchange != null) {
-					CommandFactory.createSetupGameCommand(engine.getGameState());
+				while (!CommandFactory.hasNetworking()) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				CommandFactory.createSetupGameCommand(engine.getGameState());
 			}
 			gameRunning = true;
 		}

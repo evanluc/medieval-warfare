@@ -20,7 +20,7 @@ public class DesktopLauncher {
 
 		GameInfo info = new GameInfo(players, "dummy-exchange");
 
-		model.newGame("dummy username", info.getPlayers(), null, "assets/maps/seaside-skirmish.mwm");
+//		model.newGame("dummy username", info.getPlayers(), null, "assets/maps/seaside-skirmish.mwm");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = false;
@@ -33,7 +33,7 @@ public class DesktopLauncher {
 	public DesktopLauncher(String username, GameInfo info) {
 		ModelController model = ModelController.getInstance();
 
-		model.newGame(username, info.getPlayers(), info.getGameExchange(), "assets/maps/seaside-skirmish.mwm");
+//		model.newGame(username, info.getPlayers(), info.getGameExchange(), "assets/maps/seaside-skirmish.mwm");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = true;
