@@ -8,7 +8,7 @@ public class GetPlayerStatsCommand extends RemoteCommand {
 	 * 
 	 */
 	private static final long serialVersionUID = -8674003828629957204L;
-	private Stats stats;
+	private transient Stats stats;
 	
 	public GetPlayerStatsCommand(String sender) {
 		super(sender);
