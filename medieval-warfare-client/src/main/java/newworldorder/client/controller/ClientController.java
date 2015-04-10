@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import newworldorder.common.matchmaking.GameRequest;
 import newworldorder.common.model.PartyInvitation;
-import newworldorder.common.model.Stats;
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CheckPartyCommand;
@@ -221,9 +220,9 @@ public class ClientController implements IController {
 		
 	}
 	
-	public Stats getStatsForPlayer(String username) {
+	public int[] getStatsForPlayer(String username) {
 		GetPlayerStatsCommand command = new GetPlayerStatsCommand(username);
-		Stats result = (Stats) adapter.sendAndReceive(command, commandExchange, routingKey);
+		int[] result = (int[]) adapter.sendAndReceive(command, commandExchange, routingKey);
 		return result;
 	}
 }
