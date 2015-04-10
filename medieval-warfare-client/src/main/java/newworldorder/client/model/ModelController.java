@@ -237,4 +237,11 @@ public class ModelController {
 		}
 		return true;
 	}
+	public boolean hasGameState(){
+		if(engine.getGameState() == null){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }

@@ -91,6 +91,9 @@ public class MatchmakingScreen implements Screen {
 		batch.end();
 		stage.act();
 		stage.draw();
+		if(ModelController.getInstance().hasGameState()){
+			thisGame.setGameScreen();
+		}
 		if (mapChanged) {
 			alpha += delta;
 			mapPreviewImage.setColor(1.0f, 1.0f, 1.0f, alpha);
@@ -349,10 +352,9 @@ public class MatchmakingScreen implements Screen {
 					}
 				}
 				if(controller.getPlayersInParty().isEmpty()){
-					
+					controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
 				}else{
 					controller.startPartyGame();
-					thisGame.setGameScreen();
 				}
 				
 				return true;
