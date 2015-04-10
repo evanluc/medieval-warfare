@@ -91,6 +91,9 @@ public class MatchmakingScreen implements Screen {
 		batch.end();
 		stage.act();
 		stage.draw();
+		if(ModelController.getInstance().hasGameState()){
+			thisGame.setGameScreen();
+		}
 		if (mapChanged) {
 			alpha += delta;
 			mapPreviewImage.setColor(1.0f, 1.0f, 1.0f, alpha);
@@ -323,7 +326,8 @@ public class MatchmakingScreen implements Screen {
 					int randLoss = generator.nextInt(100);
 					String win = "Wins: "+randWin;
 					String loss = "Losses: "+randLoss;
-					String ratio = "Win Ratio: " + (randWin/(randWin+randLoss));
+					double winRatio = (randWin/(randWin+randLoss));
+					String ratio = "Win Ratio: " + winRatio;
 					String[] stats = new String[3];
 					stats[0] = win;
 					stats[1] = loss;
@@ -341,21 +345,22 @@ public class MatchmakingScreen implements Screen {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				if (loadGamePath != null) {
-					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
-					
-					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
-						thisGame.setGameScreen();
-					}
-				} else {
-					if(controller.getPlayersInParty().isEmpty()){
-						
-					}else{
-						controller.startPartyGame();
+//				if (loadGamePath != null) {
+//					modelController.loadGame(ClientController.getInstance().getLocalUsername(), "assets/saves/" + loadGamePath);
+//					
+//					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
 //						thisGame.setGameScreen();
-					}
+//					}
+//				} else {
+
+				if(controller.getPlayersInParty().isEmpty()){
+					controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+				}else{
+					controller.startPartyGame();
 				}
+				
 				return false;
+
 			}
 		});
 		middleColumn.columnDefaults(0).width(150).pad(5);
