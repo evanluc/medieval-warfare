@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import newworldorder.client.controller.ClientController;
 import newworldorder.client.model.ModelController;
 import newworldorder.client.networking.CommandFactory;
+import newworldorder.common.model.IStats;
 
 public class MatchmakingScreen implements Screen {
 	
@@ -330,11 +331,11 @@ public class MatchmakingScreen implements Screen {
 						}
 					}.button("Close").show(stage);;
 					Window statsWindow = new Window(onlinePlayers.getSelected(), skin);
-					int[] playerStats = controller.getStatsForPlayer(onlinePlayers.getSelected());
+					IStats playerStats = controller.getStatsForPlayer(onlinePlayers.getSelected());
 					statsWindow.setMovable(false);
 					List<String> statList = new List<>(skin);
-					int playerWins = playerStats[0];
-					int playerLosses = playerStats[1];
+					int playerWins = playerStats.getWins();
+					int playerLosses = playerStats.getLosses();
 					String wins = "Wins: " + playerWins;
 					String losses = "Losses: " + playerLosses;
 					String[] stats = new String[2];

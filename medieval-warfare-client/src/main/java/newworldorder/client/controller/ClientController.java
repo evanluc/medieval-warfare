@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import newworldorder.common.matchmaking.GameRequest;
+import newworldorder.common.model.IStats;
 import newworldorder.common.model.PartyInvitation;
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.CommandConsumer;
@@ -220,9 +221,9 @@ public class ClientController implements IController {
 		
 	}
 	
-	public int[] getStatsForPlayer(String username) {
+	public IStats getStatsForPlayer(String username) {
 		GetPlayerStatsCommand command = new GetPlayerStatsCommand(username);
-		int[] result = (int[]) adapter.sendAndReceive(command, commandExchange, routingKey);
+		IStats result = (IStats) adapter.sendAndReceive(command, commandExchange, routingKey);
 		return result;
 	}
 }
