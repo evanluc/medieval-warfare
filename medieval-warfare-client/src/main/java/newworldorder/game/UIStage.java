@@ -94,7 +94,9 @@ public class UIStage extends Stage {
 
 	// here we render stuff for the current turn
 	public void currentTurnRenderUpdate() {
+		
 		notTurnWindow.setVisible(false);
+		hud.yourTurnRenderUpdate();
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
 	}
@@ -102,6 +104,7 @@ public class UIStage extends Stage {
 	public void notTurnRenderUpdate() {
 		if (table !=null) table.clear();
 		notTurnWindow.setVisible(true);
+		hud.notTurnRenderUpdate();
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
 	}

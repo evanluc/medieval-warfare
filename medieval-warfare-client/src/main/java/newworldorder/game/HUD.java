@@ -90,7 +90,7 @@ public class HUD extends Window {
 			}
 		});
 		
-		this.add(saveGameButton);
+		this.add(saveGameButton).row();
 		
 		leaveGameButton = new TextButton("Leave Game", skin);
 		
@@ -125,7 +125,7 @@ public class HUD extends Window {
 			}
 		});
 		
-		this.add(leaveGameButton);
+		this.add(leaveGameButton).row();
 	}
 
 	public void setCurrentUsername(String currentUsername) {
@@ -134,5 +134,18 @@ public class HUD extends Window {
 
 	public void setCurrentTurn(int currentTurn) {
 		turnNumberText.setText("Turn number : " + String.valueOf(currentTurn));
+	}
+	
+	public void yourTurnRenderUpdate(){
+		if (endTurn.hasParent() == false){ System.out.println("has no parent");
+			this.add(endTurn).row();
+		
+		}
+	}
+	
+	public void notTurnRenderUpdate(){
+		if(endTurn.hasParent()) System.out.println("has parent");
+		this.removeActor(endTurn);
+		
 	}
 }
