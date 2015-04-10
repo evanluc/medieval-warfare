@@ -11,6 +11,7 @@ public class PlayerStatistics {
 	
 	public PlayerStatistics() {
 		allStats = new HashMap<>();
+		allStats.put("test-user", new Stats(39, 19));
 	}
 	
 	public Stats getUserStats(String username) {
