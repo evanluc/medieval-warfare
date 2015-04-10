@@ -283,6 +283,7 @@ public class ModelController {
 			engine.clearGameState();
 	}	
 	public void endGame(String winners, List<String> losers) {
+		System.out.println("In model controlelr end game");
 		ClientController.getInstance().endGame(losers, winners);
 		gameOver = true;
 	}

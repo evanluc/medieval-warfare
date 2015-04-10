@@ -222,8 +222,11 @@ public class ClientController implements IController {
 	}
 	
 	public void endGame(List<String> losers, String winner) {
-		EndGameCommand command = new EndGameCommand(session.getUsername(), losers, winner);
+		if (this.username.equals(winner)) {
+		System.out.println("Sending end game command");
+		EndGameCommand command = new EndGameCommand(username, losers, winner);
 		adapter.send(command, commandExchange, routingKey);
+		}
 	}
 	
 	public int[] getStatsForPlayer(String username) {

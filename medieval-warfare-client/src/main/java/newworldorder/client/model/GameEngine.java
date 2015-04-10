@@ -770,16 +770,14 @@ public class GameEngine implements Observer {
 		}
 		if (players.size() <= 1) {
 			gameState.setHasWon(true);
-			//TODO: players.get(0).incrementWinCount();
+			System.out.println("Game has been won!");
 			List<String> losers = new ArrayList<String>();
 			for (Player p : gameState.getPlayers()) {
 				if (!p.equals(players.get(0))) {
 					losers.add(p.getUsername());
 				}
 			}
-			if (localUsername.equals(players.get(0))) {
-				controller.endGame(localUsername, losers);
-			}
+			controller.endGame(localUsername, losers);
 		}
 	}
 	
