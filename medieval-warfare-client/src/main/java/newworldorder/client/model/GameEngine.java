@@ -856,8 +856,7 @@ public class GameEngine implements Observer {
 					v.getTotalUpkeep());
 		}
 		else {
-			new UIVillageDescriptor(x, y, VillageType.HOVEL, 0, 0, 0, new HashMap<UnitType, Integer>(), 0,0);
-			return null;
+			return new UIVillageDescriptor(x, y, VillageType.HOVEL, 0, 0, 0, new HashMap<UnitType, Integer>(), 0,0);
 		}
 	}
 	
