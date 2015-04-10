@@ -1,5 +1,6 @@
 package newworldorder.game;
 import newworldorder.client.model.ModelController;
+import newworldorder.client.networking.CommandFactory;
 import newworldorder.client.shared.UIActionType;
 
 import com.badlogic.gdx.Gdx;
@@ -21,7 +22,7 @@ public class HUD extends Window {
 	private TextButton endTurn, saveGameButton, leaveGameButton;
 	private UIStage stage;
 	private ModelController modelController = ModelController.getInstance();
-
+	private boolean wantsToLeave = false;
 	public HUD(String title, Skin skin, String userName, int turnNumber, UIStage gameScreen) {
 		super(title, skin);
 		this.stage = gameScreen;
@@ -32,7 +33,7 @@ public class HUD extends Window {
 		this.add(playerTurnLabel).row();
 		this.add(playerTurnText).row();
 		this.add(turnNumberText).row();
-		
+		this.setHeight(200);
 		endTurn = new TextButton("End Turn",skin);
 		endTurn.addListener(new ClickListener(){
 			@Override
@@ -90,7 +91,7 @@ public class HUD extends Window {
 			}
 		});
 		
-		this.add(saveGameButton);
+		this.add(saveGameButton).row();
 		
 		leaveGameButton = new TextButton("Leave Game", skin);
 		
@@ -111,7 +112,9 @@ public class HUD extends Window {
 				confirmButton.addListener(new ClickListener() {
 					@Override
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
+						wantsToLeave = true;
+						CommandFactory.setHasNetworking(false);
+						ModelController.getInstance().clearGameState();
 						return false;
 					}
 				});
@@ -125,7 +128,7 @@ public class HUD extends Window {
 			}
 		});
 		
-		this.add(leaveGameButton);
+		this.add(leaveGameButton).row();
 	}
 
 	public void setCurrentUsername(String currentUsername) {
@@ -134,5 +137,13 @@ public class HUD extends Window {
 
 	public void setCurrentTurn(int currentTurn) {
 		turnNumberText.setText("Turn number : " + String.valueOf(currentTurn));
+	}
+
+	public boolean isWantsToLeave() {
+		return wantsToLeave;
+	}
+
+	public void setWantsToLeave(boolean wantsToLeave) {
+		this.wantsToLeave = wantsToLeave;
 	}
 }

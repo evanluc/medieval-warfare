@@ -1,18 +1,29 @@
 package newworldorder.game;
 
 import newworldorder.client.model.ModelController;
+import newworldorder.client.networking.CommandFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 
 
 public class GameScreen implements Screen {
@@ -23,13 +34,16 @@ public class GameScreen implements Screen {
 	private UIStage UIstage;
 	final Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 	private OrthographicCamera camera;
+	private boolean hasOpenedDialog = false;
 	MedievalWarfareGame thisGame;
 	
 	public GameScreen(MedievalWarfareGame thisGame) {
 		super();
 		this.thisGame = thisGame;
 	}
-
+	public UIStage getUIStage(){
+		return this.UIstage;
+	}
 
 	@Override
 	public void show() {
@@ -84,7 +98,64 @@ public class GameScreen implements Screen {
 			UIstage.notTurnRenderUpdate();
 		}
 		UIstage.draw();
-
+		if(this.getUIStage().getHUD().isWantsToLeave()){
+			CommandFactory.createDisconnectCommand();
+			thisGame.setMatchmakingScreen();
+		}
+		if(ModelController.getInstance().getEngine().isPlayerHasDisconnected() && !hasOpenedDialog){
+			hasOpenedDialog = true;
+			Dialog confirmDialog = new Dialog("Player has disconnected, please save game or leave", skin){
+				@Override
+				protected void result (Object object) {
+					hasOpenedDialog = false;
+					this.hide();	
+				}
+			};
+			confirmDialog.setModal(true);
+			Window saveGameWindow = new Window("Please provide a save game file name", skin);
+			saveGameWindow.setMovable(false);
+			List<String> saveGameList = new List<>(skin);
+			FileHandle[] files = Gdx.files.local("assets/saves/").list();
+			String[] saveFiles = new String[files.length];
+			for(int i = 0; i < files.length; i++) {
+				saveFiles[i] = files[i].name();
+			}
+			Array<String> p = new Array<>(saveFiles);
+			saveGameList.setItems(p);
+			ScrollPane saveGameListPane = new ScrollPane(saveGameList, skin);
+			saveGameWindow.add(saveGameListPane).expand().fill();
+			confirmDialog.add(saveGameWindow).expandY().fill().pad(20);
+			TextField saveFileNameTextField = new TextField("", skin);
+			saveGameWindow.add(saveFileNameTextField).expand().fill();
+			TextButton confirmButton = new TextButton("Save Game", skin);
+			confirmButton.addListener(new ClickListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					if (!saveFileNameTextField.getText().isEmpty()) {
+						ModelController.getInstance().saveGame("assets/saves/"+saveFileNameTextField.getText()+".mwg");
+						CommandFactory.setHasNetworking(false);
+						ModelController.getInstance().clearGameState();
+						
+						thisGame.setMatchmakingScreen();
+					}
+					return true;
+				}
+			});
+			
+			confirmDialog.button(confirmButton);
+			TextButton closeButton = new TextButton("Close", skin);
+			closeButton.addListener(new ClickListener(){
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					CommandFactory.setHasNetworking(false);
+					ModelController.getInstance().clearGameState();
+					thisGame.setMatchmakingScreen();
+					return true;
+				}
+			});
+			confirmDialog.button(closeButton);
+			
+			confirmDialog.show(stage);
+		}
 	}
 
 	public void move(float delta) {

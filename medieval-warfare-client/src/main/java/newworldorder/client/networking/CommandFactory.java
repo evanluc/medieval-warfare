@@ -72,6 +72,10 @@ public class CommandFactory {
 		return hasNetworking;
 	}
 	
+	public static void setHasNetworking(boolean b){
+		hasNetworking = b;
+	}
+	
 	public static void createSetupGameCommand(Object gameState) {
 		CommandFactory.sendCommand(new SetupGameCommand(gameState));
 	}
@@ -158,6 +162,9 @@ public class CommandFactory {
 		
 		CommandFactory.sendCommand( command );
 	}
+	public static void createDisconnectCommand(){
+		CommandFactory.sendCommand(new DisconnectCommand());
+	}
 	
 	private static abstract class AbstractGameCommand implements IGameCommand {
 		private static final long serialVersionUID = -4265280207834818270L;
@@ -184,7 +191,18 @@ public class CommandFactory {
 			engine.endTurn();
 		}
 	}
-	
+	private static class DisconnectCommand extends AbstractGameCommand {
+		private static final long serialVersionUID = -2144057378224658285L;
+		
+		public DisconnectCommand() {
+			super();
+		}
+
+		@Override
+		public void execute() {
+			engine.setPlayerHasDisconnected(true);
+		}
+	}	
 	private static class SetupGameCommand extends AbstractGameCommand {
 		private static final long serialVersionUID = 2376599495011006579L;
 		private final Object gameState;

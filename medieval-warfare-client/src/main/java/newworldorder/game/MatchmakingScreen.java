@@ -368,7 +368,11 @@ public class MatchmakingScreen implements Screen {
 					}
 				} else {
 					if(controller.getPlayersInParty().isEmpty()){
-						controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+						try{
+							controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+						}catch(NumberFormatException e){
+							
+						}
 					}else{
 						controller.startPartyGame();
 					}

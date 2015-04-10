@@ -91,7 +91,9 @@ public class UIStage extends Stage {
 		// buttons for table
 
 	}
-
+	public HUD getHUD(){
+		return this.hud;
+	}
 	// here we render stuff for the current turn
 	public void currentTurnRenderUpdate() {
 		notTurnWindow.setVisible(false);
