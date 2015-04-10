@@ -185,9 +185,9 @@ public class AccountCreationScreen implements Screen{
 
 		@Override
 		public void dispose() {
-//			stage.dispose();
-//			batch.dispose();
-//			skin.dispose();
+			stage.dispose();
+			batch.dispose();
+			skin.dispose();
 		}
 
 

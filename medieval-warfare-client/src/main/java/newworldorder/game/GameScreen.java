@@ -37,6 +37,7 @@ public class GameScreen implements Screen {
 	private OrthographicCamera camera;
 	private boolean hasOpenedDialog = false;
 	MedievalWarfareGame thisGame;
+	private boolean isDead = false;
 	
 	public GameScreen(MedievalWarfareGame thisGame) {
 		super();
@@ -80,6 +81,10 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		if (isDead) {
+			return;
+		}
+		
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
@@ -137,6 +142,7 @@ public class GameScreen implements Screen {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					if (!saveFileNameTextField.getText().isEmpty()) {
+						isDead = true;
 						thisGame.setMatchmakingScreen();
 						ModelController.getInstance().saveGame("assets/saves/"+saveFileNameTextField.getText()+".mwg");
 						CommandFactory.setHasNetworking(false);
@@ -160,6 +166,7 @@ public class GameScreen implements Screen {
 			TextButton closeButton = new TextButton("Close", skin);
 			closeButton.addListener(new ClickListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					isDead = true;
 					thisGame.setMatchmakingScreen();
 					CommandFactory.setHasNetworking(false);
 					ModelController.getInstance().clearGameState();
@@ -189,6 +196,7 @@ public class GameScreen implements Screen {
 			TextButton closeButton = new TextButton("Close", skin);
 			closeButton.addListener(new ClickListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					isDead = true;
 					thisGame.setMatchmakingScreen();
 					CommandFactory.setHasNetworking(false);
 					ModelController.getInstance().clearGameState();
@@ -240,16 +248,14 @@ public class GameScreen implements Screen {
 	@Override
 	public void hide() {
 		this.dispose();
-		stage.dispose();
-		UIstage.dispose();
 	}
 
 	@Override
 	public void dispose() {
-//		stage.dispose();
-//		tiledMap.dispose();
-//		UIstage.dispose();
-//		skin.dispose();
+		stage.dispose();
+		tiledMap.dispose();
+		UIstage.dispose();
+		skin.dispose();
 	}
 
 }
