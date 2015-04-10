@@ -628,6 +628,7 @@ public class GameEngine implements Observer {
 					newV.addUnit(u);
 				}
 
+				oldV.getTile().setTerrainType(TerrainType.MEADOW);
 				oldV.getTile().setVillage(null);
 				oldV.getControlledBy().removeVillage(oldV);
 			}
