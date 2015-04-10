@@ -5,7 +5,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import newworldorder.common.model.Stats;
+import newworldorder.common.model.IStats;
 import newworldorder.common.persistence.IUserTransaction;
 import newworldorder.common.service.IGameInitializer;
 import newworldorder.common.service.IMatchController;
@@ -50,7 +50,7 @@ public class ServiceLocator implements IServerServiceLocator {
 	}
 
 	@Override
-	public Stats getStatsForPlayer(String username) {
+	public IStats getStatsForPlayer(String username) {
 		return playerStats.getUserStats(username);
 	}
 	
