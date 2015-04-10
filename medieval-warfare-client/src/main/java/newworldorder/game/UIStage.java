@@ -146,7 +146,6 @@ public class UIStage extends Stage {
 	public void villageRenderUpdate(TiledMapActor selectedCell) {
 		if (modelController.getVillage(selectedCell.getXCell(),
 				selectedCell.getYCell()) != null) {
-			System.out.println("here is a village");
 			UIVillageDescriptor villageDescription = modelController
 					.getVillage(selectedCell.getXCell(),
 							selectedCell.getYCell());
