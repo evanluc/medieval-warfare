@@ -221,7 +221,7 @@ public class ClientController implements IController {
 		
 	}
 	
-	public Stats getWins(String username) {
+	public Stats getStatsForPlayer(String username) {
 		GetPlayerStatsCommand command = new GetPlayerStatsCommand(username);
 		Stats result = (Stats) adapter.sendAndReceive(command, commandExchange, routingKey);
 		return result;
