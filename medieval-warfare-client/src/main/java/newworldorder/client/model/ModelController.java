@@ -37,12 +37,13 @@ public class ModelController {
 	public void informOfUserAction(UIActionType action) {
 		if (!gameRunning)
 			return;
-
-		if (isLocalPlayersTurn() && isLastPlayer()) {
-			List<Integer> newTrees = engine.growNewTrees();
-			CommandFactory.createSyncTreesCommand(newTrees);
+		if (isLocalPlayersTurn()) {
+			if (isLastPlayer()) {
+				List<Integer> newTrees = engine.growNewTrees();
+				CommandFactory.createSyncTreesCommand(newTrees);
+			}
+			CommandFactory.createEndTurnCommand();
 		}
-		CommandFactory.createEndTurnCommand();
 	}
 
 	/**
