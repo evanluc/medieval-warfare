@@ -9,9 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
+
 import java.util.List;
 
 import newworldorder.client.model.ModelController;
+import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
 import newworldorder.client.shared.ColourType;
 //import newworldorder.game.model.Map;
@@ -26,6 +28,7 @@ public class TiledMapStage extends Stage {
 	private final TiledMapDescriptors tiledMapDescriptors; 
 	private TiledMapActor currentlyOutlined; 
 	private boolean multiActionInput;
+	private UIActionType whichMutiActionInput;
 	private TiledMapActor previousActor;
 	private ModelController model;
 	private Skin skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -237,6 +240,14 @@ public class TiledMapStage extends Stage {
 
 	public void setMultiActionInput(boolean bool){
 		this.multiActionInput = bool;
+	}
+
+	public UIActionType getWhichMutiActionInput() {
+		return whichMutiActionInput;
+	}
+
+	public void setWhichMutiActionInput(UIActionType whichMutiActionInput) {
+		this.whichMutiActionInput = whichMutiActionInput;
 	}
 
 	public void setPreviousActor(TiledMapActor previousActor){

@@ -68,9 +68,9 @@ public class TiledMapClickListener extends ClickListener {
 			//Case for movement. We inform the model of the movement and set the new selected tile to be the moved tile.
 			if (stage.getMultiActionInput() == true) {
 				TiledMapActor previousActor = stage.getPreviousActor();
-				System.out.println("moving tile from " + previousActor.getXCell() + " " + previousActor.getYCell() + " to "
-						+ actor.getXCell() + " " + actor.getYCell());
-				controller.informOfUserAction(UIActionType.MOVEUNIT, previousActor.getXCell(), previousActor.getYCell(),
+//				System.out.println("moving tile from " + previousActor.getXCell() + " " + previousActor.getYCell() + " to "
+//						+ actor.getXCell() + " " + actor.getYCell());
+				controller.informOfUserAction(stage.getWhichMutiActionInput(), previousActor.getXCell(), previousActor.getYCell(),
 						actor.getXCell(), actor.getYCell());
 				
 				

@@ -36,7 +36,7 @@ public class ValidMovesTable extends Window{
 		List <UIActionType> legalMovesList= ModelController.getInstance().getLegalMoves(actor.getXCell(), actor.getYCell());
 		for (UIActionType UIAction : legalMovesList){
 			TextButton newButton = new TextButton(uiActionTypeToString(UIAction), skin);
-			if (UIAction == UIActionType.MOVEUNIT) newButton.addListener(new SingleClickListener(actor,this,stage,UIAction));
+			if (UIAction == UIActionType.MOVEUNIT || UIAction == UIActionType.BOMBARDTILE) newButton.addListener(new SingleClickListener(actor,this,stage,UIAction));
 			else newButton.addListener(new DoubleClickListener(actor,this,stage,UIAction));
 			this.add(newButton).row();	
 			this.sizeBy(newButton.getHeight());
