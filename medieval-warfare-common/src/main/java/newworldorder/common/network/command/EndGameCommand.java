@@ -2,6 +2,8 @@ package newworldorder.common.network.command;
 
 import java.util.List;
 
+import newworldorder.common.service.IServerServiceLocator;
+
 public class EndGameCommand extends RemoteCommand {
 
 	/**
@@ -19,8 +21,12 @@ public class EndGameCommand extends RemoteCommand {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-
+		IServerServiceLocator locator = this.getServiceLocator();
+		for (String player : losers) {
+			locator.loss(player);
+		}
+		
+		locator.win(winner);
 	}
 
 }
