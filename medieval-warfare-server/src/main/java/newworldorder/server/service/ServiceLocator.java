@@ -53,4 +53,14 @@ public class ServiceLocator implements IServerServiceLocator {
 	public Stats getStatsForPlayer(String username) {
 		return playerStats.getUserStats(username);
 	}
+	
+	@Override
+	public void win(String username) {
+		playerStats.win(username);
+	}
+	
+	@Override
+	public void loss(String username) {
+		playerStats.loss(username);
+	}
 }

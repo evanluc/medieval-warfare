@@ -23,4 +23,14 @@ public class PlayerStatistics {
 			return allStats.get(username);
 		}
 	}
+	
+	public void win(String username) {
+		Stats s = getUserStats(username);
+		s.win();
+	}
+	
+	public void loss(String username) {
+		Stats s = getUserStats(username);
+		s.loss();
+	}
 }
