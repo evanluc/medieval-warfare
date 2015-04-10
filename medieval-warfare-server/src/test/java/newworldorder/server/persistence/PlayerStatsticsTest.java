@@ -29,16 +29,16 @@ public class PlayerStatsticsTest {
 	@Test
 	public void testWin() {
 		Stats expected = new Stats(1, 0);
-		stats.win("test-user");
-		Stats actual = stats.getUserStats("test-user");
+		stats.win("test-user-1");
+		Stats actual = stats.getUserStats("test-user-1");
 		assertEquals(expected, actual);
 	}
 	
 	@Test
 	public void testLoss() {
 		Stats expected = new Stats(0, 1);
-		stats.loss("test-user");
-		Stats actual = stats.getUserStats("test-user");
+		stats.loss("test-user-1");
+		Stats actual = stats.getUserStats("test-user-1");
 		assertEquals(expected, actual);
 	}
 
