@@ -100,7 +100,7 @@ public class UIStage extends Stage {
 	}
 
 	public void notTurnRenderUpdate() {
-		if (tree !=null) tree.clear();
+		if (table !=null) table.clear();
 		notTurnWindow.setVisible(true);
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
@@ -164,17 +164,17 @@ public class UIStage extends Stage {
 				selectedCell.getXCell(), selectedCell.getYCell());
 		tileWindow.clear();
 		if (tileDescription.structureType != null) {
-			structure.setText("Structure: " + uiStructureTypeToString(tileDescription.structureType));
+			structure.setText("Structure: \n" + uiStructureTypeToString(tileDescription.structureType));
 			tileWindow.add(structure).row();
 		}
 
 		if (tileDescription.unitType != null) {
-			unit.setText("Unit:" + uiUnitTypeToString(tileDescription.unitType));
+			unit.setText("Unit: \n" + uiUnitTypeToString(tileDescription.unitType));
 			tileWindow.add(unit).row();
 		}
 
 		if (tileDescription.terrainType != null) {
-			terrain.setText("Terrain: " + uiTerrainTypeToString(tileDescription.terrainType));
+			terrain.setText("Terrain: \n" + uiTerrainTypeToString(tileDescription.terrainType));
 			tileWindow.add(terrain).row();
 		}
 		tileWindow.setVisible(true);
