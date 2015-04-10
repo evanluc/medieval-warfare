@@ -1,12 +1,5 @@
 package newworldorder.game;
 
-import java.util.Random;
-
-import newworldorder.client.controller.ClientController;
-import newworldorder.common.network.command.SynchronizePartyCommand;
-import newworldorder.client.model.ModelController;
-import newworldorder.client.networking.CommandFactory;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -33,6 +26,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
+import newworldorder.client.controller.ClientController;
+import newworldorder.client.model.ModelController;
+import newworldorder.client.networking.CommandFactory;
+import newworldorder.common.model.Stats;
+
 public class MatchmakingScreen implements Screen {
 	
 	ClientController controller = ClientController.getInstance();
@@ -46,7 +44,7 @@ public class MatchmakingScreen implements Screen {
 	private boolean mapChanged = false;
 	private float alpha = 0f;
 	Sprite sprite;
-	private String loadGamePath;
+	
 	List<String> onlinePlayers;
 	Array<String> mapOptionsArray;
 	SelectBox<String> mapSelectBox;
@@ -56,12 +54,15 @@ public class MatchmakingScreen implements Screen {
 	int i = 100000;
 	ModelController modelController = ModelController.getInstance();
 	SelectBox<String> numPlayerSelect;
+	
+	private String loadGamePath;
+	private String mapFilePath = "assets/maps/seaside-skirmish.mwm";;
 
 	public MatchmakingScreen(MedievalWarfareGame thisGame) {
 		super();
 		this.thisGame = thisGame;
 		this.loadGamePath = null;
-
+		this.mapFilePath = "assets/maps/seaside-skirmish.mwm";
 	}
 
 	@Override
@@ -189,6 +190,7 @@ public class MatchmakingScreen implements Screen {
 //		stage.dispose();
 //		batch.dispose();
 //		skin.dispose();
+		controller.logout();
 	}
 	
 	private void initUI() {
@@ -243,6 +245,8 @@ public class MatchmakingScreen implements Screen {
 		mapOptionsArray.add("Half-Moon Bay");
 		mapSelectBox.setItems(mapOptionsArray);
 		TextureRegionDrawable[] maps = new TextureRegionDrawable[4];
+		String[] mapNames = {"seaside-skirmish", "dark-forest", "half-moon-bay"};
+		
 		mapSelectBox.addListener(new ChangeListener() {
 
 			@Override
@@ -250,10 +254,13 @@ public class MatchmakingScreen implements Screen {
 				mapChanged = true;
 				mapPreviewImage.setColor(1.0f, 1.0f, 1.0f, 0.0f);
 				mapPreviewImage.setDrawable(maps[mapSelectBox.getSelectedIndex()]);
-				if (!mapSelectBox.getSelected().equals("Saved Game")) {
+				if (mapSelectBox.getSelected().equals("Saved Game")) {
+					mapFilePath = null;
+				} else {
 					mapOptionsArray.removeValue("Saved Game", false);
 					loadGamePath = null;
 					mapSelectBox.setItems(mapOptionsArray);
+					mapFilePath = "assets/maps/" + mapNames[mapSelectBox.getSelectedIndex()] + ".mwm";
 				}
 			}
 			
@@ -324,18 +331,18 @@ public class MatchmakingScreen implements Screen {
 						}
 					}.button("Close").show(stage);;
 					Window statsWindow = new Window(onlinePlayers.getSelected(), skin);
+					Stats playerStats = controller.getStatsForPlayer(onlinePlayers.getSelected());
 					statsWindow.setMovable(false);
 					List<String> statList = new List<>(skin);
-					Random generator = new Random();
-					int randWin = generator.nextInt(100);
-					int randLoss = generator.nextInt(100);
-					String win = "Wins: "+randWin;
-					String loss = "Losses: "+randLoss;
-					double winRatio = (randWin/(randWin+randLoss));
+					int playerWins = playerStats.getWins();
+					int playerLosses = playerStats.getLosses();
+					double winRatio = (playerWins/(playerWins + playerLosses));
+					String wins = "Wins: " + playerWins;
+					String losses = "Losses: " + playerLosses;
 					String ratio = "Win Ratio: " + winRatio;
 					String[] stats = new String[3];
-					stats[0] = win;
-					stats[1] = loss;
+					stats[0] = wins;
+					stats[1] = losses;
 					stats[2] = ratio;
 					Array<String> p = new Array<>(stats);
 					statList.setItems(p);
@@ -356,7 +363,6 @@ public class MatchmakingScreen implements Screen {
 					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
 						controller.startPartyGame();
 						while (!CommandFactory.hasNetworking()){
-//							System.out.println(modelController.getGameState());
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException e) {
@@ -367,6 +373,8 @@ public class MatchmakingScreen implements Screen {
 						modelController.distributeGameState();
 					}
 				} else {
+					System.out.println(mapFilePath);
+					modelController.setMapFilePath(mapFilePath);
 					if(controller.getPlayersInParty().isEmpty()){
 						try{
 							controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));

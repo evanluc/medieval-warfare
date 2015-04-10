@@ -96,14 +96,17 @@ public class UIStage extends Stage {
 	}
 	// here we render stuff for the current turn
 	public void currentTurnRenderUpdate() {
+		
 		notTurnWindow.setVisible(false);
+		hud.yourTurnRenderUpdate();
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
 	}
 
 	public void notTurnRenderUpdate() {
-		if (tree !=null) tree.clear();
+		if (table !=null) table.clear();
 		notTurnWindow.setVisible(true);
+		hud.notTurnRenderUpdate();
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
 	}
@@ -145,7 +148,6 @@ public class UIStage extends Stage {
 	public void villageRenderUpdate(TiledMapActor selectedCell) {
 		if (modelController.getVillage(selectedCell.getXCell(),
 				selectedCell.getYCell()) != null) {
-			System.out.println("here is a village");
 			UIVillageDescriptor villageDescription = modelController
 					.getVillage(selectedCell.getXCell(),
 							selectedCell.getYCell());
@@ -166,17 +168,17 @@ public class UIStage extends Stage {
 				selectedCell.getXCell(), selectedCell.getYCell());
 		tileWindow.clear();
 		if (tileDescription.structureType != null) {
-			structure.setText("Structure: " + uiStructureTypeToString(tileDescription.structureType));
+			structure.setText("Structure: \n" + uiStructureTypeToString(tileDescription.structureType));
 			tileWindow.add(structure).row();
 		}
 
 		if (tileDescription.unitType != null) {
-			unit.setText("Unit:" + uiUnitTypeToString(tileDescription.unitType));
+			unit.setText("Unit: \n" + uiUnitTypeToString(tileDescription.unitType));
 			tileWindow.add(unit).row();
 		}
 
 		if (tileDescription.terrainType != null) {
-			terrain.setText("Terrain: " + uiTerrainTypeToString(tileDescription.terrainType));
+			terrain.setText("Terrain: \n" + uiTerrainTypeToString(tileDescription.terrainType));
 			tileWindow.add(terrain).row();
 		}
 		tileWindow.setVisible(true);

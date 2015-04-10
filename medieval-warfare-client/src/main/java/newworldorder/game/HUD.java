@@ -33,7 +33,8 @@ public class HUD extends Window {
 		this.add(playerTurnLabel).row();
 		this.add(playerTurnText).row();
 		this.add(turnNumberText).row();
-		this.setHeight(200);
+		this.setSize(150, 175);
+		
 		endTurn = new TextButton("End Turn",skin);
 		endTurn.addListener(new ClickListener(){
 			@Override
@@ -67,11 +68,13 @@ public class HUD extends Window {
 				Array<String> p = new Array<>(saveFiles);
 				saveGameList.setItems(p);
 				ScrollPane saveGameListPane = new ScrollPane(saveGameList, skin);
-				saveGameWindow.add(saveGameListPane).expand().fill();
-				saveGameDialog.add(saveGameWindow).expandY().fill().pad(20);
+			
+				saveGameWindow.add(saveGameListPane).expand().fill().row();
+				saveGameDialog.add(saveGameWindow).expandY().fill().pad(20).row();
 				TextField saveFileNameTextField = new TextField("", skin);
-				saveGameWindow.add(saveFileNameTextField).expand().fill();
+				saveGameWindow.add(saveFileNameTextField).expand().fill().row();
 				TextButton confirmButton = new TextButton("Save Game", skin);
+				
 				confirmButton.addListener(new ClickListener() {
 					@Override
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -82,10 +85,18 @@ public class HUD extends Window {
 					}
 				});
 				
-				saveGameDialog.button(confirmButton);
-				TextButton closeButton = new TextButton("Close", skin);
-				saveGameDialog.button(closeButton);
+				saveGameListPane.addListener(new ClickListener(){
+					@Override
+					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					if (saveGameList.getSelected() != null) saveFileNameTextField.setText(saveGameList.getSelected().substring(0, saveGameList.getSelected().length()-4));
+					
+					return false;
+					}
+				});
 				
+				saveGameDialog.button(confirmButton).bottom().row();
+				TextButton closeButton = new TextButton("Close", skin);
+				saveGameDialog.button(closeButton).bottom().row();
 				saveGameDialog.show(stage);
 				return true;
 			}
@@ -119,9 +130,9 @@ public class HUD extends Window {
 					}
 				});
 				
-				confirmDialog.button(confirmButton);
+				confirmDialog.button(confirmButton).row();
 				TextButton closeButton = new TextButton("Close", skin);
-				confirmDialog.button(closeButton);
+				confirmDialog.button(closeButton).row();
 				
 				confirmDialog.show(stage);
 				return true;
@@ -145,5 +156,17 @@ public class HUD extends Window {
 
 	public void setWantsToLeave(boolean wantsToLeave) {
 		this.wantsToLeave = wantsToLeave;
+	}	
+	public void yourTurnRenderUpdate(){
+		if (endTurn.hasParent() == false){ System.out.println("has no parent");
+			this.add(endTurn).top().row();
+		 	
+		}
+	}
+	
+	public void notTurnRenderUpdate(){
+		if(endTurn.hasParent()) System.out.println("has parent");
+		this.removeActor(endTurn);
+		
 	}
 }
