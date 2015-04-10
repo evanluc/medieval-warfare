@@ -128,10 +128,10 @@ public class GameScreen implements Screen {
 			Array<String> p = new Array<>(saveFiles);
 			saveGameList.setItems(p);
 			ScrollPane saveGameListPane = new ScrollPane(saveGameList, skin);
-			saveGameWindow.add(saveGameListPane).expand().fill();
-			confirmDialog.add(saveGameWindow).expandY().fill().pad(20);
+			saveGameWindow.add(saveGameListPane).expand().fill().row();
+			confirmDialog.add(saveGameWindow).expandY().fill().pad(20).row();
 			TextField saveFileNameTextField = new TextField("", skin);
-			saveGameWindow.add(saveFileNameTextField).expand().fill();
+			saveGameWindow.add(saveFileNameTextField).expand().fill().row();
 			TextButton confirmButton = new TextButton("Save Game", skin);
 			confirmButton.addListener(new ClickListener() {
 				@Override
@@ -148,8 +148,15 @@ public class GameScreen implements Screen {
 					return true;
 				}
 			});
-			
-			confirmDialog.button(confirmButton);
+			saveGameListPane.addListener(new ClickListener(){
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				if (saveGameList.getSelected() != null) saveFileNameTextField.setText(saveGameList.getSelected().substring(0, saveGameList.getSelected().length()-4));
+				
+				return false;
+				}
+			});
+			confirmDialog.button(confirmButton).bottom().row();
 			TextButton closeButton = new TextButton("Close", skin);
 			closeButton.addListener(new ClickListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -162,7 +169,7 @@ public class GameScreen implements Screen {
 					return true;
 				}
 			});
-			confirmDialog.button(closeButton);
+			confirmDialog.button(closeButton).bottom().row();
 			
 			confirmDialog.show(stage);
 		}
