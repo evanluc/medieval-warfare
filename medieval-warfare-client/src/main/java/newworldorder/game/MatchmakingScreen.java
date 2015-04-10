@@ -336,14 +336,11 @@ public class MatchmakingScreen implements Screen {
 					List<String> statList = new List<>(skin);
 					int playerWins = playerStats.getWins();
 					int playerLosses = playerStats.getLosses();
-					double winRatio = (playerWins/(playerWins + playerLosses));
 					String wins = "Wins: " + playerWins;
 					String losses = "Losses: " + playerLosses;
-					String ratio = "Win Ratio: " + winRatio;
-					String[] stats = new String[3];
+					String[] stats = new String[2];
 					stats[0] = wins;
 					stats[1] = losses;
-					stats[2] = ratio;
 					Array<String> p = new Array<>(stats);
 					statList.setItems(p);
 					ScrollPane statsPane = new ScrollPane(statList, skin);
