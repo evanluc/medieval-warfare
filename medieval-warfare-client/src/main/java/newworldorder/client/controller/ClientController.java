@@ -214,4 +214,8 @@ public class ClientController implements IController {
 	public String getLocalUsername() {
 		return session.getUsername();
 	}
+	
+	public void endGame(List<String> losers, String winner) {
+		
+	}
 }

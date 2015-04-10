@@ -2,6 +2,7 @@ package newworldorder.client.model;
 
 import java.util.List;
 
+import newworldorder.client.controller.ClientController;
 import newworldorder.client.networking.CommandFactory;
 import newworldorder.client.shared.UIActionType;
 import newworldorder.client.shared.UITileDescriptor;
@@ -18,6 +19,7 @@ public class ModelController {
 	private boolean gameRunning;
 	private String localPlayerName;
 	private String mapFilePath = "assets/maps/seaside-skirmish.mwm";
+	public boolean gameOver = false;
 	
 	private ModelController() {
 		super();
@@ -220,6 +222,10 @@ public class ModelController {
 	public boolean isLastPlayer() {
 		return engine.isLastPlayer();
 	}
+	
+	public boolean isGameOver() {
+		return gameOver;
+	}
 
 	public void setLocalPlayerName(String localPlayerName) {
 		this.localPlayerName = localPlayerName;
@@ -267,5 +273,10 @@ public class ModelController {
 		}else{
 			return true;
 		}
+	}
+	
+	public void endGame(String winners, List<String> losers) {
+		ClientController.getInstance().endGame(losers, winners);
+		gameOver = true;
 	}
 }
