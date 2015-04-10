@@ -23,8 +23,8 @@ public class GdxAppController implements IGameLauncher {
 	@Override
 	public void launchGame(GameInfo info) {
 		model = ModelController.getInstance();
-		model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
-//		mwg.setGameScreen();
+		model.setupNetworking(info.getGameExchange());
+		model.newGame(username, info.getPlayers());
 	}
 	
 	public static GdxAppController getInstance() {
