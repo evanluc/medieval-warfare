@@ -1,6 +1,8 @@
 package newworldorder.server.persistence;
 
-public class Stats implements newworldorder.common.model.IStats {
+import newworldorder.common.model.IStats;
+
+public class Stats implements IStats {
 	/**
 	 * 
 	 */
