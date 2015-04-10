@@ -1,6 +1,8 @@
 package newworldorder.common.model;
 
-public interface Stats {
+import java.io.Serializable;
+
+public interface IStats extends Serializable {
 	public int getWins();
 	public int getLosses();
 }

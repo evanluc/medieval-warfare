@@ -29,7 +29,6 @@ import com.badlogic.gdx.utils.Array;
 import newworldorder.client.controller.ClientController;
 import newworldorder.client.model.ModelController;
 import newworldorder.client.networking.CommandFactory;
-import newworldorder.common.model.Stats;
 
 public class MatchmakingScreen implements Screen {
 	
@@ -331,19 +330,16 @@ public class MatchmakingScreen implements Screen {
 						}
 					}.button("Close").show(stage);;
 					Window statsWindow = new Window(onlinePlayers.getSelected(), skin);
-					Stats playerStats = controller.getStatsForPlayer(onlinePlayers.getSelected());
+					int[] playerStats = controller.getStatsForPlayer(onlinePlayers.getSelected());
 					statsWindow.setMovable(false);
 					List<String> statList = new List<>(skin);
-					int playerWins = playerStats.getWins();
-					int playerLosses = playerStats.getLosses();
-					double winRatio = (playerWins/(playerWins + playerLosses));
+					int playerWins = playerStats[0];
+					int playerLosses = playerStats[1];
 					String wins = "Wins: " + playerWins;
 					String losses = "Losses: " + playerLosses;
-					String ratio = "Win Ratio: " + winRatio;
-					String[] stats = new String[3];
+					String[] stats = new String[2];
 					stats[0] = wins;
 					stats[1] = losses;
-					stats[2] = ratio;
 					Array<String> p = new Array<>(stats);
 					statList.setItems(p);
 					ScrollPane statsPane = new ScrollPane(statList, skin);
@@ -376,7 +372,11 @@ public class MatchmakingScreen implements Screen {
 					System.out.println(mapFilePath);
 					modelController.setMapFilePath(mapFilePath);
 					if(controller.getPlayersInParty().isEmpty()){
-						controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+						try{
+							controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+						}catch(NumberFormatException e){
+							
+						}
 					}else{
 						controller.startPartyGame();
 					}

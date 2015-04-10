@@ -1,6 +1,10 @@
 package newworldorder.server.persistence;
 
-public class Stats implements newworldorder.common.model.Stats {
+public class Stats implements newworldorder.common.model.IStats {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2809065436980489490L;
 	private int wins, losses;
 	
 	public Stats(int wins, int losses) {
