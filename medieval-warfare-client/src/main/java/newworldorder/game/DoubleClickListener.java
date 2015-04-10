@@ -1,7 +1,6 @@
 package newworldorder.game;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -37,7 +36,7 @@ public class DoubleClickListener extends ClickListener {
 		if (tree != null) stage.getUIStage().buttonRenderUpdate(actor);
 		System.out.println("sending action type : " + actionType);
 		controller.informOfUserAction(actionType, actor.getXCell(), actor.getYCell());
-		stage.getUIStage().infoRenderUpdate(actor);
+		stage.getUIStage().yourTurnInfoRenderUpdate(actor);
 		return false; 
 	}
 }

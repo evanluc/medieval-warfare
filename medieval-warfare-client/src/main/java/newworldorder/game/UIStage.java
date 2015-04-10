@@ -107,12 +107,18 @@ public class UIStage extends Stage {
 
 	}
 
-	public void infoRenderUpdate(TiledMapActor selectedCell) {
+	public void yourTurnInfoRenderUpdate(TiledMapActor selectedCell) {
 		buttonRenderUpdate(selectedCell);
 		villageRenderUpdate(selectedCell);
 		tileRenderUpdate(selectedCell);
 	}
 
+	public void notTurnInfoRenderUpdate(TiledMapActor selectedCell) {
+		villageRenderUpdate(selectedCell);
+		tileRenderUpdate(selectedCell);
+	}
+	
+	
 	public void buttonRenderUpdate(TiledMapActor selectedCell) {
 		table.clear();
 		List<UIActionType> legalMovesList = modelController.getLegalMoves(

@@ -34,6 +34,6 @@ public class SingleClickListener extends ClickListener {
 		stage.setMultiActionInput(true);
 		stage.setPreviousActor(actor);
 		if (window != null) window.setVisible(false);
-		if (tree != null) stage.getUIStage().infoRenderUpdate(actor);
+		if (tree != null) stage.getUIStage().yourTurnInfoRenderUpdate(actor);
 	}
 }
