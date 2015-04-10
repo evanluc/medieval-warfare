@@ -106,6 +106,7 @@ public class ModelController {
 	}
 
 	public void loadGame(String username, String filePath) {
+		gameOver = true;
 		Game gameState = null;
 		try {
 			gameState = ModelSerializer.loadGameState(filePath);
@@ -142,6 +143,7 @@ public class ModelController {
 	}
 
 	public void newGame(String username, List<String> players) {
+		gameOver = true;
 		this.localPlayerName = username;
 		engine.setLocalPlayerName(username);
 		Map presetMap = null;
@@ -181,6 +183,7 @@ public class ModelController {
 	}
 	
 	public void setGameState(Object gameState) {
+		gameOver = true;
 		if (gameState instanceof Game || gameState == null) {
 			engine.resetObservers();
 			engine.setGameState((Game) gameState);
