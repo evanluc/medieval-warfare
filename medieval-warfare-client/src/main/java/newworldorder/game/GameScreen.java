@@ -166,6 +166,35 @@ public class GameScreen implements Screen {
 			
 			confirmDialog.show(stage);
 		}
+		
+		if(ModelController.getInstance().isGameOver() && !hasOpenedDialog){
+			hasOpenedDialog = true;
+			Dialog confirmDialog = new Dialog("Click Close to return to matchmaking", skin){
+				@Override
+				protected void result (Object object) {
+					hasOpenedDialog = false;
+					this.hide();	
+				}
+			};
+			confirmDialog.setModal(true);
+			Window saveGameWindow = new Window("The game has ended!", skin);
+
+			TextButton closeButton = new TextButton("Close", skin);
+			closeButton.addListener(new ClickListener(){
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					thisGame.setMatchmakingScreen();
+					CommandFactory.setHasNetworking(false);
+					ModelController.getInstance().clearGameState();
+					hasOpenedDialog = false;
+					ClientController.getInstance().login(ClientController.getInstance().username,
+							ClientController.getInstance().password);
+					return true;
+				}
+			});
+			confirmDialog.button(closeButton);
+			
+			confirmDialog.show(stage);
+		}
 	}
 
 	public void move(float delta) {

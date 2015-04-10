@@ -16,6 +16,7 @@ import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CheckPartyCommand;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.CreateAccountCommand;
+import newworldorder.common.network.command.EndGameCommand;
 import newworldorder.common.network.command.GetOnlinePlayersCommand;
 import newworldorder.common.network.command.GetPlayerStatsCommand;
 import newworldorder.common.network.command.JoinGameCommand;
@@ -221,7 +222,8 @@ public class ClientController implements IController {
 	}
 	
 	public void endGame(List<String> losers, String winner) {
-		
+		EndGameCommand command = new EndGameCommand(session.getUsername(), losers, winner);
+		adapter.send(command, commandExchange, routingKey);
 	}
 	
 	public int[] getStatsForPlayer(String username) {
