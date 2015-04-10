@@ -628,6 +628,7 @@ public class GameEngine implements Observer {
 					newV.addUnit(u);
 				}
 
+				oldV.getTile().setTerrainType(TerrainType.MEADOW);
 				oldV.getTile().setVillage(null);
 				oldV.getControlledBy().removeVillage(oldV);
 			}
@@ -769,10 +770,14 @@ public class GameEngine implements Observer {
 		if (players.size() <= 1) {
 			gameState.setHasWon(true);
 			//TODO: players.get(0).incrementWinCount();
+			List<String> losers = new ArrayList<String>();
 			for (Player p : gameState.getPlayers()) {
 				if (!p.equals(players.get(0))) {
-					//TODO: p.incrementLossCount();
+					losers.add(p.getUsername());
 				}
+			}
+			if (localUsername.equals(players.get(0))) {
+				controller.endGame(localUsername, losers);
 			}
 		}
 	}

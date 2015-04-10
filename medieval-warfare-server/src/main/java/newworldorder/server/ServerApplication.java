@@ -1,5 +1,9 @@
 package newworldorder.server;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -11,6 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 @SpringBootApplication
 public class ServerApplication implements CommandLineRunner {
+	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private final Logger logger = LoggerFactory.getLogger(ServerApplication.class);
 
 	@Autowired private AnnotationConfigApplicationContext context;
@@ -24,6 +29,8 @@ public class ServerApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		container.start();
 		logger.info("MedievalWarfare server started. Ready for commands...");
+		UserProbe probe = context.getBean(UserProbe.class);
+		scheduler.scheduleAtFixedRate(probe, 30, 30, TimeUnit.SECONDS);
 	}
 
 }

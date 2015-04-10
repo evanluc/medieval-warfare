@@ -11,4 +11,6 @@ public interface IServerServiceLocator {
 	public IGameInitializer getGameInitializer();
 	public Set<String> getOnlinePlayers();
 	public Stats getStatsForPlayer(String username);
+	public void win(String username);
+	public void loss(String username);
 }
