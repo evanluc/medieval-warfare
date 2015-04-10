@@ -151,12 +151,15 @@ public class ModelController {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("engine.getGameState()= "+engine.getGameState());
 		if (engine.getGameState() != null) {
 			gameRunning = true;
 			return;
 		}
+		System.out.println("presetMap="+presetMap);
 		if (presetMap != null) {
-			if (players.get(0).compareTo(username) == 0) {
+			System.out.println("players.get(0).compareTo(username) == 0  "+ (players.get(0).compareTo(username) == 0));
+			if (players.get(0).compareTo(username) == 0){
 				engine.newGame(players, presetMap);
 				System.out.println("First player");
 				while (!CommandFactory.hasNetworking()) {
@@ -178,7 +181,7 @@ public class ModelController {
 	}
 	
 	public void setGameState(Object gameState) {
-		if (gameState instanceof Game) {
+		if (gameState instanceof Game || gameState == null) {
 			engine.resetObservers();
 			engine.setGameState((Game) gameState);
 		}
@@ -274,7 +277,11 @@ public class ModelController {
 			return true;
 		}
 	}
-	
+	public void clearGameState() {
+			System.out.println("In clearGameState in ModelController");
+			engine.resetObservers();
+			engine.clearGameState();
+	}	
 	public void endGame(String winners, List<String> losers) {
 		ClientController.getInstance().endGame(losers, winners);
 		gameOver = true;

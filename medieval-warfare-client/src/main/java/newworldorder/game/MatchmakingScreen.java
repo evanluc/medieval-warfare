@@ -376,7 +376,11 @@ public class MatchmakingScreen implements Screen {
 					System.out.println(mapFilePath);
 					modelController.setMapFilePath(mapFilePath);
 					if(controller.getPlayersInParty().isEmpty()){
-						controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+						try{
+							controller.requestGame(Integer.parseInt((numPlayerSelect.getSelected())));
+						}catch(NumberFormatException e){
+							
+						}
 					}else{
 						controller.startPartyGame();
 					}
