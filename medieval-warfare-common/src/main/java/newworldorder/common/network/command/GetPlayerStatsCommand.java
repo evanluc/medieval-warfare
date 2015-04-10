@@ -8,7 +8,7 @@ public class GetPlayerStatsCommand extends RemoteCommand {
 	 * 
 	 */
 	private static final long serialVersionUID = -8674003828629957204L;
-	private IStats stats;
+	private int[] stats;
 	
 	public GetPlayerStatsCommand(String sender) {
 		super(sender);
@@ -16,10 +16,11 @@ public class GetPlayerStatsCommand extends RemoteCommand {
 
 	@Override
 	public void execute() {
-		stats = this.getServiceLocator().getStatsForPlayer(this.getSender());
+		IStats tStats = this.getServiceLocator().getStatsForPlayer(this.getSender());
+		stats = new int[] {tStats.getWins(), tStats.getLosses()};
 	}
 	
-	public IStats getStats() {
+	public int[] getStats() {
 		return stats;
 	}
 }
