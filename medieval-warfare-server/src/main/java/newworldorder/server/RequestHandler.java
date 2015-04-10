@@ -9,6 +9,7 @@ import newworldorder.common.network.command.AbstractCommand;
 import newworldorder.common.network.command.CommandHandler;
 import newworldorder.common.network.command.CreateAccountCommand;
 import newworldorder.common.network.command.GetOnlinePlayersCommand;
+import newworldorder.common.network.command.GetPlayerStatsCommand;
 import newworldorder.common.network.command.LoginCommand;
 import newworldorder.common.network.command.RemoteCommand;
 import newworldorder.common.network.command.ReplyCommandHandler;
@@ -60,6 +61,12 @@ public class RequestHandler implements CommandHandler, ReplyCommandHandler {
 			c.setServiceLocator(locator);
 			c.execute();
 			return c.getOnlinePlayers();
+		}
+		else if (command instanceof GetPlayerStatsCommand) {
+			GetPlayerStatsCommand c = (GetPlayerStatsCommand) command;
+			c.setServiceLocator(locator);
+			c.execute();
+			return c.getStats();
 		}
 		else {
 			return null;
