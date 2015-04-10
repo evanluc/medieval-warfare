@@ -1,7 +1,5 @@
 package newworldorder.game;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -31,6 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import newworldorder.client.controller.ClientController;
 import newworldorder.client.model.ModelController;
 import newworldorder.client.networking.CommandFactory;
+import newworldorder.common.model.Stats;
 
 public class MatchmakingScreen implements Screen {
 	
@@ -332,18 +331,18 @@ public class MatchmakingScreen implements Screen {
 						}
 					}.button("Close").show(stage);;
 					Window statsWindow = new Window(onlinePlayers.getSelected(), skin);
+					Stats playerStats = controller.getStatsForPlayer(onlinePlayers.getSelected());
 					statsWindow.setMovable(false);
 					List<String> statList = new List<>(skin);
-					Random generator = new Random();
-					int randWin = generator.nextInt(100);
-					int randLoss = generator.nextInt(100);
-					String win = "Wins: "+randWin;
-					String loss = "Losses: "+randLoss;
-					double winRatio = (randWin/(randWin+randLoss));
+					int playerWins = playerStats.getWins();
+					int playerLosses = playerStats.getLosses();
+					double winRatio = (playerWins/(playerWins + playerLosses));
+					String wins = "Wins: " + playerWins;
+					String losses = "Losses: " + playerLosses;
 					String ratio = "Win Ratio: " + winRatio;
 					String[] stats = new String[3];
-					stats[0] = win;
-					stats[1] = loss;
+					stats[0] = wins;
+					stats[1] = losses;
 					stats[2] = ratio;
 					Array<String> p = new Array<>(stats);
 					statList.setItems(p);
