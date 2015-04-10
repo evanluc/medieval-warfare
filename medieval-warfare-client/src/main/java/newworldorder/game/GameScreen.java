@@ -1,5 +1,6 @@
 package newworldorder.game;
 
+import newworldorder.client.controller.ClientController;
 import newworldorder.client.model.ModelController;
 import newworldorder.client.networking.CommandFactory;
 
@@ -99,10 +100,14 @@ public class GameScreen implements Screen {
 		}
 		UIstage.draw();
 		if(this.getUIStage().getHUD().isWantsToLeave()){
-			CommandFactory.createDisconnectCommand();
 			thisGame.setMatchmakingScreen();
+			CommandFactory.createDisconnectCommand();
+			ModelController.getInstance().getEngine().setPlayerHasDisconnected(false);
+			ClientController.getInstance().login(ClientController.getInstance().username,
+					ClientController.getInstance().password);
 		}
 		if(ModelController.getInstance().getEngine().isPlayerHasDisconnected() && !hasOpenedDialog){
+			ModelController.getInstance().getEngine().setPlayerHasDisconnected(false);
 			hasOpenedDialog = true;
 			Dialog confirmDialog = new Dialog("Player has disconnected, please save game or leave", skin){
 				@Override
@@ -132,11 +137,13 @@ public class GameScreen implements Screen {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					if (!saveFileNameTextField.getText().isEmpty()) {
+						thisGame.setMatchmakingScreen();
 						ModelController.getInstance().saveGame("assets/saves/"+saveFileNameTextField.getText()+".mwg");
 						CommandFactory.setHasNetworking(false);
 						ModelController.getInstance().clearGameState();
-						
-						thisGame.setMatchmakingScreen();
+						hasOpenedDialog = false;	
+						ClientController.getInstance().login(ClientController.getInstance().username,
+								ClientController.getInstance().password);
 					}
 					return true;
 				}
@@ -146,9 +153,12 @@ public class GameScreen implements Screen {
 			TextButton closeButton = new TextButton("Close", skin);
 			closeButton.addListener(new ClickListener(){
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					thisGame.setMatchmakingScreen();
 					CommandFactory.setHasNetworking(false);
 					ModelController.getInstance().clearGameState();
-					thisGame.setMatchmakingScreen();
+					hasOpenedDialog = false;
+					ClientController.getInstance().login(ClientController.getInstance().username,
+							ClientController.getInstance().password);
 					return true;
 				}
 			});

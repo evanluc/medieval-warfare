@@ -70,7 +70,7 @@ public class HUD extends Window {
 				ScrollPane saveGameListPane = new ScrollPane(saveGameList, skin);
 			
 				saveGameWindow.add(saveGameListPane).expand().fill().row();
-				saveGameDialog.add(saveGameWindow).expandY().fill().pad(20).row();
+				saveGameDialog.add(saveGameWindow).expand().fill().pad(20).row();
 				TextField saveFileNameTextField = new TextField("", skin);
 				saveGameWindow.add(saveFileNameTextField).expand().fill().row();
 				TextButton confirmButton = new TextButton("Save Game", skin);
