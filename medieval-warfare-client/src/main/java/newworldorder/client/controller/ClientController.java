@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 
 import newworldorder.common.matchmaking.GameRequest;
 import newworldorder.common.model.PartyInvitation;
+import newworldorder.common.model.Stats;
 import newworldorder.common.network.AmqpAdapter;
 import newworldorder.common.network.CommandConsumer;
 import newworldorder.common.network.command.CheckPartyCommand;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.CreateAccountCommand;
 import newworldorder.common.network.command.GetOnlinePlayersCommand;
+import newworldorder.common.network.command.GetPlayerStatsCommand;
 import newworldorder.common.network.command.JoinGameCommand;
 import newworldorder.common.network.command.LoginCommand;
 import newworldorder.common.network.command.LogoutCommand;
@@ -217,5 +219,11 @@ public class ClientController implements IController {
 	
 	public void endGame(List<String> losers, String winner) {
 		
+	}
+	
+	public Stats getWins(String username) {
+		GetPlayerStatsCommand command = new GetPlayerStatsCommand(username);
+		Stats result = (Stats) adapter.sendAndReceive(command, commandExchange, routingKey);
+		return result;
 	}
 }
