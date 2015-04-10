@@ -7,6 +7,7 @@ import newworldorder.common.network.command.AbstractCommand;
 import newworldorder.common.network.command.CheckPartyCommand;
 import newworldorder.common.network.command.ClientCommand;
 import newworldorder.common.network.command.CommandHandler;
+import newworldorder.common.network.command.ProbeCommand;
 import newworldorder.common.network.command.ReplyCommandHandler;
 import newworldorder.common.service.IClientServiceLocator;
 
@@ -37,6 +38,11 @@ public class ClientCommandHandler implements CommandHandler, ReplyCommandHandler
 			checkCommand.setServiceLocator(locator);
 			checkCommand.execute();
 			return checkCommand.canJoin();
+		}
+		else if (command instanceof ProbeCommand) {
+			ProbeCommand c = (ProbeCommand) command;
+			c.execute();
+			return c.getStatus();
 		}
 		else {
 			return null;
