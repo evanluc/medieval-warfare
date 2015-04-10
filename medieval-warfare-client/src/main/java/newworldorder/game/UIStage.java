@@ -100,7 +100,7 @@ public class UIStage extends Stage {
 	}
 
 	public void notTurnRenderUpdate() {
-		if (tree !=null) tree.clear();
+		if (table !=null) table.clear();
 		notTurnWindow.setVisible(true);
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
