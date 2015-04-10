@@ -32,6 +32,8 @@ public class ClientController implements IController {
 	private final Session session;
 	private final CommandConsumer consumer;
 	private static ClientController instance;
+	public String username;
+	public String password;
 
 	@Value("${rabbitmq.consumeFrom}")
 	private String notifyExchange;
@@ -75,6 +77,8 @@ public class ClientController implements IController {
 			LoginCommand loginCommand = new LoginCommand(username, password);
 			boolean result = (Boolean) adapter.sendAndReceive(loginCommand, commandExchange, routingKey);
 			if (result) {
+				this.username = username;
+				this.password = password;
 				session.setUsername(username);
 				consumer.startConsumingFromDirectExchange(notifyExchange, username);
 			}
