@@ -75,8 +75,14 @@ public class GameScreen implements Screen {
 		stage.draw();
 		move(delta);
 		UIstage.act();
-		if (ModelController.getInstance().isLocalPlayersTurn()) UIstage.currentTurnRenderUpdate();
-		else UIstage.notTurnRenderUpdate();
+		if (ModelController.getInstance().isLocalPlayersTurn()){
+			if(stage.getCurrentlyOutlined()!= null) UIstage.yourTurnInfoRenderUpdate(stage.getCurrentlyOutlined());
+			UIstage.currentTurnRenderUpdate();
+		}
+		else{
+			if(stage.getCurrentlyOutlined() != null )UIstage.notTurnInfoRenderUpdate(stage.getCurrentlyOutlined());
+			UIstage.notTurnRenderUpdate();
+		}
 		UIstage.draw();
 
 	}

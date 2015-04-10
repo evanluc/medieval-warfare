@@ -49,7 +49,7 @@ public class UIStage extends Stage {
 		Label stopItText = new Label(
 				"Your opponent is still making moves.\n Please wait until their turn ends\n"
 						+ "In the meantime you can still survey your tiles and villages.",
-				skin);
+						skin);
 		notTurnWindow.add(stopItText).row();
 		notTurnWindow.setWidth(450);
 		notTurnWindow.setHeight(100);
@@ -100,11 +100,10 @@ public class UIStage extends Stage {
 	}
 
 	public void notTurnRenderUpdate() {
-		// if (yourTurnWindow.isVisible()) yourTurnWindow.setVisible(false);
+		if (tree !=null) tree.clear();
 		notTurnWindow.setVisible(true);
 		hud.setCurrentUsername(modelController.getCurrentTurnPlayer());
 		hud.setCurrentTurn(modelController.getTurnNumber());
-
 	}
 
 	public void yourTurnInfoRenderUpdate(TiledMapActor selectedCell) {
@@ -117,8 +116,8 @@ public class UIStage extends Stage {
 		villageRenderUpdate(selectedCell);
 		tileRenderUpdate(selectedCell);
 	}
-	
-	
+
+
 	public void buttonRenderUpdate(TiledMapActor selectedCell) {
 		table.clear();
 		List<UIActionType> legalMovesList = modelController.getLegalMoves(
@@ -193,7 +192,7 @@ public class UIStage extends Stage {
 		}
 		return null;
 	}
-	
+
 
 	private String uiUnitTypeToString(final UnitType unitType){
 		switch(unitType){
@@ -205,7 +204,7 @@ public class UIStage extends Stage {
 		}
 		return null; 
 	}
-	
+
 	private String uiTerrainTypeToString (final TerrainType terrainType){
 		switch(terrainType){
 		case GRASS: return "Grass";
@@ -216,7 +215,7 @@ public class UIStage extends Stage {
 		return null;
 	}
 
-	
+
 	private String uiActionTypeToString(UIActionType action) {
 		switch (action) {
 		case MOVEUNIT:

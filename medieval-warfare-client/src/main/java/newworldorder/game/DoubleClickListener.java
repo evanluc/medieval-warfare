@@ -32,11 +32,11 @@ public class DoubleClickListener extends ClickListener {
 
 	@Override
 	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		if (window != null) window.setVisible(false);
-		if (tree != null) stage.getUIStage().buttonRenderUpdate(actor);
+//		if (window != null) window.setVisible(false);
+//		if (tree != null) stage.getUIStage().buttonRenderUpdate(actor);
 		System.out.println("sending action type : " + actionType);
 		controller.informOfUserAction(actionType, actor.getXCell(), actor.getYCell());
-		stage.getUIStage().yourTurnInfoRenderUpdate(actor);
+		//stage.getUIStage().yourTurnInfoRenderUpdate(actor);
 		return false; 
 	}
 }

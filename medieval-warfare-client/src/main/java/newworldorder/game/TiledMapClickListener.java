@@ -44,8 +44,8 @@ public class TiledMapClickListener extends ClickListener {
 			Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 			outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 			stage.setCurrentlyOutlined(actor);
-			stage.getUIStage().notTurnInfoRenderUpdate(actor);
-			System.out.println("button render updated here");
+			//stage.getUIStage().notTurnInfoRenderUpdate(actor);
+			//System.out.println("button render updated here");
 		}
 
 		else{
@@ -60,7 +60,7 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
-				stage.getUIStage().yourTurnInfoRenderUpdate(actor);
+//				stage.getUIStage().yourTurnInfoRenderUpdate(actor);
 
 
 			}
@@ -83,7 +83,6 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
-				stage.getUIStage().yourTurnInfoRenderUpdate(actor);
 				stage.setPreviousActor(null);
 				stage.setMultiActionInput(false);
 

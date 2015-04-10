@@ -29,11 +29,11 @@ public class SingleClickListener extends ClickListener {
 	}	
 	
 	@Override
-	public void clicked(InputEvent event, float x, float y) {
+	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
 		System.out.println("moving unit");
 		stage.setMultiActionInput(true);
 		stage.setPreviousActor(actor);
-		if (window != null) window.setVisible(false);
-		if (tree != null) stage.getUIStage().yourTurnInfoRenderUpdate(actor);
+		return false;
+
 	}
 }
