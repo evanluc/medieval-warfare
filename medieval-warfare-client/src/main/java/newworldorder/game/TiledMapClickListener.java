@@ -30,8 +30,6 @@ public class TiledMapClickListener extends ClickListener {
 	@Override
 	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)  {
 
-		System.out.println("clicked on tiled map click listener");
-
 		final TiledMapStage stage = (TiledMapStage) actor.getStage();
 
 		if(stage.getModel().isLocalPlayersTurn()== false){
@@ -44,8 +42,7 @@ public class TiledMapClickListener extends ClickListener {
 			Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 			outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 			stage.setCurrentlyOutlined(actor);
-			//stage.getUIStage().notTurnInfoRenderUpdate(actor);
-			//System.out.println("button render updated here");
+
 		}
 
 		else{
@@ -60,8 +57,6 @@ public class TiledMapClickListener extends ClickListener {
 				Cell outlineCell = stage.getTiledMapDescriptors().outlineLayer.getCell(actor.getXCell(),actor.getYCell());
 				outlineCell.setTile(stage.getTiledMapDescriptors().outlineTile);
 				stage.setCurrentlyOutlined(actor);
-//				stage.getUIStage().yourTurnInfoRenderUpdate(actor);
-
 
 			}
 
