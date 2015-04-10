@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class HUD extends Window {
 	private Label playerTurnLabel, playerTurnText, turnNumberText;
-	private TextButton endTurn, saveGameButton;
+	private TextButton endTurn, saveGameButton, leaveGameButton;
 	private UIStage stage;
 	private ModelController modelController = ModelController.getInstance();
 
@@ -57,8 +57,6 @@ public class HUD extends Window {
 				
 				Window saveGameWindow = new Window("Please provide a save game file name", skin);
 				saveGameWindow.setMovable(false);
-//				@SuppressWarnings("unchecked")
-//				Cell<Actor> newRow = saveGameDialog.row();
 				List<String> saveGameList = new List<>(skin);
 				FileHandle[] files = Gdx.files.local("assets/saves/").list();
 				String[] saveFiles = new String[files.length];
@@ -69,11 +67,8 @@ public class HUD extends Window {
 				saveGameList.setItems(p);
 				ScrollPane saveGameListPane = new ScrollPane(saveGameList, skin);
 				saveGameWindow.add(saveGameListPane).expand().fill();
-//				newRow.setActor(saveGameWindow).expandY().fill().pad(20);
 				saveGameDialog.add(saveGameWindow).expandY().fill().pad(20);
-//				newRow = saveGameDialog.row();
 				TextField saveFileNameTextField = new TextField("", skin);
-//				newRow.setActor(saveFileNameTextField).expand().fill();
 				saveGameWindow.add(saveFileNameTextField).expand().fill();
 				TextButton confirmButton = new TextButton("Save Game", skin);
 				confirmButton.addListener(new ClickListener() {
@@ -96,6 +91,41 @@ public class HUD extends Window {
 		});
 		
 		this.add(saveGameButton);
+		
+		leaveGameButton = new TextButton("Leave Game", skin);
+		
+		leaveGameButton.addListener(new ClickListener(){
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				Dialog confirmDialog = new Dialog("Leave Game", skin){
+					@Override
+					protected void result (Object object) {
+						this.hide();	
+					}
+				};
+				
+				Window confirmWindow = new Window("Are you sure?", skin);
+				confirmWindow.setMovable(false);
+				List<String> saveGameList = new List<>(skin);
+				TextButton confirmButton = new TextButton("Leave", skin);
+				confirmButton.addListener(new ClickListener() {
+					@Override
+					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+						return false;
+					}
+				});
+				
+				confirmDialog.button(confirmButton);
+				TextButton closeButton = new TextButton("Close", skin);
+				confirmDialog.button(closeButton);
+				
+				confirmDialog.show(stage);
+				return true;
+			}
+		});
+		
+		this.add(leaveGameButton);
 	}
 
 	public void setCurrentUsername(String currentUsername) {
