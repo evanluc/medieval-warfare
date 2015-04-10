@@ -2,11 +2,6 @@ package newworldorder.game;
 
 import java.util.Random;
 
-import newworldorder.client.controller.ClientController;
-import newworldorder.common.network.command.SynchronizePartyCommand;
-import newworldorder.client.model.ModelController;
-import newworldorder.client.networking.CommandFactory;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -32,6 +27,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+
+import newworldorder.client.controller.ClientController;
+import newworldorder.client.model.ModelController;
+import newworldorder.client.networking.CommandFactory;
 
 public class MatchmakingScreen implements Screen {
 	
@@ -192,6 +191,7 @@ public class MatchmakingScreen implements Screen {
 //		stage.dispose();
 //		batch.dispose();
 //		skin.dispose();
+		controller.logout();
 	}
 	
 	private void initUI() {
