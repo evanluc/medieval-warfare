@@ -29,6 +29,7 @@ public class GameEngine implements Observer {
 	private Game gameState;
 	private Set<Tile> updatedTiles;
 	private String localUsername;
+	private boolean playerHasDisconnected = false;
 
 	GameEngine(ModelController controller) {
 		this.gameState = null;
@@ -1026,6 +1027,10 @@ public class GameEngine implements Observer {
 			this.addObserverToTiles();
 		}
 	}
+	public void clearGameState(){
+		this.gameState = null;
+		System.out.println("calling clearGameState, this.gameState = "+ this.gameState);
+	}
 	
 	List<UIActionType> getLegalMoves(int x, int y){
 		List<UIActionType> legalMoves = new ArrayList<UIActionType>();
@@ -1274,5 +1279,13 @@ public class GameEngine implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		updatedTiles.add((Tile) o);
+	}
+
+	public boolean isPlayerHasDisconnected() {
+		return playerHasDisconnected;
+	}
+
+	public void setPlayerHasDisconnected(boolean playerHasDisconnected) {
+		this.playerHasDisconnected = playerHasDisconnected;
 	}
 }
