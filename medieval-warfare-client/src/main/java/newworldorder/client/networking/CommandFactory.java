@@ -122,6 +122,7 @@ public class CommandFactory {
 			break;
 		case UPGRADEVILLAGECASTLE:
 			command = new UpgradeVillageCastleCommand(x, y);
+			break;
 		case ENDTURN:
 			command =  new EndTurnCommand();
 			break;
