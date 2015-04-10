@@ -11,13 +11,12 @@ public class SampleSavedGameGenerator {
 	public static void main(String[] args) {
 		ModelController model = ModelController.getInstance();
 		List<String> players = new ArrayList<String>();
-		players.add("Bob");
-		players.add("Tristan");
-		players.add("Sam");
+		players.add("david");
+		players.add("grady");
 
 		System.out.println("Attempt creating new game");
 
-		model.newGame("Bob", players, null, mappath);
+		model.newGame("david", players, null, mappath);
 
 		System.out.println("Created new game");
 

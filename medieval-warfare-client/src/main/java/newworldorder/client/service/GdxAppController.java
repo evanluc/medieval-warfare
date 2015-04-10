@@ -24,7 +24,7 @@ public class GdxAppController implements IGameLauncher {
 	public void launchGame(GameInfo info) {
 		model = ModelController.getInstance();
 		model.newGame(username, info.getPlayers(), info.getGameExchange(), mappath);
-		mwg.setGameScreen();
+//		mwg.setGameScreen();
 	}
 	
 	public static GdxAppController getInstance() {

@@ -347,15 +347,15 @@ public class MatchmakingScreen implements Screen {
 					if (modelController.validatePlayers(controller.getAcceptedPlayersInParty())) {
 						thisGame.setGameScreen();
 					}
+				} else {
+					if(controller.getPlayersInParty().isEmpty()){
+						
+					}else{
+						controller.startPartyGame();
+//						thisGame.setGameScreen();
+					}
 				}
-				if(controller.getPlayersInParty().isEmpty()){
-					
-				}else{
-					controller.startPartyGame();
-					thisGame.setGameScreen();
-				}
-				
-				return true;
+				return false;
 			}
 		});
 		middleColumn.columnDefaults(0).width(150).pad(5);
