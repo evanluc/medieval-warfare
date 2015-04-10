@@ -983,6 +983,16 @@ public class GameEngine implements Observer {
 		}
 	}
 	
+	void resetObservers() {
+		if (gameState == null) 
+			return;
+		Map map = gameState.getMap();
+		for (Tile t : map.getTiles()) {
+			t.deleteObservers();
+		}
+		updatedTiles.clear();
+	}
+	
 	List<Integer> growNewTrees() {
 		return gameState.getMap().growNewTrees();
 	}
